@@ -6,6 +6,7 @@
 <p align="center">
   <img src="https://github.com/bdbaraban/ideadog/blob/master/assets/logo.png"
        alt="IdeaDog logo"
+       style="width: 250px;"
   />
 </p>
 
