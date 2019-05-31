@@ -1,0 +1,48 @@
+{
+  "name": "ideadog",
+  "version": "1.0.0",
+  "description": "A social ideas platform.",
+  "main": "index.tsx",
+  "repository": {
+    "url": "https://github.com/bdbaraban/ideadog.git",
+    "type": "git"
+  },
+  "author": {
+    "name": "Brennan D Baraban",
+    "email": "375@holbertonschool.com",
+    "url": "https://bdov.dev"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@material-ui/core": "^4.0.1",
+    "@material-ui/icons": "^4.0.1",
+    "@types/react": "^16.8.18",
+    "@types/react-dom": "^16.8.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "typescript": "^3.5.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "husky": "^2.3.0",
+    "prettier": "^1.17.1"
+  },
+  "scripts": {
+    "build": "parcel build dist/index.html",
+    "lint": "eslint ./src/**/*.{ts,tsx}",
+    "start": "parcel src/index.html --hmr-port 1235"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "eslint ./src/**/*.{ts,tsx}"
+    }
+  }
+}
