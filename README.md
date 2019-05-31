@@ -15,17 +15,19 @@ Development of IdeaDog has only just begun. Stay tuned, there is much, much, muc
 Front-End:
 | Tool/Library     | Version   |
 | ---------------- | --------- |
-|                  |           |
+| TypeScript       | 3.5.1     |
+| React            | 16.8.6    |
+| Material UI      | 4.0.1     |
 
 Back-End:
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
-|                  |            |
+| Rust             | ?          |
 
 Deployment:
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
-|                  |            |
+| Docker           | ?          |
 
 ## Authors :black_nib:
 
