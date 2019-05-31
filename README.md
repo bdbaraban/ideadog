@@ -15,14 +15,17 @@ Development of IdeaDog has only just begun. Stay tuned, there is much, much, muc
 Front-End:
 | Tool/Library     | Version   |
 | ---------------- | --------- |
+|                  |           |
 
 Back-End:
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
+|                  |            |
 
 Deployment:
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
+|                  |            |
 
 ## Authors :black_nib:
 
