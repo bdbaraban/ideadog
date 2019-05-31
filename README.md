@@ -3,6 +3,12 @@
   A [statically-typed] social ideas platform.
 </p>
 
+<p align="center">
+  <img src="https://github.com/bdbaraban/ideadog/blob/master/assets/logo.png"
+       alt="IdeaDog logo"
+  />
+</p>
+
 ## Description :bulb:
 
 IdeaDog is a social web application for sharing ideas. Why statically-typed, you ask?
