@@ -18,8 +18,17 @@
     "@material-ui/icons": "^4.0.1",
     "@types/react": "^16.8.18",
     "@types/react-dom": "^16.8.4",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "components": "^0.1.0",
+    "containers": "^0.0.1",
+    "hooks": "^0.3.2",
+    "icons": "^1.0.0",
+    "images": "^3.0.2",
+    "material-ui": "^0.20.2",
+    "navi": "^0.12.7",
+    "react": "^15.4.0 || ^16.0.0",
+    "react-dom": "^15.4.0 || ^16.0.0",
+    "react-navi": "^0.12.7",
+    "react-tiny-virtual-list": "^2.2.0",
     "typescript": "^3.5.1"
   },
   "devDependencies": {
@@ -32,13 +41,14 @@
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
     "husky": "^2.3.0",
     "prettier": "^1.17.1"
   },
   "scripts": {
     "build": "parcel build dist/index.html",
     "lint": "eslint ./src/**/*.{ts,tsx}",
-    "start": "parcel src/index.html --hmr-port 1235"
+    "start": "parcel src/index.html"
   },
   "husky": {
     "hooks": {
