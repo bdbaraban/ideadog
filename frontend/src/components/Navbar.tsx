@@ -1,9 +1,17 @@
 import React from 'react';
 import {
+  FormControl,
+  Select,
+  OutlinedInput,
+  MenuItem,
+  createMuiTheme
+} from '@material-ui/core';
+import {
+  createStyles,
+  fade,
   makeStyles,
   Theme,
-  createStyles,
-  fade
+  MuiThemeProvider
 } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import InputBase from '@material-ui/core/InputBase';
@@ -11,6 +19,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import { Styles } from 'jss';
+import { useNavigation, useCurrentRoute } from 'react-navi';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import HappyTully from '../icons/HappyTully';
 
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
@@ -22,8 +33,32 @@ const useStyles = makeStyles(
         flexGrow: 1,
         display: 'none',
         [theme.breakpoints.up('sm')]: {
+          marginLeft: theme.spacing(1),
           display: 'block'
         }
+      },
+      formControl: {
+        background: fade(theme.palette.common.white, 0.15),
+        border: 'none',
+        borderRadius: 4,
+        margin: theme.spacing(1),
+        minWidth: 120,
+        '&:hover': {
+          backgroundColor: fade(theme.palette.common.white, 0.25)
+        },
+        '&:focus': {
+          backgroundColor: fade(theme.palette.common.white, 0.25)
+        }
+      },
+      selectRoot: {
+        color: theme.palette.common.white
+      },
+      selectSelect: {
+        padding: theme.spacing(1),
+        paddingLeft: theme.spacing(2)
+      },
+      selectIcon: {
+        color: theme.palette.common.white
       },
       search: {
         position: 'relative',
@@ -32,7 +67,7 @@ const useStyles = makeStyles(
         '&:hover': {
           backgroundColor: fade(theme.palette.common.white, 0.25)
         },
-        marginLeft: 0,
+        marginLeft: theme.spacing(1),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
           marginLeft: theme.spacing(1),
@@ -52,7 +87,7 @@ const useStyles = makeStyles(
         color: 'inherit'
       },
       inputInput: {
-        padding: theme.spacing(1.4, 1, 1, 7),
+        padding: theme.spacing(1, 1, 1, 7),
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
@@ -65,37 +100,100 @@ const useStyles = makeStyles(
     })
 );
 
-const Navbar = (): React.ReactElement => {
+const Navbar = (props: { filter: string }): React.ReactElement => {
   const classes = useStyles();
+  const route = useCurrentRoute();
+  const navigation = useNavigation();
+
+  const handleChange = (
+    event: React.ChangeEvent<{ value: string | unknown }>
+  ): void => {
+    if (typeof event.target.value === 'string') {
+      const redirect =
+        route.url.query.tags !== undefined
+          ? `/ideas/${encodeURIComponent(
+              event.target.value
+            )}?tags=${encodeURIComponent(route.url.query.tags)}`
+          : `/ideas/${encodeURIComponent(event.target.value)}`;
+      navigation.navigate(redirect);
+    }
+  };
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <Typography
-            className={classes.title}
-            variant="h5"
-            color="inherit"
-            noWrap
-          >
-            IdeaDog
-          </Typography>
+    <AppBar color="primary" className={classes.root}>
+      <Toolbar>
+        <SvgIcon component={(): React.ReactElement => HappyTully(46, 1)}>
+          &nbsp;
+        </SvgIcon>
+        <Typography
+          className={classes.title}
+          variant="h5"
+          color="inherit"
+          noWrap
+        >
+          IdeaDog
+        </Typography>
 
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
+        <FormControl variant="outlined" className={classes.formControl}>
+          <MuiThemeProvider
+            theme={createMuiTheme({
+              overrides: {
+                MuiOutlinedInput: {
+                  notchedOutline: {
+                    border: 'none'
+                  }
+                }
+              }
+            })}
+          >
+            <Select
               classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
+                root: classes.selectRoot,
+                outlined: classes.outlined,
+                select: classes.selectSelect,
+                icon: classes.selectIcon
               }}
-            />
+              inputProps={{
+                classes: classes.outlined
+              }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    color: '#fff',
+                    backgroundColor: 'rgba(48, 60, 108, 1)'
+                  }
+                }
+              }}
+              value={props.filter}
+              onChange={handleChange}
+              input={
+                <OutlinedInput
+                  labelWidth={0}
+                  name="filter"
+                  id="outlined-age-simple"
+                />
+              }
+            >
+              <MenuItem value={'all'}>All</MenuItem>
+              <MenuItem value={'bright'}>Bright</MenuItem>
+            </Select>
+          </MuiThemeProvider>
+        </FormControl>
+
+        <div className={classes.search}>
+          <div className={classes.searchIcon}>
+            <SearchIcon />
           </div>
-        </Toolbar>
-      </AppBar>
-    </div>
+          <InputBase
+            placeholder="Search…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput
+            }}
+          />
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 
