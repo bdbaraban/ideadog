@@ -36,7 +36,7 @@ const theme: Theme = createMuiTheme({
     }
   },
   typography: {
-    fontFamily: ['Overpass', 'sans-serif'].join(',')
+    fontFamily: ['Lato', 'sans-serif'].join(',')
   }
 });
 
