@@ -1,3 +1,6 @@
 [submodule "backend/ideaDog-server"]
 	path = backend/ideaDog-server
 	url = https://github.com/Ostoyae/ideaDog_server.git
+[submodule "backend/r2d2-arangodb"]
+	path = backend/r2d2-arangodb
+	url = https://github.com/Ostoyae/r2d2-arangodb.git
