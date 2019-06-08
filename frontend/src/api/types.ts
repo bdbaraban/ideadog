@@ -16,6 +16,5 @@ export interface Idea {
 export interface Tag {
   id: string;
   key: string;
-  name: string;
   count: number;
 }
