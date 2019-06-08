@@ -37,17 +37,11 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.6.0",
-    "husky": "^2.4.0",
     "prettier": "^1.18.2"
   },
   "scripts": {
     "build": "parcel build dist/index.html",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "start": "parcel src/index.html"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "eslint ./src/**/*.{ts,tsx}"
-    }
   }
 }
