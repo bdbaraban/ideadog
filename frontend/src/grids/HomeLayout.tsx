@@ -2,9 +2,8 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Styles } from 'jss';
 import Grid from '@material-ui/core/Grid';
-import { Idea } from '../api/useIdeas';
-import IdeaGrid from './IdeaGrid';
-import InfoGrid from './InfoGrid';
+import { Idea, Tag } from '../api';
+import { IdeaGrid, InfoGrid } from './';
 
 const useStyles = makeStyles(
   (): Styles =>
@@ -20,17 +19,17 @@ const useStyles = makeStyles(
     })
 );
 
-interface GridLayoutProps {
+interface HomeLayoutProps {
   ideas: Idea[];
   currentTags: string[];
-  allTags: string[];
+  allTags: Tag[];
 }
 
-const GridLayout = ({
+const HomeLayout = ({
   ideas,
   currentTags,
   allTags
-}: GridLayoutProps): React.ReactElement => {
+}: HomeLayoutProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
@@ -43,4 +42,4 @@ const GridLayout = ({
   );
 };
 
-export default GridLayout;
+export default HomeLayout;
