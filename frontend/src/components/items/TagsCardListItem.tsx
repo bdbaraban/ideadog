@@ -1,30 +1,28 @@
 import React from 'react';
 import {
-  ListItem,
   ListItemIcon,
   Checkbox,
-  ListItemText
+  ListItemText,
+  MenuItem
 } from '@material-ui/core';
 import Label from '@material-ui/icons/Label';
 import LabelOutlined from '@material-ui/icons/LabelOutlined';
 import { CheckboxTag } from '../cards';
 
 interface TagsCardListItemProps {
-  checkboxTags: CheckboxTag[];
-  index: number;
+  tag: CheckboxTag;
   handleToggle: (tag: CheckboxTag) => () => void;
 }
 
 const TagsCardListItem = ({
-  checkboxTags,
-  index,
+  tag,
   handleToggle
 }: TagsCardListItemProps): React.ReactElement => {
-  const tag: string = Object.keys(checkboxTags[index])[0];
-  const value: boolean = Object.values(checkboxTags[index])[0];
+  const name: string = Object.keys(tag)[0];
+  const value: boolean = Object.values(tag)[0];
 
   return (
-    <ListItem key={index} button onClick={handleToggle(checkboxTags[index])}>
+    <MenuItem button onClick={handleToggle(tag)}>
       <ListItemIcon>
         <Checkbox
           icon={<LabelOutlined />}
@@ -32,11 +30,11 @@ const TagsCardListItem = ({
           edge="start"
           checked={value}
           disableRipple
-          inputProps={{ 'aria-labelledby': tag }}
+          inputProps={{ 'aria-labelledby': name }}
         />
       </ListItemIcon>
-      <ListItemText id={tag} primary={tag} />
-    </ListItem>
+      <ListItemText id={name} primary={name} />
+    </MenuItem>
   );
 };
 

@@ -5,10 +5,10 @@ import {
   createStyles,
   makeStyles,
   Theme,
-  Typography
+  Typography,
+  MenuList
 } from '@material-ui/core';
 import { Styles } from 'jss';
-import VirtualizedList from '@dwqs/react-virtual-list';
 import { useNavigation, useCurrentRoute } from 'react-navi';
 import { TagsCardListItem } from '../';
 import { Tag } from '../../api';
@@ -30,8 +30,9 @@ const useStyles = makeStyles(
         fontWeight: 'bold'
       },
       list: {
+        maxHeight: 250,
         scrollbarWidth: 'none',
-        overflow: '-moz-scrollbars-none',
+        overflow: 'auto',
         '&::-webkit-scrollbar': {
           width: 0
         }
@@ -56,7 +57,10 @@ const TagsCard = ({
   const route = useCurrentRoute();
   const navigation = useNavigation();
 
-  const allTagNames = allTags.map((tag: Tag): string => tag.name);
+  const allTagNames = allTags.map(
+    (tag: Tag): string =>
+      `${tag.key.charAt(0).toUpperCase()}${tag.key.slice(1)}`
+  );
 
   const [checkboxTags, setCheckboxTags] = React.useState<CheckboxTag[]>(
     allTagNames.map(
@@ -98,23 +102,17 @@ const TagsCard = ({
         <Typography className={classes.title} color="textSecondary">
           Tags
         </Typography>
-        <VirtualizedList
-          className={classes.list}
-          height={225}
-          itemCount={allTags.length}
-          useWindow={false}
-          renderItem={({
-            index
-          }: {
-            [key: string]: number;
-          }): React.ReactElement => (
-            <TagsCardListItem
-              checkboxTags={checkboxTags}
-              index={index}
-              handleToggle={handleToggle}
-            />
+        <MenuList id="tags-menu" className={classes.list}>
+          {checkboxTags.map(
+            (tag: CheckboxTag): React.ReactElement => (
+              <TagsCardListItem
+                key={Object.keys(tag)[0]}
+                tag={tag}
+                handleToggle={handleToggle}
+              />
+            )
           )}
-        />
+        </MenuList>
       </CardContent>
     </Card>
   );

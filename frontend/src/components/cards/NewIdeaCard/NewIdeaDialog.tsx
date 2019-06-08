@@ -215,7 +215,10 @@ const NewIdeaDialog = ({
                 )}
               >
                 {allTags
-                  .map((tag: Tag): string => tag.name)
+                  .map(
+                    (tag: Tag): string =>
+                      `${tag.key.charAt(0).toUpperCase()}${tag.key.slice(1)}`
+                  )
                   .map(
                     (tag: string): React.ReactElement => (
                       <MenuItem key={tag} value={tag}>

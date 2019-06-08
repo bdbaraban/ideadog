@@ -175,8 +175,8 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
                 component={(): React.ReactElement =>
                   HappyTully(
                     42,
-                    upvotes / (upvotes + downvotes) < 0.1
-                      ? 0.1
+                    upvotes / (upvotes + downvotes) < 0.05
+                      ? 0.05
                       : upvotes / (upvotes + downvotes)
                   )
                 }
@@ -189,8 +189,8 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
                 component={(): React.ReactElement =>
                   SadTully(
                     42,
-                    downvotes / (upvotes + downvotes) < 0.1
-                      ? 0.1
+                    downvotes / (upvotes + downvotes) < 0.05
+                      ? 0.05
                       : downvotes / (upvotes + downvotes)
                   )
                 }
