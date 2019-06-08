@@ -19,7 +19,7 @@ Development of IdeaDog has only just begun. Stay tuned, there is much, much, muc
 
 ## Dependencies :couple:
 
-Front-End:
+**Front-End**:
 
 | Tool/Library             | Version |
 | ------------------------ | ------- |
@@ -32,7 +32,7 @@ Front-End:
 
 View the complete list of front-end dependencies in the corresponding [package.json](./frontend/package.json).
 
-Back-End:
+**Back-End**:
 
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
@@ -40,7 +40,7 @@ Back-End:
 | Actix            | ?          |
 | ArangoDB         | ^0.14.0    |
 
-Deployment:
+**Deployment**:
 
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
