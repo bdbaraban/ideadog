@@ -46,7 +46,10 @@ interface TagsCardProps {
 }
 
 export interface CheckboxTag {
-  [key: string]: boolean;
+  [key: string]: {
+    count: number;
+    checked: boolean;
+  };
 }
 
 const TagsCard = ({
@@ -57,16 +60,15 @@ const TagsCard = ({
   const route = useCurrentRoute();
   const navigation = useNavigation();
 
-  const allTagNames = allTags.map(
-    (tag: Tag): string =>
-      `${tag.key.charAt(0).toUpperCase()}${tag.key.slice(1)}`
-  );
-
   const [checkboxTags, setCheckboxTags] = React.useState<CheckboxTag[]>(
-    allTagNames.map(
-      (tag: string): CheckboxTag => {
+    allTags.map(
+      (tag: Tag): CheckboxTag => {
+        const name = `${tag.key.charAt(0).toUpperCase()}${tag.key.slice(1)}`;
         let obj: CheckboxTag = {};
-        obj[tag] = currentTags.includes(tag);
+        obj[name] = {
+          count: tag.count,
+          checked: currentTags.includes(name)
+        };
         return obj;
       }
     )
@@ -76,13 +78,13 @@ const TagsCard = ({
     const checked = [...checkboxTags];
     const index = checked.indexOf(tag);
 
-    tag[Object.keys(tag)[0]] = !tag[Object.keys(tag)[0]];
+    tag[Object.keys(tag)[0]].checked = !tag[Object.keys(tag)[0]].checked;
     checked[index] = tag;
     setCheckboxTags(checked);
 
     const query: string = checked
       .reduce((query: string[], tag: CheckboxTag): string[] => {
-        if (Object.values(tag)[0]) {
+        if (Object.values(tag)[0].checked) {
           query.push(Object.keys(tag)[0].toLowerCase());
         }
         return query;
