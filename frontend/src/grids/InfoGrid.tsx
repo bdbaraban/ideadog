@@ -1,13 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import { Theme, Hidden, makeStyles, createStyles } from '@material-ui/core';
 import { Styles } from 'jss';
-import UserCard from '../components/UserCard';
-import TagsCard from '../components/TagsCard';
-import AboutCard from '../components/AboutCard';
+import { UserCard, TagsCard, AboutCard } from '../components';
+import { Tag } from '../api';
 
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
@@ -27,10 +23,15 @@ const useStyles = makeStyles(
     })
 );
 
-const InfoGrid = (props: {
+interface InfoGridProps {
   currentTags: string[];
-  allTags: string[];
-}): React.ReactElement => {
+  allTags: Tag[];
+}
+
+const InfoGrid = ({
+  currentTags,
+  allTags
+}: InfoGridProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
@@ -47,7 +48,7 @@ const InfoGrid = (props: {
           <UserCard />
         </Grid>
         <Grid item>
-          <TagsCard currentTags={props.currentTags} allTags={props.allTags} />
+          <TagsCard currentTags={currentTags} allTags={allTags} />
         </Grid>
         <Grid item>
           <AboutCard />
