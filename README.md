@@ -72,6 +72,8 @@ API:
 * `POST /api/idea`: Creates a new idea.
 * `GET /api/idea/{id}`: Fetches an idea with id `{id}`.
 
+View the complete API documentation at [this Postman link](https://documenter.getpostman.com/view/253532/S1TZxahn?version=latest#66ec1bb7-e35b-4ecf-b796-f88dfbeb7d86).
+
 ## Authors :black_nib:
 
 * __Brennan D Baraban__ <[bdbaraban](https://github.com/bdbaraban)>
