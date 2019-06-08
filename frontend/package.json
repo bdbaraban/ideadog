@@ -1,7 +1,7 @@
 {
   "name": "ideadog",
   "version": "1.0.0",
-  "description": "A social ideas platform.",
+  "description": "A [statically-typed] social ideas platform",
   "main": "index.tsx",
   "repository": {
     "url": "https://github.com/bdbaraban/ideadog.git",
@@ -14,24 +14,19 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@material-ui/core": "^4.0.1",
+    "@dwqs/react-virtual-list": "^1.0.0",
+    "@material-ui/core": "^4.0.2",
     "@material-ui/icons": "^4.0.1",
-    "@types/react": "^16.8.18",
     "@types/react-dom": "^16.8.4",
-    "components": "^0.1.0",
-    "containers": "^0.0.1",
-    "hooks": "^0.3.2",
-    "icons": "^1.0.0",
-    "images": "^3.0.2",
-    "material-ui": "^0.20.2",
+    "clipboard-copy": "^3.0.0",
     "navi": "^0.12.7",
     "react": "^15.4.0 || ^16.0.0",
     "react-dom": "^15.4.0 || ^16.0.0",
     "react-navi": "^0.12.7",
-    "react-tiny-virtual-list": "^2.2.0",
     "typescript": "^3.5.1"
   },
   "devDependencies": {
+    "@types/react": "^16.8.19",
     "@typescript-eslint/eslint-plugin": "^1.9.0",
     "@typescript-eslint/parser": "^1.9.0",
     "babel-preset-env": "^1.7.0",
@@ -42,8 +37,8 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.6.0",
-    "husky": "^2.3.0",
-    "prettier": "^1.17.1"
+    "husky": "^2.4.0",
+    "prettier": "^1.18.2"
   },
   "scripts": {
     "build": "parcel build dist/index.html",
