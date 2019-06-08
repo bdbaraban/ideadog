@@ -53,7 +53,7 @@ View the complete list of front-end dependencies in the corresponding [package.j
 Features:
 * Hooks hooks hooks! IdeaDog features _zero_ traditional React components.
 * List virtualization. I tried combinations of five different list virtualization libraries before I discovered [React Virtual List](./https://github.com/dwqs/react-virtual-list). Check it out!
-* Asynchronous data fetching. Did I mention that I like hooks? Do yourself a favor and give [Navi] a try.
+* Asynchronous data fetching. Did I mention that I like hooks? Do yourself a favor and give [Navi](https://frontarm.com/navi/en/) a try.
 
 Routes:
 * `/:sort?tags`: The home page of IdeaDog, filters displayed ideas by `:sort` and `?tags`.
