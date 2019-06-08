@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HappyTully = (size: number, opacity: number): React.ReactElement => {
+const HappyTully = (size: number, opacity: number = 1): React.ReactElement => {
   return (
     <svg
       width={`${size}`}
