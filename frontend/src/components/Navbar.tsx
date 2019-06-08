@@ -4,7 +4,8 @@ import {
   Select,
   OutlinedInput,
   MenuItem,
-  createMuiTheme
+  createMuiTheme,
+  Button
 } from '@material-ui/core';
 import {
   createStyles,
@@ -18,10 +19,10 @@ import InputBase from '@material-ui/core/InputBase';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import { Styles } from 'jss';
 import { useNavigation, useCurrentRoute } from 'react-navi';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import HappyTully from '../icons/HappyTully';
+import { HappyTully } from '../icons';
 
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
@@ -100,10 +101,18 @@ const useStyles = makeStyles(
     })
 );
 
-const Navbar = (props: { filter: string }): React.ReactElement => {
+interface NavbarProps {
+  sort: string;
+}
+
+const Navbar = ({ sort }: NavbarProps): React.ReactElement => {
   const classes = useStyles();
   const route = useCurrentRoute();
   const navigation = useNavigation();
+
+  const routeHome = (): void => {
+    navigation.navigate('/home');
+  };
 
   const handleChange = (
     event: React.ChangeEvent<{ value: string | unknown }>
@@ -111,10 +120,10 @@ const Navbar = (props: { filter: string }): React.ReactElement => {
     if (typeof event.target.value === 'string') {
       const redirect =
         route.url.query.tags !== undefined
-          ? `/ideas/${encodeURIComponent(
+          ? `/${encodeURIComponent(
               event.target.value
             )}?tags=${encodeURIComponent(route.url.query.tags)}`
-          : `/ideas/${encodeURIComponent(event.target.value)}`;
+          : `/${encodeURIComponent(event.target.value)}`;
       navigation.navigate(redirect);
     }
   };
@@ -122,9 +131,11 @@ const Navbar = (props: { filter: string }): React.ReactElement => {
   return (
     <AppBar color="primary" className={classes.root}>
       <Toolbar>
-        <SvgIcon component={(): React.ReactElement => HappyTully(46, 1)}>
-          &nbsp;
-        </SvgIcon>
+        <Button onClick={routeHome}>
+          <SvgIcon component={(): React.ReactElement => HappyTully(46, 1)}>
+            &nbsp;
+          </SvgIcon>
+        </Button>
         <Typography
           className={classes.title}
           variant="h5"
@@ -147,6 +158,7 @@ const Navbar = (props: { filter: string }): React.ReactElement => {
             })}
           >
             <Select
+              displayEmpty={true}
               classes={{
                 root: classes.selectRoot,
                 outlined: classes.outlined,
@@ -164,12 +176,12 @@ const Navbar = (props: { filter: string }): React.ReactElement => {
                   }
                 }
               }}
-              value={props.filter}
+              value={sort}
               onChange={handleChange}
               input={
                 <OutlinedInput
                   labelWidth={0}
-                  name="filter"
+                  name="sort"
                   id="outlined-age-simple"
                 />
               }
