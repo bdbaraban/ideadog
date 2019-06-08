@@ -23,12 +23,12 @@ Development of IdeaDog has only just begun. Stay tuned, there is much, much, muc
 
 | Tool/Library             | Version |
 | ------------------------ | ------- |
-| TypeScript               | ^3.5.1  |
-| React                    | ^16.8.6 |
-| Material UI              | ^4.0.2  |
-| Navi                     | ^0.12.7 |
-| @dwqs/react-virtual-list | ^1.0.0  |
-| clipboard-copy           | ^3.0.0  |
+| [TypeScript](https://www.typescriptlang.org/) | ^3.5.1  |
+| [React](https://reactjs.org/) | ^16.8.6 |
+| [Material UI](https://material-ui.com/) | ^4.0.2  |
+| [Navi](https://frontarm.com/navi/en/) | ^0.12.7 |
+| [@dwqs/react-virtual-list](https://www.npmjs.com/package/@dwqs/react-virtual-list) | ^1.0.0  |
+| [clipboard-copy](https://www.npmjs.com/package/clipboard-copy) | ^3.0.0  |
 
 View the complete list of front-end dependencies in the corresponding [package.json](./frontend/package.json).
 
@@ -36,23 +36,24 @@ View the complete list of front-end dependencies in the corresponding [package.j
 
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
-| Rust             | ?          |
-| Actix            | ?          |
-| ArangoDB         | ^0.14.0    |
+| [Rust](https://www.rust-lang.org/) | ? |
+| [Actix](https://actix.rs/actix/actix/) | ? |
+| [ArangoDB](https://www.arangodb.com/) | ^0.14.0 |
 
-**Deployment**:
+**Packaging/Deployment**:
 
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
-| Docker           | ^18.09.3   |
-| Docker Compose   | ^1.23.2    |
-| Yarn             | ^1.16.0    |
+| [Docker](https://www.docker.com/) | ^18.09.3   |
+| [Docker Compose](https://docs.docker.com/compose/) | ^1.23.2    |
+| [Yarn](https://yarnpkg.com/en/) | ^1.16.0    |
+| [Parcel](https://parceljs.org/) | ^1.12.3    |
 
 ## Front-End :dog2:
 
 Features:
 * Hooks hooks hooks! IdeaDog features _zero_ traditional React components.
-* List virtualization. I tried combinations of five different list virtualization libraries before I discovered [React Virtual List](./https://github.com/dwqs/react-virtual-list). Check it out!
+* List virtualization. I tried combinations of five different list virtualization libraries before I discovered [React Virtual List](https://www.npmjs.com/package/@dwqs/react-virtual-list). Check it out!
 * Asynchronous data fetching. Did I mention that I like hooks? Do yourself a favor and give [Navi](https://frontarm.com/navi/en/) a try.
 
 Routes:
@@ -62,7 +63,7 @@ Routes:
 ## Back-End :feet:
 
 Features:
-* NoSQL, but relationships? [ArangoDB](./https://www.arangodb.com/) is pretty awesome.
+* NoSQL, but relationships? [ArangoDB](https://www.arangodb.com/) is pretty awesome.
 
 API:
 * `GET /api`: Displays a friendly message.
