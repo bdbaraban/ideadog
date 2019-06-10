@@ -13,18 +13,20 @@ import { CheckboxTag } from '../cards';
 
 interface TagsCardListItemProps {
   tag: CheckboxTag;
-  handleToggle: (tag: CheckboxTag) => () => void;
+  handleToggle: (tag: CheckboxTag, index: number) => () => void;
+  index: number;
 }
 
 const TagsCardListItem = ({
   tag,
-  handleToggle
+  handleToggle,
+  index
 }: TagsCardListItemProps): React.ReactElement => {
   const name: string = Object.keys(tag)[0];
   const { count, checked } = Object.values(tag)[0];
 
   return (
-    <MenuItem button onClick={handleToggle(tag)}>
+    <MenuItem button onClick={handleToggle(tag, index)}>
       <ListItemIcon>
         <Checkbox
           icon={<LabelOutlined />}

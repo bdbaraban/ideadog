@@ -23,7 +23,7 @@ const IdeaGridItem = ({ idea }: IdeaGridItemProps): React.ReactElement => {
 
   return (
     <Grid item xs={12} className={classes.root}>
-      <IdeaCard idea={idea} />
+      {idea && <IdeaCard idea={idea} />}
     </Grid>
   );
 };
