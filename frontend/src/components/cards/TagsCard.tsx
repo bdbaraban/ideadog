@@ -60,41 +60,51 @@ const TagsCard = ({
   const route = useCurrentRoute();
   const navigation = useNavigation();
 
-  const [checkboxTags, setCheckboxTags] = React.useState<CheckboxTag[]>(
-    allTags.map(
-      (tag: Tag): CheckboxTag => {
-        const name = `${tag.key.charAt(0).toUpperCase()}${tag.key.slice(1)}`;
-        let obj: CheckboxTag = {};
-        obj[name] = {
-          count: tag.count,
-          checked: currentTags.includes(name)
-        };
-        return obj;
-      }
-    )
-  );
+  const [checkboxTags, setCheckboxTags] = React.useState<CheckboxTag[]>([]);
 
-  const handleToggle = (tag: CheckboxTag): (() => void) => (): void => {
+  React.useEffect((): void => {
+    setCheckboxTags(
+      allTags.map(
+        (tag: Tag): CheckboxTag => {
+          const name = `${tag.key.charAt(0).toUpperCase()}${tag.key.slice(1)}`;
+          let obj: CheckboxTag = {};
+          obj[name] = {
+            count: tag.count,
+            checked: currentTags.includes(name)
+          };
+          return obj;
+        }
+      )
+    );
+  }, [allTags]);
+
+  const handleToggle = (
+    tag: CheckboxTag,
+    index: number
+  ): (() => void) => (): void => {
     const checked = [...checkboxTags];
-    const index = checked.indexOf(tag);
 
     tag[Object.keys(tag)[0]].checked = !tag[Object.keys(tag)[0]].checked;
     checked[index] = tag;
     setCheckboxTags(checked);
 
-    const query: string = checked
-      .reduce((query: string[], tag: CheckboxTag): string[] => {
+    const tags: string = checked.reduce(
+      (query: string, tag: CheckboxTag): string => {
         if (Object.values(tag)[0].checked) {
-          query.push(Object.keys(tag)[0].toLowerCase());
+          if (query !== '') {
+            query += ',';
+          }
+          query += Object.keys(tag)[0].toLowerCase();
         }
         return query;
-      }, [])
-      .join(',');
+      },
+      ''
+    );
 
     navigation.navigate(
-      query.length !== 0
-        ? `${route.url.pathname}?tags=${encodeURIComponent(query)}`
-        : `${route.url.pathname}`
+      tags.length !== 0
+        ? `${route.url.hostname}?tags=${encodeURIComponent(tags)}`
+        : `${route.url.hostname}`
     );
   };
 
@@ -106,11 +116,12 @@ const TagsCard = ({
         </Typography>
         <MenuList id="tags-menu" className={classes.list}>
           {checkboxTags.map(
-            (tag: CheckboxTag): React.ReactElement => (
+            (tag: CheckboxTag, index: number): React.ReactElement => (
               <TagsCardListItem
                 key={Object.keys(tag)[0]}
                 tag={tag}
                 handleToggle={handleToggle}
+                index={index}
               />
             )
           )}
