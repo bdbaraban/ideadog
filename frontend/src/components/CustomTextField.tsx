@@ -5,7 +5,7 @@ import { Styles } from 'jss';
 import { fade } from '@material-ui/core/styles';
 import { OutlinedInputProps } from '@material-ui/core/OutlinedInput';
 
-const NewIdeaTextField = (props: TextFieldProps): React.ReactElement => {
+const CustomTextField = (props: TextFieldProps): React.ReactElement => {
   const useTextStyles = makeStyles(
     (theme: Theme): Styles =>
       createStyles({
@@ -33,17 +33,10 @@ const NewIdeaTextField = (props: TextFieldProps): React.ReactElement => {
 
   return (
     <TextField
-      id="new-idea-text-field"
-      autoFocus={true}
       InputProps={InputProps as Partial<OutlinedInputProps>}
-      fullWidth={true}
-      label="I've got a bright new idea..."
-      margin="none"
-      multiline
-      placeholder="A dog hotel, for humans."
       {...props}
     />
   );
 };
 
-export default NewIdeaTextField;
+export default CustomTextField;
