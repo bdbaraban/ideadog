@@ -1,4 +1,5 @@
 import { Idea } from './';
+import { NotFoundError } from 'navi';
 
 interface SearchParameters {
   key: string;
@@ -6,7 +7,11 @@ interface SearchParameters {
 
 const getIdea = async ({ key }: SearchParameters): Promise<Idea[]> => {
   const response = await fetch(`http://localhost:5000/api/idea/${key}`);
-  const data = await response.json();
+  const data: Idea[] = await response.json();
+
+  if (!data) {
+    throw new NotFoundError(`Idea with ID '${key}' does not exist.`);
+  }
   return data;
 };
 

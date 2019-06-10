@@ -18,3 +18,16 @@ export interface Tag {
   key: string;
   count: number;
 }
+
+export interface User {
+  id: string;
+  key: string;
+  username: string;
+  email: string;
+  ideas: string[];
+  favorite: string;
+  upvotes: number;
+  downvotes: number;
+  active: boolean;
+  created_at: number;
+}
