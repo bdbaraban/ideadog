@@ -15,7 +15,6 @@ import {
 import { fade } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Chip from '@material-ui/core/Chip';
-import PropTypes from 'prop-types';
 import { Styles } from 'jss';
 import IconButton from '@material-ui/core/IconButton';
 import ClassOutlined from '@material-ui/icons/ClassOutlined';
@@ -140,6 +139,13 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
   const [upvotes, setUpvotes] = React.useState<number>(idea.upvotes);
   const [downvotes, setDownvotes] = React.useState<number>(idea.downvotes);
 
+  React.useEffect((): void => {
+    setUpvotes(idea.upvotes ? idea.upvotes : 1);
+    setDownvotes(idea.downvotes ? idea.downvotes : 1);
+
+    /* return update function */
+  }, [idea.upvotes, idea.downvotes]);
+
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -255,10 +261,6 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
       </CardContent>
     </Card>
   );
-};
-
-IdeaCard.propTypes = {
-  idea: PropTypes.object.isRequired
 };
 
 export default IdeaCard;

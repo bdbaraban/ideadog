@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core';
 import { Styles } from 'jss';
 import { fade } from '@material-ui/core/styles';
-import { Tag, useUserStatus } from '../../../api';
-import { NewIdeaDialog, LoginDialog } from '.';
+import { Tag, UserAuth } from '../../../api';
+import { NewIdeaDialog, NotLoggedInDialog } from '../../';
 
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
@@ -42,22 +42,16 @@ const useStyles = makeStyles(
 
 interface NewIdeaProps {
   allTags: Tag[];
+  user: UserAuth;
 }
 
-const NewIdeaCard = ({ allTags }: NewIdeaProps): React.ReactElement => {
+const NewIdeaCard = ({ allTags, user }: NewIdeaProps): React.ReactElement => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState<boolean>(false);
-  const [isOnline, setIsOnline] = React.useState<boolean>(useUserStatus());
 
-  const handleOpen = (): void => {
-    setOpen(true);
-  };
-  const handleClose = (): void => {
-    setOpen(false);
-  };
-  const handleLogin = (): void => {
-    setIsOnline(true);
+  const toggleOpen = (): void => {
+    setOpen(!open);
   };
 
   return (
@@ -66,25 +60,25 @@ const NewIdeaCard = ({ allTags }: NewIdeaProps): React.ReactElement => {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleOpen}
+          onClick={toggleOpen}
           className={classes.cardButton}
         >
           I&apos;ve got a bright new idea...
           <Icon fontSize="small">edit</Icon>
         </Button>
-        {isOnline ? (
+        {user.currentUser ? (
           // New idea dialog, if user is logged in
           <NewIdeaDialog
             open={open}
-            handleClose={handleClose}
+            toggleOpen={toggleOpen}
             allTags={allTags}
           />
         ) : (
-          // Login dialog, if user is not logged in
-          <LoginDialog
+          // Not-logged-in dialog, if user is not logged in
+          <NotLoggedInDialog
             open={open}
-            handleClose={handleClose}
-            handleLogin={handleLogin}
+            toggleSelfOpen={toggleOpen}
+            user={user}
           />
         )}
       </CardContent>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Fab, makeStyles, createStyles, Icon } from '@material-ui/core';
 import { Styles } from 'jss';
-import { NewIdeaDialog, LoginDialog } from './';
-import { useUserStatus, Tag } from '../api';
+import { NewIdeaDialog, NotLoggedInDialog } from './';
+import { Tag, UserAuth } from '../api';
 
 const useStyles = makeStyles(
   (): Styles =>
@@ -17,22 +17,16 @@ const useStyles = makeStyles(
 
 interface NewIdeaFabProps {
   allTags: Tag[];
+  user: UserAuth;
 }
 
-const NewIdeaFab = ({ allTags }: NewIdeaFabProps): React.ReactElement => {
+const NewIdeaFab = ({ allTags, user }: NewIdeaFabProps): React.ReactElement => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState<boolean>(false);
-  const [isOnline, setIsOnline] = React.useState<boolean>(useUserStatus());
 
-  const handleOpen = (): void => {
-    setOpen(true);
-  };
-  const handleClose = (): void => {
-    setOpen(false);
-  };
-  const handleLogin = (): void => {
-    setIsOnline(true);
+  const toggleOpen = (): void => {
+    setOpen(!open);
   };
 
   return (
@@ -41,22 +35,18 @@ const NewIdeaFab = ({ allTags }: NewIdeaFabProps): React.ReactElement => {
       aria-label="Add"
       disabled={open}
       className={classes.fab}
-      onClick={handleOpen}
+      onClick={toggleOpen}
     >
       <Icon fontSize="large">edit</Icon>
-      {isOnline ? (
+      {user.currentUser ? (
         // New idea dialog, if user is logged in
-        <NewIdeaDialog
-          open={open}
-          handleClose={handleClose}
-          allTags={allTags}
-        />
+        <NewIdeaDialog open={open} toggleOpen={toggleOpen} allTags={allTags} />
       ) : (
         // Login dialog, if user is not logged in
-        <LoginDialog
+        <NotLoggedInDialog
+          user={user}
           open={open}
-          handleClose={handleClose}
-          handleLogin={handleLogin}
+          toggleSelfOpen={toggleOpen}
         />
       )}
     </Fab>

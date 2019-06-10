@@ -18,7 +18,8 @@ import {
   createStyles
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { NewIdeaTextField, TagsInputLabel, TagsSelect } from '.';
+import { CustomTextField } from '../../';
+import { TagsInputLabel, TagsSelect } from '.';
 import { useNavigation, useCurrentRoute } from 'react-navi';
 import { Tag } from '../../../api';
 import { SadTully, HappyTully } from '../../../icons';
@@ -107,13 +108,13 @@ const useStyles = makeStyles(
 
 interface NewIdeaDialogProps {
   open: boolean;
-  handleClose: () => void;
+  toggleOpen: () => void;
   allTags: Tag[];
 }
 
 const NewIdeaDialog = ({
   open,
-  handleClose,
+  toggleOpen,
   allTags
 }: NewIdeaDialogProps): React.ReactElement => {
   const classes = useStyles();
@@ -128,26 +129,28 @@ const NewIdeaDialog = ({
   ): void => {
     setText(event.target.value);
   };
+
   const handleTagsChange = (
     event: React.ChangeEvent<{ value: unknown }>
   ): void => {
     setTags(event.target.value as string[]);
   };
+
   const handlePost = async (): Promise<void> => {
-    await fetch('/users', {
+    await fetch('http://localhost:5000/api/idea', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      /* eslint-disable @typescript-eslint/camelcase */
       body: JSON.stringify({
         text,
+        /* eslint-disable @typescript-eslint/camelcase */
         owner_id: '902317',
+        /* eslint-enable @typescript-eslint/camelcase */
         tags: tags.map((tag: string): string => tag.toLowerCase())
       })
-      /* eslint-enable @typescript-eslint/camelcase */
     });
-    handleClose();
+    toggleOpen();
     navigation.navigate(route.url.href);
   };
 
@@ -157,7 +160,7 @@ const NewIdeaDialog = ({
 
   return (
     <Dialog
-      onClose={handleClose}
+      onClose={toggleOpen}
       aria-labelledby="new-idea-dialog"
       open={open}
       fullWidth={true}
@@ -167,7 +170,7 @@ const NewIdeaDialog = ({
           aria-label="Close"
           className={classes.newIdeaDialogCloseButton}
           color="secondary"
-          onClick={handleClose}
+          onClick={toggleOpen}
           size="small"
         >
           <CloseIcon className={classes.newIdeaDialogCloseIcon} />
@@ -184,11 +187,18 @@ const NewIdeaDialog = ({
         </Button>
       </DialogTitle>
       <DialogContent className={classes.newIdeaDialogContent}>
-        <NewIdeaTextField
+        <CustomTextField
+          id="new-idea-text-field"
           value={text}
           error={text.length > 140}
           onChange={handleTextChange}
           variant="filled"
+          autoFocus={true}
+          fullWidth={true}
+          label="I've got a bright new idea..."
+          margin="none"
+          multiline
+          placeholder="A dog hotel, for humans."
         />
         <Container className={classes.newIdeaDialogContentContainer}>
           <Container className={classes.newIdeaFormControlContainer}>
@@ -214,22 +224,22 @@ const NewIdeaDialog = ({
                   </div>
                 )}
               >
-                {allTags
-                  .map(
-                    (tag: Tag): string =>
-                      `${tag.key.charAt(0).toUpperCase()}${tag.key.slice(1)}`
-                  )
-                  .map(
-                    (tag: string): React.ReactElement => (
-                      <MenuItem key={tag} value={tag}>
+                {allTags.map(
+                  (tag: Tag): React.ReactElement => {
+                    const name = `${tag.key
+                      .charAt(0)
+                      .toUpperCase()}${tag.key.slice(1)}`;
+                    return (
+                      <MenuItem key={name} value={name}>
                         <Checkbox
                           color="default"
-                          checked={tags.indexOf(tag) > -1}
+                          checked={tags.indexOf(name) > -1}
                         />
-                        <ListItemText primary={tag} />
+                        <ListItemText primary={name} />
                       </MenuItem>
-                    )
-                  )}
+                    );
+                  }
+                )}
               </TagsSelect>
             </FormControl>
           </Container>
