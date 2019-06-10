@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { Theme, Hidden, makeStyles, createStyles } from '@material-ui/core';
 import { Styles } from 'jss';
 import { UserCard, TagsCard, AboutCard } from '../components';
-import { Tag } from '../api';
+import { Tag, UserAuth } from '../api';
 
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
@@ -26,11 +26,13 @@ const useStyles = makeStyles(
 interface InfoGridProps {
   currentTags: string[];
   allTags: Tag[];
+  user: UserAuth;
 }
 
 const InfoGrid = ({
   currentTags,
-  allTags
+  allTags,
+  user
 }: InfoGridProps): React.ReactElement => {
   const classes = useStyles();
 
@@ -45,7 +47,7 @@ const InfoGrid = ({
         spacing={2}
       >
         <Grid item>
-          <UserCard />
+          <UserCard user={user} />
         </Grid>
         <Grid item>
           <TagsCard currentTags={currentTags} allTags={allTags} />

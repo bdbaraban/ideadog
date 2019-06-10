@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   createStyles,
   Hidden,
@@ -11,7 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import VirtualizedList from '@dwqs/react-virtual-list';
 import { NewIdeaCard, IdeaGridItem } from '../components';
-import { Idea, Tag } from '../api';
+import { Idea, Tag, UserAuth } from '../api';
 
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
@@ -37,7 +37,8 @@ const useStyles = makeStyles(
       container: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        height: 50
       },
       typography: {
         textAlign: 'center'
@@ -48,16 +49,21 @@ const useStyles = makeStyles(
 interface IdeaGridProps {
   ideas: Idea[];
   allTags: Tag[];
+  user: UserAuth;
 }
 
-const IdeaGrid = ({ ideas, allTags }: IdeaGridProps): React.ReactElement => {
+const IdeaGrid = ({
+  ideas,
+  allTags,
+  user
+}: IdeaGridProps): React.ReactElement => {
   const classes = useStyles();
 
-  const [, forceUpdate] = React.useReducer((x: number): number => x + 1, 0);
+  const [currentIdeas, setCurrentIdeas] = React.useState<Idea[]>([]);
 
-  useEffect((): void => {
-    forceUpdate(0);
-  }, []);
+  React.useEffect((): void => {
+    setCurrentIdeas(ideas);
+  }, [ideas[0]]);
 
   const onLoading = (): React.ReactElement => {
     return (
@@ -71,7 +77,7 @@ const IdeaGrid = ({ ideas, allTags }: IdeaGridProps): React.ReactElement => {
     return (
       <div className={classes.container}>
         <Typography className={classes.typography} color="textSecondary">
-          You&apos;ve exhausted <i>all</i> ideas.
+          No bamboozle, there are no more ideas.
         </Typography>
       </div>
     );
@@ -100,15 +106,15 @@ const IdeaGrid = ({ ideas, allTags }: IdeaGridProps): React.ReactElement => {
     >
       <Hidden xsDown>
         <Grid item>
-          <NewIdeaCard allTags={allTags} />
+          <NewIdeaCard allTags={allTags} user={user} />
         </Grid>
       </Hidden>
       <VirtualizedList
         className={classes.list}
-        itemCount={ideas.length}
+        itemCount={currentIdeas.length}
         overscanCount={15}
         useWindow={false}
-        height={800}
+        height={600}
         onLoading={onLoading}
         onEnded={onEnded}
         noContentRenderer={noContentRenderer}
@@ -116,7 +122,7 @@ const IdeaGrid = ({ ideas, allTags }: IdeaGridProps): React.ReactElement => {
           index
         }: {
           [key: string]: number;
-        }): React.ReactElement => <IdeaGridItem idea={ideas[index]} />}
+        }): React.ReactElement => <IdeaGridItem idea={currentIdeas[index]} />}
       />
     </Grid>
   );

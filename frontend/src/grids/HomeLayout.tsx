@@ -2,8 +2,8 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Styles } from 'jss';
 import Grid from '@material-ui/core/Grid';
-import { Idea, Tag } from '../api';
-import { IdeaGrid, InfoGrid } from './';
+import { Idea, Tag, UserAuth } from '../api';
+import { IdeaGrid, InfoGrid } from '.';
 
 const useStyles = makeStyles(
   (): Styles =>
@@ -23,20 +23,22 @@ interface HomeLayoutProps {
   ideas: Idea[];
   currentTags: string[];
   allTags: Tag[];
+  user: UserAuth;
 }
 
 const HomeLayout = ({
   ideas,
   currentTags,
-  allTags
+  allTags,
+  user
 }: HomeLayoutProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Grid className={classes.grid} container spacing={6} justify="center">
-        <IdeaGrid ideas={ideas} allTags={allTags} />
-        <InfoGrid currentTags={currentTags} allTags={allTags} />
+        <IdeaGrid ideas={ideas} allTags={allTags} user={user} />
+        <InfoGrid currentTags={currentTags} allTags={allTags} user={user} />
       </Grid>
     </div>
   );
