@@ -5,7 +5,7 @@ import {
   OutlinedInput,
   MenuItem,
   createMuiTheme,
-  Button
+  Icon
 } from '@material-ui/core';
 import {
   createStyles,
@@ -21,7 +21,7 @@ import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import { Styles } from 'jss';
-import { useNavigation, useCurrentRoute } from 'react-navi';
+import { Link, useNavigation, useCurrentRoute } from 'react-navi';
 import { HappyTully } from '../icons';
 
 const useStyles = makeStyles(
@@ -37,6 +37,10 @@ const useStyles = makeStyles(
           marginLeft: theme.spacing(1),
           display: 'block'
         }
+      },
+      link: {
+        textDecoration: 'none',
+        color: theme.palette.common.white
       },
       formControl: {
         background: fade(theme.palette.common.white, 0.15),
@@ -97,6 +101,9 @@ const useStyles = makeStyles(
             width: 200
           }
         }
+      },
+      sideIcon: {
+        marginRight: theme.spacing(1)
       }
     })
 );
@@ -109,10 +116,6 @@ const Navbar = ({ sort }: NavbarProps): React.ReactElement => {
   const classes = useStyles();
   const route = useCurrentRoute();
   const navigation = useNavigation();
-
-  const routeHome = (): void => {
-    navigation.navigate('/home');
-  };
 
   const handleChange = (
     event: React.ChangeEvent<{ value: string | unknown }>
@@ -131,18 +134,20 @@ const Navbar = ({ sort }: NavbarProps): React.ReactElement => {
   return (
     <AppBar color="primary" className={classes.root}>
       <Toolbar>
-        <Button onClick={routeHome}>
+        <Link href="/home">
           <SvgIcon component={(): React.ReactElement => HappyTully(46, 1)}>
             &nbsp;
           </SvgIcon>
-        </Button>
+        </Link>
         <Typography
           className={classes.title}
           variant="h5"
           color="inherit"
           noWrap
         >
-          IdeaDog
+          <Link href="/home" className={classes.link}>
+            IdeaDog
+          </Link>
         </Typography>
 
         <FormControl variant="outlined" className={classes.formControl}>
@@ -152,6 +157,10 @@ const Navbar = ({ sort }: NavbarProps): React.ReactElement => {
                 MuiOutlinedInput: {
                   notchedOutline: {
                     border: 'none'
+                  },
+                  input: {
+                    display: 'flex',
+                    alignItems: 'center'
                   }
                 }
               }
@@ -186,8 +195,18 @@ const Navbar = ({ sort }: NavbarProps): React.ReactElement => {
                 />
               }
             >
-              <MenuItem value={'all'}>All</MenuItem>
-              <MenuItem value={'bright'}>Bright</MenuItem>
+              <MenuItem value={'home'}>
+                <Icon className={classes.sideIcon} fontSize="inherit">
+                  sort
+                </Icon>
+                All
+              </MenuItem>
+              <MenuItem value={'bright'}>
+                <Icon className={classes.sideIcon} fontSize="inherit">
+                  brightness_5
+                </Icon>
+                Bright
+              </MenuItem>
             </Select>
           </MuiThemeProvider>
         </FormControl>
