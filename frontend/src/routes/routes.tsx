@@ -1,9 +1,9 @@
 import React from 'react';
 import { lazy, mount, NaviRequest, redirect, route } from 'navi';
-import { getIdeas, getTags, Idea, Tag } from '../api';
+import { getIdeas, getTags, Idea, Tag, UserAuth } from '../api';
 import { Navbar, NewIdeaFab } from '../components';
 import { HomeLayout } from '../grids';
-import { LazyImport, NotFoundPage, RoutePromise, Title } from './';
+import { LazyImport, RoutePromise, Title } from './';
 
 const titles: Title = {
   home: 'IdeaDog - Home',
@@ -24,34 +24,33 @@ const splitTags = (query: string | undefined): string[] => {
 export default mount({
   '/': redirect('/home'),
   '/:sort': route(
-    async (req: NaviRequest<object>): Promise<RoutePromise> => {
-      const sort: string = req.params.sort;
-      if (sort !== 'home' && sort !== 'all' && sort !== 'bright') {
-        return {
-          title: 'IdeaDog - Not Found',
-          view: <NotFoundPage />
-        };
-      }
+    async (
+      request: NaviRequest<object>,
+      context: { user: UserAuth }
+    ): Promise<RoutePromise> => {
+      const { sort, tags } = request.params;
+      const ideas: Idea[] = await getIdeas({ sort, tags });
 
-      const currentTags: string[] = splitTags(req.params.tags);
+      const currentTags: string[] = splitTags(request.params.tags);
       const allTags: Tag[] = await getTags();
-      const ideas: Idea[] = await getIdeas({ sort, currentTags });
 
       return {
         title: titles[sort],
         view: (
           <div>
-            <Navbar sort={sort === 'home' ? 'all' : sort} />
+            <Navbar sort={sort} />
             <HomeLayout
               ideas={ideas}
               currentTags={currentTags}
               allTags={allTags}
+              user={context.user}
             />
-            <NewIdeaFab allTags={allTags} />
+            <NewIdeaFab allTags={allTags} user={context.user} />
           </div>
         )
       };
     }
   ),
-  '/idea': lazy((): LazyImport => import('./idea'))
+  '/idea': lazy((): LazyImport => import('./idea')),
+  '/user': lazy((): LazyImport => import('./user'))
 });
