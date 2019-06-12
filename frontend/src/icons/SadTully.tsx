@@ -1,11 +1,16 @@
 import React from 'react';
 
+/**
+ * Sad Tully logo SVG
+ * @param size {number} - width/height to render the SVG with
+ * @param opacity {number} - opacity number to render the SVG with, defaults to 1
+ */
 const SadTully = (size: number, opacity: number = 1): React.ReactElement => {
   return (
     <svg
       width={`${size}`}
       height={`${size}`}
-      style={{ opacity: opacity }}
+      style={{ opacity }}
       viewBox="0 0 445 348"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
