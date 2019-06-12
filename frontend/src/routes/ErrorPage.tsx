@@ -12,6 +12,9 @@ import { SadTully } from '../icons';
 import { Styles } from 'jss';
 import { Link } from 'react-navi';
 
+/**
+ * ErrorPage component styles
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
@@ -51,11 +54,21 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * ErrorPage component prop types
+ */
 interface ErrorPageProps {
+  // Error title
+  title: string;
+
+  // Error message
   message: string;
 }
 
-const ErrorPage = ({ message }: ErrorPageProps): React.ReactElement => {
+/**
+ * Generic error page component
+ */
+const ErrorPage = ({ title, message }: ErrorPageProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
@@ -67,7 +80,7 @@ const ErrorPage = ({ message }: ErrorPageProps): React.ReactElement => {
             color="textSecondary"
             variant="h4"
           >
-            404 - Not Found
+            {title}
           </Typography>
           <Typography
             className={classes.text}
