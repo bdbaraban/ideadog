@@ -2,9 +2,10 @@ import React, { Suspense } from 'react';
 import { Router, View } from 'react-navi';
 import { makeStyles } from '@material-ui/core';
 import { Styles } from 'jss';
-import { Layout, routes } from './routes';
-import { UserAuth } from './api';
+import { home, Layout } from './routes';
+import { UserSession } from './api';
 
+// Hide page scrollbars
 const useStyles = makeStyles(
   (): Styles => ({
     '@global': {
@@ -20,13 +21,17 @@ const useStyles = makeStyles(
   { name: 'MuiCssBaseline' }
 );
 
+/**
+ * Entry point of IdeaDog React App
+ */
 const App = (): React.ReactElement => {
   useStyles();
 
-  const user = new UserAuth();
+  // Instantiate current user
+  const user = new UserSession();
 
   return (
-    <Router routes={routes} context={{ user }}>
+    <Router routes={home} context={{ user }}>
       <Layout>
         <Suspense fallback={null}>
           <View />
