@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Button,
   CardContent,
   Container,
   createStyles,
@@ -9,8 +10,7 @@ import {
   makeStyles,
   Theme,
   Typography,
-  SvgIcon,
-  Button
+  SvgIcon
 } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -21,9 +21,13 @@ import ClassOutlined from '@material-ui/icons/ClassOutlined';
 import Forward from '@material-ui/icons/Forward';
 import CopyToClipboard from '../CopyToClipboard';
 import { Link } from 'react-navi';
-import { Idea } from '../../api';
+import { Idea } from '../../types';
+import { MONTHS } from '../../constants';
 import { HappyTully, SadTully } from '../../icons';
 
+/**
+ * IdeaCard component style
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
@@ -112,53 +116,85 @@ const useStyles = makeStyles(
     })
 );
 
-const months: string[] = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-];
+/**
+ * Votes state type
+ */
+interface VotesState {
+  // Idea upvotes count
+  upvotes: number;
 
+  // Idea downvotes count
+  downvotes: number;
+}
+
+/**
+ * IdeaCard component prop types
+ */
 interface IdeaCardProps {
+  // Idea to display
   idea: Idea;
 }
 
+/**
+ * Idea card template component
+ */
 const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
   const classes = useStyles();
-  const bulletPoint = <span className={classes.bullet}>•</span>;
 
+  // Share dialog boolean
   const [open, setOpen] = React.useState<boolean>(false);
-  const [upvotes, setUpvotes] = React.useState<number>(idea.upvotes);
-  const [downvotes, setDownvotes] = React.useState<number>(idea.downvotes);
 
+  // Dynamically re-render upvotes/downvotes using state
+  const [votes, setVotes] = React.useState<VotesState>({
+    upvotes: 1,
+    downvotes: 1
+  });
   React.useEffect((): void => {
-    setUpvotes(idea.upvotes ? idea.upvotes : 1);
-    setDownvotes(idea.downvotes ? idea.downvotes : 1);
+    setVotes({
+      upvotes: idea.upvotes ? idea.upvotes : 1,
+      downvotes: idea.downvotes ? idea.downvotes : 1
+    });
 
-    /* return update function */
+    // TODO: return update function
   }, [idea.upvotes, idea.downvotes]);
 
-  const handleOpen = (): void => {
-    setOpen(true);
-  };
-  const handleClose = (): void => {
-    setOpen(false);
-  };
-  const handleUpvoteClick = (): void => {
-    setUpvotes(upvotes + 1);
-  };
-  const handleDownvoteClick = (): void => {
-    setDownvotes(downvotes + 1);
+  // Toggle share dialog open/closed
+  const toggleOpen = (): void => {
+    setOpen(!open);
   };
 
+  // Increment upvotes
+  const handleUpvoteClick = (): void => {
+    setVotes({
+      upvotes: votes.upvotes + 1,
+      downvotes: votes.downvotes
+    });
+  };
+
+  // Increment downvotes
+  const handleDownvoteClick = (): void => {
+    setVotes({
+      upvotes: votes.upvotes,
+      downvotes: votes.downvotes + 1
+    });
+  };
+
+  // Calculate opacity of SVG logos based on upvotes/downvotes
+  const calculateOpacity = (type: string): number => {
+    if (type == 'upvotes') {
+      return votes.upvotes / (votes.upvotes + votes.downvotes) < 0.05
+        ? 0.05
+        : votes.upvotes / (votes.upvotes + votes.downvotes);
+    }
+    return votes.downvotes / (votes.upvotes + votes.downvotes) < 0.05
+      ? 0.05
+      : votes.downvotes / (votes.upvotes + votes.downvotes);
+  };
+
+  // Generic bullet point div
+  const bulletPoint = <span className={classes.bullet}>•</span>;
+
+  // Convert idea created_at timestamp to Date object
   const convertedDate: Date = new Date(idea.date);
 
   return (
@@ -169,8 +205,8 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
           color="textSecondary"
           gutterBottom
         >
-          @{idea.owner.name} {bulletPoint} {months[convertedDate.getUTCMonth()]}{' '}
-          {convertedDate.getUTCDay()}, {convertedDate.getUTCFullYear()}
+          @{idea.owner.name} {bulletPoint} {MONTHS[convertedDate.getUTCMonth()]}{' '}
+          {convertedDate.getUTCDate()}, {convertedDate.getUTCFullYear()}
         </Typography>
         <Typography className={classes.text}>{idea.text}</Typography>
         <Container className={classes.footer}>
@@ -179,12 +215,7 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
               <SvgIcon
                 className={classes.happy}
                 component={(): React.ReactElement =>
-                  HappyTully(
-                    42,
-                    upvotes / (upvotes + downvotes) < 0.05
-                      ? 0.05
-                      : upvotes / (upvotes + downvotes)
-                  )
+                  HappyTully(42, calculateOpacity('upvotes'))
                 }
               >
                 &nbsp;
@@ -193,12 +224,7 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
             <Button onClick={handleDownvoteClick}>
               <SvgIcon
                 component={(): React.ReactElement =>
-                  SadTully(
-                    42,
-                    downvotes / (upvotes + downvotes) < 0.05
-                      ? 0.05
-                      : downvotes / (upvotes + downvotes)
-                  )
+                  SadTully(42, calculateOpacity('downvotes'))
                 }
               >
                 &nbsp;
@@ -208,7 +234,7 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
           <Container className={classes.tags}>
             {idea.tags.map(
               (tag: string): React.ReactElement => {
-                const uppercaseTag = `${tag.charAt(0).toUpperCase()}${tag.slice(
+                const uppercaseTag = `${tag[0].toUpperCase()}${tag.substring(
                   1
                 )}`;
                 return (
@@ -222,11 +248,11 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
             )}
           </Container>
           <Container className={classes.share}>
-            <IconButton onClick={handleOpen} color="inherit">
+            <IconButton onClick={toggleOpen} color="inherit">
               <Forward fontSize="large" />
             </IconButton>
             <Dialog
-              onClose={handleClose}
+              onClose={toggleOpen}
               aria-labelledby="share-idea-dialog"
               open={open}
             >
