@@ -168,4 +168,4 @@ const IdeaGrid = ({
   );
 };
 
-export default IdeaGrid;
+export default React.memo(IdeaGrid);

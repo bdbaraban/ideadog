@@ -51,4 +51,4 @@ const IdeaLayout = ({ idea }: IdeaLayoutProps): React.ReactElement => {
   );
 };
 
-export default IdeaLayout;
+export default React.memo(IdeaLayout);

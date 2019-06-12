@@ -61,4 +61,4 @@ const HomeLayout = ({
   );
 };
 
-export default HomeLayout;
+export default React.memo(HomeLayout);
