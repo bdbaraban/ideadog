@@ -1,9 +1,12 @@
 import React from 'react';
-import { Idea } from 'api';
 import { Grid, makeStyles, Theme, createStyles } from '@material-ui/core';
-import { IdeaCard } from '../cards';
 import { Styles } from 'jss';
+import { Idea } from '../../types';
+import { IdeaCard } from '../cards';
 
+/**
+ * IdeaGridItem component style
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
@@ -14,10 +17,17 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * IdeaGridItem component prop types
+ */
 interface IdeaGridItemProps {
+  // Current idea
   idea: Idea;
 }
 
+/**
+ * Generic grid item component for infinite scrolling list in IdeaGrid
+ */
 const IdeaGridItem = ({ idea }: IdeaGridItemProps): React.ReactElement => {
   const classes = useStyles();
 
@@ -28,4 +38,4 @@ const IdeaGridItem = ({ idea }: IdeaGridItemProps): React.ReactElement => {
   );
 };
 
-export default IdeaGridItem;
+export default React.memo(IdeaGridItem);
