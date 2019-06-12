@@ -63,7 +63,7 @@ const NewIdeaFab = ({ allTags, user }: NewIdeaFabProps): React.ReactElement => {
         <NotLoggedInDialog
           user={user}
           open={open}
-          toggleSelfOpen={toggleOpen}
+          toggleParentOpen={toggleOpen}
         />
       )}
     </Fab>
