@@ -1,22 +1,33 @@
 import React from 'react';
 import {
-  ListItemIcon,
   Checkbox,
+  ListItemIcon,
   ListItemText,
+  ListItemSecondaryAction,
   MenuItem,
-  Typography,
-  ListItemSecondaryAction
+  Typography
 } from '@material-ui/core';
 import Label from '@material-ui/icons/Label';
 import LabelOutlined from '@material-ui/icons/LabelOutlined';
-import { CheckboxTag } from '../cards';
+import { CheckboxTag, VoidFunction } from '../../types';
 
+/**
+ * TagsCardListItem component prop types
+ */
 interface TagsCardListItemProps {
-  tag: CheckboxTag;
-  handleToggle: (tag: CheckboxTag, index: number) => () => void;
+  // Index of item in virtualized list
   index: number;
+
+  // Current tag
+  tag: CheckboxTag;
+
+  // Checkbox toggler, inherited from parent list component
+  handleToggle: (tag: CheckboxTag, index: number) => VoidFunction;
 }
 
+/**
+ * Generic tags list item used by TagsCard
+ */
 const TagsCardListItem = ({
   tag,
   handleToggle,
@@ -45,4 +56,4 @@ const TagsCardListItem = ({
   );
 };
 
-export default TagsCardListItem;
+export default React.memo(TagsCardListItem);
