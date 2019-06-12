@@ -48,16 +48,16 @@ interface NotLoggedInDialogProps {
   open: boolean;
 
   // Open/close toggler inherited from parent component
-  toggleSelfOpen: VoidFunction;
+  toggleParentOpen: VoidFunction;
 }
 
 /**
  * Dialog displayed when user tries to post without having logged in
  */
 const NotLoggedInDialog = ({
+  user,
   open,
-  toggleSelfOpen,
-  user
+  toggleParentOpen
 }: NotLoggedInDialogProps): React.ReactElement => {
   const classes = useStyles();
 
@@ -68,7 +68,7 @@ const NotLoggedInDialog = ({
 
   return !isOpen ? (
     <Dialog
-      onClose={toggleSelfOpen}
+      onClose={toggleParentOpen}
       aria-labelledby="not-logged-in-dialog"
       open={open}
     >
@@ -91,7 +91,12 @@ const NotLoggedInDialog = ({
       </DialogTitle>
     </Dialog>
   ) : (
-    <LoginDialog open={open} toggleSelfOpen={toggleSelfOpen} user={user} />
+    <LoginDialog
+      open={open}
+      toggleGrandparentOpen={toggleParentOpen}
+      toggleParentOpen={toggleOpen}
+      user={user}
+    />
   );
 };
 
