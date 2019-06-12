@@ -3,8 +3,11 @@ import { useLoadingRoute } from 'react-navi';
 import { LinearProgress, makeStyles } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
 import { Styles } from 'jss';
-import { ErrorBoundary } from './';
+import { ErrorBoundary } from '.';
 
+/**
+ * Layout component styles
+ */
 const useStyles = makeStyles(
   (): Styles =>
     createStyles({
@@ -21,10 +24,18 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * Layout component prop types
+ */
 interface LayoutProps {
+  // ReactElement child components
   children: React.ReactElement;
 }
 
+/**
+ * Generic page layout component. Wraps pages with a loading
+ * indicator and error boundary.
+ */
 const Layout = ({ children }: LayoutProps): React.ReactElement => {
   const classes = useStyles();
   const loadingRoute = useLoadingRoute();
