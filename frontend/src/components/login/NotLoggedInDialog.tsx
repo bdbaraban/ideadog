@@ -1,19 +1,23 @@
 import React from 'react';
 import {
+  Button,
+  createStyles,
   Dialog,
   DialogTitle,
   DialogContent,
-  SvgIcon,
-  Button,
   makeStyles,
-  Theme,
-  createStyles
+  SvgIcon,
+  Theme
 } from '@material-ui/core';
 import { Styles } from 'jss';
 import { SadTully } from '../../icons';
-import { UserAuth } from '../../api';
+import { UserSession } from '../../api';
+import { VoidFunction } from '../../types';
 import { LoginDialog } from '.';
 
+/**
+ * NotLoggedInDialog component style
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
@@ -33,54 +37,62 @@ const useStyles = makeStyles(
     })
 );
 
-interface LoginDialogProps {
+/**
+ * NotLoggedInDialog prop types
+ */
+interface NotLoggedInDialogProps {
+  // Current user session
+  user: UserSession;
+
+  // Open/closed status
   open: boolean;
-  toggleSelfOpen: () => void;
-  user: UserAuth;
+
+  // Open/close toggler inherited from parent component
+  toggleSelfOpen: VoidFunction;
 }
 
+/**
+ * Dialog displayed when user tries to post without having logged in
+ */
 const NotLoggedInDialog = ({
   open,
   toggleSelfOpen,
   user
-}: LoginDialogProps): React.ReactElement => {
+}: NotLoggedInDialogProps): React.ReactElement => {
   const classes = useStyles();
 
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
-
   const toggleOpen = (): void => {
     setIsOpen(!isOpen);
   };
 
-  return (
+  return !isOpen ? (
     <Dialog
       onClose={toggleSelfOpen}
-      aria-labelledby="new-idea-dialog"
+      aria-labelledby="not-logged-in-dialog"
       open={open}
     >
-      {!isOpen ? (
-        <DialogTitle id="not-logged-in-dialog-title" className={classes.title}>
-          You must be logged in to post ideas.
-          <DialogContent className={classes.content}>
-            <SvgIcon component={(): React.ReactElement => SadTully(92, 1)}>
-              &nbsp;
-            </SvgIcon>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="large"
-              className={classes.button}
-              onClick={toggleOpen}
-            >
-              Log In/Sign Up
-            </Button>
-          </DialogContent>
-        </DialogTitle>
-      ) : (
-        <LoginDialog user={user} toggleOpen={toggleSelfOpen} />
-      )}
+      <DialogTitle id="not-logged-in-dialog-title" className={classes.title}>
+        You must be logged in to post ideas.
+        <DialogContent className={classes.content}>
+          <SvgIcon component={(): React.ReactElement => SadTully(92)}>
+            &nbsp;
+          </SvgIcon>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            className={classes.button}
+            onClick={toggleOpen}
+          >
+            Log In/Sign Up
+          </Button>
+        </DialogContent>
+      </DialogTitle>
     </Dialog>
+  ) : (
+    <LoginDialog open={open} toggleSelfOpen={toggleSelfOpen} user={user} />
   );
 };
 
-export default NotLoggedInDialog;
+export default React.memo(NotLoggedInDialog);
