@@ -2,9 +2,13 @@ import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Styles } from 'jss';
 import Grid from '@material-ui/core/Grid';
-import { Idea, UserAuth } from '../api';
-import { UserIdeaGrid, UserGrid } from '.';
+import { UserSession } from '../api';
+import { IdeaGrid, UserGrid } from '.';
+import { Idea, Tag } from '../types';
 
+/**
+ * UserLayout component styles
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
@@ -17,27 +21,46 @@ const useStyles = makeStyles(
         }
       },
       grid: {
-        width: '100%'
+        width: '100%',
+        [theme.breakpoints.down('sm')]: {
+          margin: '0 auto'
+        }
       }
     })
 );
 
+/**
+ * UserLayout component prop types
+ */
 interface UserLayoutProps {
+  // Current user session
+  user: UserSession;
+
+  // Array of current ideas
   ideas: Idea[];
-  user: UserAuth;
+
+  // Array of all available tags
+  allTags: Tag[];
 }
 
-const UserLayout = ({ ideas, user }: UserLayoutProps): React.ReactElement => {
+/**
+ * User page layout grid
+ */
+const UserLayout = ({
+  user,
+  ideas,
+  allTags
+}: UserLayoutProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Grid className={classes.grid} container spacing={6} justify="center">
-        <UserIdeaGrid ideas={ideas} />
+        <IdeaGrid user={user} ideas={ideas} allTags={allTags} />
         <UserGrid user={user} />
       </Grid>
     </div>
   );
 };
 
-export default UserLayout;
+export default React.memo(UserLayout);
