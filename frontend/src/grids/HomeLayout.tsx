@@ -2,9 +2,13 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Styles } from 'jss';
 import Grid from '@material-ui/core/Grid';
-import { Idea, Tag, UserAuth } from '../api';
+import { UserSession } from '../api';
+import { CheckboxTag, Idea, Tag } from '../types';
 import { IdeaGrid, InfoGrid } from '.';
 
+/**
+ * HomeLayout component styles
+ */
 const useStyles = makeStyles(
   (): Styles =>
     createStyles({
@@ -19,26 +23,39 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * HomeLayout component prop types
+ */
 interface HomeLayoutProps {
+  // Current user session
+  user: UserSession;
+
+  // Array of current ideas
   ideas: Idea[];
-  currentTags: string[];
+
+  // Array of all available tags
   allTags: Tag[];
-  user: UserAuth;
+
+  // Array of currently-checked tag names
+  checkboxTags: CheckboxTag[];
 }
 
+/**
+ * Home page layout grid
+ */
 const HomeLayout = ({
+  user,
   ideas,
-  currentTags,
   allTags,
-  user
+  checkboxTags
 }: HomeLayoutProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Grid className={classes.grid} container spacing={6} justify="center">
-        <IdeaGrid ideas={ideas} allTags={allTags} user={user} />
-        <InfoGrid currentTags={currentTags} allTags={allTags} user={user} />
+        <IdeaGrid user={user} ideas={ideas} allTags={allTags} />
+        <InfoGrid user={user} checkboxTags={checkboxTags} />
       </Grid>
     </div>
   );
