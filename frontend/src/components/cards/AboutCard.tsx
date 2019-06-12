@@ -1,19 +1,22 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import {
+  CardContent,
   createStyles,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
   makeStyles,
   Theme,
-  CardContent,
   Typography,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
   withStyles
 } from '@material-ui/core';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Styles } from 'jss';
 
+/**
+ * AboutCard component style
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
@@ -45,6 +48,9 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * Custom Material UI expansion panel
+ */
 const ExpansionPanel = withStyles({
   root: {
     '&:before': {
@@ -53,11 +59,14 @@ const ExpansionPanel = withStyles({
   }
 })(MuiExpansionPanel);
 
+/**
+ * About card component, displayed at bottom of InfoGrid
+ */
 const AboutCard = (): React.ReactElement => {
   const classes = useStyles();
 
   return (
-    <Card raised={true} className={classes.card}>
+    <Card className={classes.card} raised={true}>
       <CardContent className={classes.cardContent}>
         <Typography className={classes.infoTitle} color="textSecondary">
           About
@@ -175,4 +184,4 @@ const AboutCard = (): React.ReactElement => {
   );
 };
 
-export default AboutCard;
+export default React.memo(AboutCard);
