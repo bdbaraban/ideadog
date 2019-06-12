@@ -62,7 +62,12 @@ const AccountButton = ({ user }: AccountButtonProps): React.ReactElement => {
       <IconButton className={classes.icon} onClick={handleClick}>
         <Icon fontSize="large">account_circle</Icon>
       </IconButton>
-      <LoginDialog open={open} toggleSelfOpen={toggleOpen} user={user} />
+      <LoginDialog
+        user={user}
+        open={open}
+        toggleGrandparentOpen={null}
+        toggleParentOpen={toggleOpen}
+      />
     </div>
   );
 };
