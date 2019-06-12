@@ -92,4 +92,4 @@ const SettingsCard = ({ user }: SettingsCardProps): React.ReactElement => {
   );
 };
 
-export default SettingsCard;
+export default React.memo(SettingsCard);
