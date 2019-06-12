@@ -15,8 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "@dwqs/react-virtual-list": "^1.0.0",
-    "@material-ui/core": "^4.0.2",
-    "@material-ui/icons": "^4.0.1",
+    "@material-ui/core": "^4.1.0",
+    "@material-ui/icons": "^4.1.0",
     "@types/react-dom": "^16.8.4",
     "clipboard-copy": "^3.0.0",
     "navi": "^0.12.7",
