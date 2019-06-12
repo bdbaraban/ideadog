@@ -1,11 +1,20 @@
-import { Idea } from './';
 import { NotFoundError } from 'navi';
+import { Idea } from '../types';
 
+/**
+ * getIdeas parameter types
+ */
 interface SearchParameters {
+  // Ideas filter
   sort: string;
+
+  // String of tags to filter ideas with
   tags: string;
 }
 
+/**
+ * Gets ideas from the IdeaDog API with sort and tags filters
+ */
 const getIdeas = async ({ sort, tags }: SearchParameters): Promise<Idea[]> => {
   let query: string;
   if (sort === 'home') {
