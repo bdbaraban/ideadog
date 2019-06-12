@@ -1,10 +1,14 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Theme, Hidden, makeStyles, createStyles } from '@material-ui/core';
+import { createStyles, Hidden, makeStyles, Theme } from '@material-ui/core';
 import { Styles } from 'jss';
-import { UserCard, TagsCard, AboutCard } from '../components';
-import { Tag, UserAuth } from '../api';
+import { AboutCard, TagsCard, UserCard } from '../components';
+import { UserSession } from '../api';
+import { CheckboxTag } from '../types';
 
+/**
+ * InfoGrid component styles
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
@@ -23,34 +27,41 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * InfoGrid component prop types
+ */
 interface InfoGridProps {
-  currentTags: string[];
-  allTags: Tag[];
-  user: UserAuth;
+  // Current user session
+  user: UserSession;
+
+  // Array of currently-checked tag names
+  checkboxTags: CheckboxTag[];
 }
 
+/**
+ * Right column grid of info cards, only displays on desktop
+ */
 const InfoGrid = ({
-  currentTags,
-  allTags,
-  user
+  user,
+  checkboxTags
 }: InfoGridProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <Hidden smDown>
       <Grid
-        container
-        item
         className={classes.root}
+        item
+        container
         direction="column"
-        xs={4}
         spacing={2}
+        xs={4}
       >
         <Grid item>
           <UserCard user={user} />
         </Grid>
         <Grid item>
-          <TagsCard currentTags={currentTags} allTags={allTags} />
+          <TagsCard checkboxTags={checkboxTags} />
         </Grid>
         <Grid item>
           <AboutCard />
@@ -60,4 +71,4 @@ const InfoGrid = ({
   );
 };
 
-export default InfoGrid;
+export default React.memo(InfoGrid);
