@@ -79,8 +79,11 @@ interface LoginDialogProps {
   // Open/closed status
   open: boolean;
 
+  // Open/close toggler inherited from grandparent component
+  toggleGrandparentOpen: VoidFunction | null;
+
   // Open/close toggler inherited from parent component
-  toggleSelfOpen: VoidFunction;
+  toggleParentOpen: VoidFunction;
 }
 
 /**
@@ -89,7 +92,8 @@ interface LoginDialogProps {
 const LoginDialog = ({
   user,
   open,
-  toggleSelfOpen
+  toggleGrandparentOpen,
+  toggleParentOpen
 }: LoginDialogProps): React.ReactElement => {
   const classes = useStyles();
   const route = useCurrentRoute();
@@ -116,7 +120,10 @@ const LoginDialog = ({
   const usernameErrorRegex = !username.name.match(/^[a-zA-Z0-9_]+$/);
 
   const handleClose = (): void => {
-    toggleSelfOpen();
+    if (toggleGrandparentOpen) {
+      toggleGrandparentOpen();
+    }
+    toggleParentOpen();
     setIsOpen(false);
   };
 
@@ -163,7 +170,10 @@ const LoginDialog = ({
       });
     } else {
       await user.login(email.address, null);
-      toggleSelfOpen();
+      if (toggleGrandparentOpen) {
+        toggleGrandparentOpen();
+      }
+      toggleParentOpen();
       navigation.navigate(route.url.href);
     }
   };
@@ -183,7 +193,10 @@ const LoginDialog = ({
     }
     if (!emailErrorRegex && !usernameErrorRegex) {
       await user.register(email.address, username.name);
-      toggleSelfOpen();
+      if (toggleGrandparentOpen) {
+        toggleGrandparentOpen();
+      }
+      toggleParentOpen();
       navigation.navigate(route.url.href);
     }
   };
