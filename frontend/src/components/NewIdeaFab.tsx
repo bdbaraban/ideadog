@@ -1,9 +1,13 @@
 import React from 'react';
-import { Fab, makeStyles, createStyles, Icon } from '@material-ui/core';
+import { createStyles, Fab, Icon, makeStyles } from '@material-ui/core';
 import { Styles } from 'jss';
-import { NewIdeaDialog, NotLoggedInDialog } from './';
-import { Tag, UserAuth } from '../api';
+import { UserSession } from '../api';
+import { Tag } from '../types';
+import { NewIdeaDialog, NotLoggedInDialog } from '.';
 
+/**
+ * NewIdeaFab component style
+ */
 const useStyles = makeStyles(
   (): Styles =>
     createStyles({
@@ -15,16 +19,24 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * NewIdeaFab component props
+ */
 interface NewIdeaFabProps {
+  // Current user session
+  user: UserSession;
+
+  // Array of all available tags
   allTags: Tag[];
-  user: UserAuth;
 }
 
+/**
+ * Constant floating action button for posting new ideas
+ */
 const NewIdeaFab = ({ allTags, user }: NewIdeaFabProps): React.ReactElement => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState<boolean>(false);
-
   const toggleOpen = (): void => {
     setOpen(!open);
   };
@@ -38,11 +50,16 @@ const NewIdeaFab = ({ allTags, user }: NewIdeaFabProps): React.ReactElement => {
       onClick={toggleOpen}
     >
       <Icon fontSize="large">edit</Icon>
-      {user.currentUser ? (
+      {user.current ? (
         // New idea dialog, if user is logged in
-        <NewIdeaDialog open={open} toggleOpen={toggleOpen} allTags={allTags} />
+        <NewIdeaDialog
+          open={open}
+          toggleOpen={toggleOpen}
+          allTags={allTags}
+          user={user}
+        />
       ) : (
-        // Login dialog, if user is not logged in
+        // Not-logged-in dialog, if user is not logged in
         <NotLoggedInDialog
           user={user}
           open={open}
@@ -53,4 +70,4 @@ const NewIdeaFab = ({ allTags, user }: NewIdeaFabProps): React.ReactElement => {
   );
 };
 
-export default NewIdeaFab;
+export default React.memo(NewIdeaFab);
