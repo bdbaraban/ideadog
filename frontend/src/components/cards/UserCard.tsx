@@ -2,20 +2,21 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import {
   Button,
+  CardContent,
+  Container,
   createStyles,
   makeStyles,
   Theme,
-  CardContent,
-  Typography,
-  Container,
-  Icon,
-  Dialog
+  Typography
 } from '@material-ui/core';
 import { Styles } from 'jss';
-import { UserAuth } from '../../api';
+import { UserSession } from '../../api';
+import { MONTHS } from '../../constants';
 import { LoginDialog } from '../';
-import { Link } from 'react-navi';
 
+/**
+ * UserCard component style
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
@@ -63,7 +64,7 @@ const useStyles = makeStyles(
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'flex-end'
       },
       link: {
         textDecoration: 'none',
@@ -72,65 +73,84 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * UserCard component prop types
+ */
 interface UserCardProps {
-  user: UserAuth;
+  // Current user session
+  user: UserSession;
 }
 
+/**
+ * User card component displayed at top of InfoGrid
+ */
 const UserCard = ({ user }: UserCardProps): React.ReactElement => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState<boolean>(false);
-
   const toggleOpen = (): void => {
     setOpen(!open);
   };
 
+  // Convert User date of account creation timestamp to Date object
+  const convertedDate: Date | null = user.current
+    ? new Date(user.current.created_at)
+    : null;
+
+  // Calculate brightness based on User upvotes/downvotes
+  const brightness: number | null = user.current
+    ? Math.round(
+        (user.current.upvotes /
+          (user.current.upvotes + user.current.downvotes)) *
+          100
+      )
+    : null;
+
   return (
+    // User info, if user is logged in
     <Card raised={true} className={classes.card}>
-      {user.currentUser ? (
+      {user.current ? (
         <CardContent className={classes.cardContent}>
           <Container className={classes.infoContainer}>
             <Container className={classes.infoLeft}>
               <Typography className={classes.infoTitle} color="textSecondary">
-                @{user.currentUser.username}
+                @{user.current.username}
               </Typography>
               <Typography color="textSecondary">Ideas:</Typography>
               <Typography color="textSecondary">Brightness:</Typography>
-              <Typography color="textSecondary">Top Tag:</Typography>
+              <Typography color="textSecondary">Favorite tag:</Typography>
+              {convertedDate && (
+                <Typography color="textSecondary">Member since:</Typography>
+              )}
             </Container>
 
             <Container className={classes.infoRight}>
               <div className={classes.infoPieces}>
-                <Link
-                  className={classes.link}
-                  href={`/user/${user.currentUser.key}`}
-                >
-                  <Icon fontSize="small" color="inherit">
-                    account_circle
-                  </Icon>
-                </Link>
+                <div className={classes.infoRight}>&nbsp;</div>
                 <div className={classes.infoRight}>
                   <Typography color="textSecondary">7</Typography>
                 </div>
                 <div className={classes.infoRight}>
-                  <Typography color="textSecondary">
-                    {Math.round(
-                      (user.currentUser.upvotes /
-                        (user.currentUser.upvotes +
-                          user.currentUser.downvotes)) *
-                        100
-                    )}
-                    %
-                  </Typography>
+                  <Typography color="textSecondary">{brightness}%</Typography>
                 </div>
-                <div className={classes.infoRight}>
-                  <Typography color="textSecondary">Dogs</Typography>
-                </div>
+                {convertedDate && (
+                  <div className={classes.infoRight}>
+                    <Typography color="textSecondary">
+                      {user.current.favorite}
+                    </Typography>
+                    <Typography color="textSecondary">
+                      {MONTHS[convertedDate.getUTCMonth()]}{' '}
+                      {convertedDate.getUTCDate()},{' '}
+                      {convertedDate.getUTCFullYear()}
+                    </Typography>
+                  </div>
+                )}
               </div>
             </Container>
           </Container>
         </CardContent>
       ) : (
+        // Login button, if user is not logged in
         <CardContent className={classes.cardContent}>
           <Container className={classes.loginButtonContainer}>
             <Button
@@ -142,9 +162,7 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
             >
               Log In/Sign Up
             </Button>
-            <Dialog open={open} onClose={toggleOpen}>
-              <LoginDialog user={user} toggleOpen={toggleOpen} />
-            </Dialog>
+            <LoginDialog user={user} open={open} toggleSelfOpen={toggleOpen} />
           </Container>
         </CardContent>
       )}
@@ -152,4 +170,4 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
   );
 };
 
-export default UserCard;
+export default React.memo(UserCard);
