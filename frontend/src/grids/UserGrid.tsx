@@ -3,15 +3,29 @@ import Grid from '@material-ui/core/Grid';
 import { Theme, makeStyles, createStyles } from '@material-ui/core';
 import { Styles } from 'jss';
 import { UserCard, SettingsCard } from '../components';
-import { UserAuth } from '../api';
+import { UserSession } from '../api';
 
+/**
+ * UserGrid component styles
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
       root: {
         flexGrow: 1,
         flexWrap: 'nowrap',
-        marginTop: '15vh'
+        marginTop: '15vh',
+        [theme.breakpoints.down('sm')]: {
+          order: -1,
+          marginTop: '10vh',
+          marginBottom: '0 !important',
+          paddingBottom: '0 !important'
+        }
+      },
+      item: {
+        [theme.breakpoints.down('sm')]: {
+          paddingBottom: 0
+        }
       },
       card: {
         padding: theme.spacing(2),
@@ -23,32 +37,39 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * UserGrid prop types
+ */
 interface UserGridProps {
-  user: UserAuth;
+  // Current user session
+  user: UserSession;
 }
 
+/**
+ * User page column grid layout
+ */
 const UserGrid = ({ user }: UserGridProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <Grid
-      container
-      item
       className={classes.root}
+      item
+      container
       direction="column"
+      spacing={2}
       xs={12}
       sm={10}
       md={4}
-      spacing={2}
     >
       <Grid item>
         <UserCard user={user} />
       </Grid>
-      <Grid item>
+      <Grid className={classes.item} item>
         <SettingsCard user={user} />
       </Grid>
     </Grid>
   );
 };
 
-export default UserGrid;
+export default React.memo(UserGrid);
