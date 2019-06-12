@@ -10,19 +10,33 @@ import { Styles } from 'jss';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import VirtualizedList from '@dwqs/react-virtual-list';
-import { NewIdeaCard, IdeaGridItem } from '../components';
-import { Idea, Tag, UserAuth } from '../api';
+import { useCurrentRoute } from 'react-navi';
+import { IdeaGridItem, NewIdeaCard } from '../components';
+import { UserSession } from '../api';
+import { Idea, Tag } from '../types';
 
+/**
+ * IdeaGrid component styles
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
-      root: {
+      rootDefault: {
+        alignContent: 'center',
+        flexGrow: 1,
+        flexWrap: 'nowrap',
+        marginTop: '15vh'
+      },
+      rootUser: {
         alignContent: 'center',
         flexGrow: 1,
         flexWrap: 'nowrap',
         marginTop: '15vh',
         [theme.breakpoints.down('sm')]: {
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
+          order: 1,
+          marginTop: 0,
+          paddingTop: '0 !important'
         }
       },
       list: {
@@ -32,7 +46,8 @@ const useStyles = makeStyles(
           width: 0
         },
         paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1)
+        paddingRight: theme.spacing(1),
+        width: '100%'
       },
       container: {
         display: 'flex',
@@ -46,25 +61,46 @@ const useStyles = makeStyles(
     })
 );
 
-interface IdeaGridProps {
-  ideas: Idea[];
-  allTags: Tag[];
-  user: UserAuth;
+/**
+ * VirtualizedList renderItem function parameter types
+ */
+interface RenderItemParams {
+  // Index
+  [key: string]: number;
 }
 
+/**
+ * IdeaGrid prop types
+ */
+interface IdeaGridProps {
+  // Current user session
+  user: UserSession;
+
+  // Array of current ideas
+  ideas: Idea[];
+
+  // Array of all available tags
+  allTags: Tag[];
+}
+
+/**
+ * Infinite scrolling column grid of ideas
+ */
 const IdeaGrid = ({
+  user,
   ideas,
-  allTags,
-  user
+  allTags
 }: IdeaGridProps): React.ReactElement => {
   const classes = useStyles();
+  const route = useCurrentRoute();
 
-  const [currentIdeas, setCurrentIdeas] = React.useState<Idea[]>([]);
-
+  // Current ideas to display, tracks state changes based on received ideas prop
+  const [, setCurrentIdeas] = React.useState<Idea[]>([]);
   React.useEffect((): void => {
     setCurrentIdeas(ideas);
-  }, [ideas[0]]);
+  }, [ideas]);
 
+  // Circular progress indicator to display during ideas loading
   const onLoading = (): React.ReactElement => {
     return (
       <div className={classes.container}>
@@ -73,6 +109,7 @@ const IdeaGrid = ({
     );
   };
 
+  // Text div to display upon having displayed all ideas
   const onEnded = (): React.ReactElement => {
     return (
       <div className={classes.container}>
@@ -83,6 +120,7 @@ const IdeaGrid = ({
     );
   };
 
+  // Text div to display when there are no ideas to display
   const noContentRenderer = (): React.ReactElement => {
     return (
       <div className={classes.container}>
@@ -95,34 +133,36 @@ const IdeaGrid = ({
 
   return (
     <Grid
-      container
+      className={
+        route.url.href.startsWith('/user')
+          ? classes.rootUser
+          : classes.rootDefault
+      }
       item
-      className={classes.root}
+      container
       direction="column"
+      spacing={2}
       xs={12}
       sm={10}
       md={6}
-      spacing={2}
     >
-      <Hidden xsDown>
+      <Hidden smDown>
         <Grid item>
           <NewIdeaCard allTags={allTags} user={user} />
         </Grid>
       </Hidden>
       <VirtualizedList
         className={classes.list}
-        itemCount={currentIdeas.length}
+        itemCount={ideas.length}
         overscanCount={15}
         useWindow={false}
-        height={600}
+        height={1000}
         onLoading={onLoading}
         onEnded={onEnded}
         noContentRenderer={noContentRenderer}
-        renderItem={({
-          index
-        }: {
-          [key: string]: number;
-        }): React.ReactElement => <IdeaGridItem idea={currentIdeas[index]} />}
+        renderItem={({ index }: RenderItemParams): React.ReactElement => (
+          <IdeaGridItem idea={ideas[index]} />
+        )}
       />
     </Grid>
   );
