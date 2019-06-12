@@ -89,9 +89,9 @@ const NewIdeaCard = ({
         ) : (
           // Not-logged-in dialog, if user is not logged in
           <NotLoggedInDialog
-            open={open}
-            toggleSelfOpen={toggleOpen}
             user={user}
+            open={open}
+            toggleParentOpen={toggleOpen}
           />
         )}
       </CardContent>

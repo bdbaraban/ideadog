@@ -162,7 +162,12 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
             >
               Log In/Sign Up
             </Button>
-            <LoginDialog user={user} open={open} toggleSelfOpen={toggleOpen} />
+            <LoginDialog
+              user={user}
+              open={open}
+              toggleGrandparentOpen={null}
+              toggleParentOpen={toggleOpen}
+            />
           </Container>
         </CardContent>
       )}
