@@ -1,17 +1,20 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import {
+  Button,
+  CardContent,
   createStyles,
   makeStyles,
   Theme,
-  CardContent,
-  Typography,
-  Button
+  Typography
 } from '@material-ui/core';
 import { Styles } from 'jss';
-import { UserAuth } from 'api';
 import { useNavigation } from 'react-navi';
+import { UserSession } from '../../api';
 
+/**
+ * SettingsCard component style
+ */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
@@ -45,14 +48,22 @@ const useStyles = makeStyles(
     })
 );
 
+/**
+ * SettingsCard component prop types
+ */
 interface SettingsCardProps {
-  user: UserAuth;
+  // Current user session
+  user: UserSession;
 }
 
+/**
+ * User account settings displayed on user page
+ */
 const SettingsCard = ({ user }: SettingsCardProps): React.ReactElement => {
   const classes = useStyles();
   const navigation = useNavigation();
 
+  // Log out user and refresh page
   const handleLogOut = (): void => {
     user.logout();
     navigation.navigate('/home');
