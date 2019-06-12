@@ -1,27 +1,43 @@
 import React from 'react';
 import { mount, NaviRequest, route } from 'navi';
-import { Idea, getIdeas, UserAuth } from '../api';
-import { Navbar } from '../components';
+import { getTags, getUserIdeas } from '../api';
+import { Navbar, NewIdeaFab } from '../components';
 import { UserLayout } from '../grids';
-import { RoutePromise } from './';
+import { CheckboxTag, Idea, Tag } from '../types';
+import { RouteContext, RoutePromise, setCheckboxTags } from '.';
 
+/**
+ * Individual user page
+ */
 export default mount({
   '/:key': route(
     async (
-      req: NaviRequest<object>,
-      context: { user: UserAuth }
+      request: NaviRequest<object>,
+      context: RouteContext
     ): Promise<RoutePromise> => {
-      const key: string = req.params.key;
-      const sort = 'home';
-      const tags = 'programming';
-      const ideas: Idea[] = await getIdeas({ sort, tags });
+      // User key
+      const { key } = request.params;
+
+      // Get ideas posted by user with key `key`
+      const ideas: Idea[] = await getUserIdeas({ key });
+
+      // Get all available tags
+      const allTags: Tag[] = await getTags();
+
+      // Set checkbox tags based on allTags and query tags
+      const checkboxTags: CheckboxTag[] = setCheckboxTags(undefined, allTags);
 
       return {
         title: 'IdeaDog - User',
         view: (
           <div>
-            <Navbar sort={'home'} />
-            <UserLayout ideas={ideas} user={context.user} />
+            <Navbar
+              sort={'home'}
+              user={context.user}
+              checkboxTags={checkboxTags}
+            />
+            <UserLayout user={context.user} ideas={ideas} allTags={allTags} />
+            <NewIdeaFab user={context.user} allTags={allTags} />
           </div>
         )
       };
