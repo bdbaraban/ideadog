@@ -1,33 +1,39 @@
 import React from 'react';
-import { TextFieldProps } from '@material-ui/core/TextField';
 import { makeStyles, Theme, createStyles, TextField } from '@material-ui/core';
+import { TextFieldProps } from '@material-ui/core/TextField';
+import { OutlinedInputProps } from '@material-ui/core/OutlinedInput';
 import { Styles } from 'jss';
 import { fade } from '@material-ui/core/styles';
-import { OutlinedInputProps } from '@material-ui/core/OutlinedInput';
 
-const CustomTextField = (props: TextFieldProps): React.ReactElement => {
-  const useTextStyles = makeStyles(
-    (theme: Theme): Styles =>
-      createStyles({
-        root: {
-          color: theme.palette.common.white,
-          overflow: 'hidden',
-          borderRadius: 4,
-          backgroundColor: fade(theme.palette.common.white, 0.15),
-          '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25)
-          },
-          '&$focused': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-            boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 2px`
-          }
+/**
+ * CustomTextField component styles
+ */
+const useStyles = makeStyles(
+  (theme: Theme): Styles =>
+    createStyles({
+      root: {
+        color: theme.palette.common.white,
+        overflow: 'hidden',
+        borderRadius: 4,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        '&:hover': {
+          backgroundColor: fade(theme.palette.common.white, 0.25)
         },
-        focused: {}
-      })
-  );
+        '&$focused': {
+          backgroundColor: fade(theme.palette.common.white, 0.25),
+          boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 2px`
+        }
+      },
+      focused: {}
+    })
+);
 
+/**
+ * Customized Material UI TextField component
+ */
+const CustomTextField = (props: TextFieldProps): React.ReactElement => {
   const InputProps = {
-    classes: useTextStyles(),
+    classes: useStyles(),
     disableUnderline: true
   };
 
@@ -39,4 +45,4 @@ const CustomTextField = (props: TextFieldProps): React.ReactElement => {
   );
 };
 
-export default CustomTextField;
+export default React.memo(CustomTextField);
