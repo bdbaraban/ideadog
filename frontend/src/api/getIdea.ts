@@ -1,5 +1,6 @@
 import { NotFoundError } from 'navi';
 import { Idea } from '../types';
+import { API } from '../constants';
 
 /**
  * getIdea parameter types
@@ -13,7 +14,7 @@ interface SearchParameters {
  * Fetches a single ID from the IdeaDog API
  */
 const getIdea = async ({ key }: SearchParameters): Promise<Idea> => {
-  const response = await fetch(`http://localhost:5000/api/idea/${key}`);
+  const response = await fetch(`http://${API}/api/idea/${key}`);
   const data: Idea[] = await response.json();
 
   if (!data) {

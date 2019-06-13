@@ -1,5 +1,6 @@
 import { NotFoundError } from 'navi';
 import { Idea } from '../types';
+import { API } from '../constants';
 
 /**
  * getIdeas parameter types
@@ -20,18 +21,18 @@ const getIdeas = async ({ sort, tags }: SearchParameters): Promise<Idea[]> => {
   if (sort === 'home') {
     switch (tags) {
       case undefined:
-        query = 'http://localhost:5000/api/ideas';
+        query = `http://${API}/api/ideas`;
         break;
       default:
-        query = `http://localhost:5000/api/ideas?tags=${tags}`;
+        query = `http://${API}/api/ideas?tags=${tags}`;
     }
   } else if (sort === 'bright') {
     switch (tags) {
       case undefined:
-        query = `http://localhost:5000/api/ideas/${sort}`;
+        query = `http://${API}/api/ideas/${sort}`;
         break;
       default:
-        query = `http://localhost:5000/api/ideas/${sort}?tags=${tags}`;
+        query = `http://${API}/api/ideas/${sort}?tags=${tags}`;
     }
   } else {
     throw new NotFoundError(`Sorting filter '${sort}' does not exist.`);
