@@ -21,7 +21,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Styles } from 'jss';
 import { fade } from '@material-ui/core/styles';
 import { useNavigation, useCurrentRoute } from 'react-navi';
-import { API } from '../../constants';
 import { UserSession } from '../../api';
 import { Tag, VoidFunction } from '../../types';
 import { SadTully, HappyTully } from '../../icons';
@@ -168,7 +167,7 @@ const NewIdeaDialog = ({
   // Post idea and refresh page
   const handlePost = async (): Promise<void> => {
     user.current &&
-      (await fetch(`http://${API}/api/idea`, {
+      (await fetch('/api/idea', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
