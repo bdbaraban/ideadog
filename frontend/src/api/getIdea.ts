@@ -14,7 +14,7 @@ interface SearchParameters {
  * Fetches a single ID from the IdeaDog API
  */
 const getIdea = async ({ key }: SearchParameters): Promise<Idea> => {
-  const response = await fetch(`//${API}/api/idea/${key}`);
+  const response = await fetch(`/api/idea/${key}`);
   const data: Idea[] = await response.json();
 
   if (!data) {
