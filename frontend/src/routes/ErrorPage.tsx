@@ -41,7 +41,8 @@ const useStyles = makeStyles(
         padding: theme.spacing(4)
       },
       text: {
-        paddingBottom: theme.spacing(2)
+        paddingBottom: theme.spacing(2),
+        textAlign: 'center'
       },
       link: {
         color: theme.palette.secondary.main,
