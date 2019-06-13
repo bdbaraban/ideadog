@@ -19,7 +19,6 @@
     "@types/react-dom": "^16.8.4",
     "clipboard-copy": "^3.0.0",
     "navi": "^0.12.7",
-    "parcel": "^1.12.3",
     "react": "^15.4.0 || ^16.0.0",
     "react-dom": "^15.4.0 || ^16.0.0",
     "react-navi": "^0.12.7",
@@ -40,9 +39,8 @@
     "prettier": "^1.18.2"
   },
   "scripts": {
-    "build": "rm -rf dist && parcel build src/index.html",
+    "build": "parcel build src/index.html",
     "lint": "eslint ./src/**/*.{ts,tsx}",
-    "now-build": "yarn build",
     "start": "parcel src/index.html"
   }
 }
