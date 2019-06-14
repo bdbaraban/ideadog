@@ -14,18 +14,18 @@
   "license": "MIT",
   "dependencies": {
     "@dwqs/react-virtual-list": "^1.0.0",
-    "@material-ui/core": "^4.1.0",
-    "@material-ui/icons": "^4.1.0",
+    "@material-ui/core": "^4.1.1",
+    "@material-ui/icons": "^4.2.0",
     "@types/react-dom": "^16.8.4",
     "clipboard-copy": "^3.0.0",
-    "navi": "^0.12.7",
+    "navi": "^0.12.8",
     "react": "^15.4.0 || ^16.0.0",
     "react-dom": "^15.4.0 || ^16.0.0",
-    "react-navi": "^0.12.7",
-    "typescript": "^3.5.1"
+    "react-navi": "^0.12.8",
+    "typescript": "^3.5.2"
   },
   "devDependencies": {
-    "@types/react": "^16.8.19",
+    "@types/react": "^16.8.20",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
     "babel-preset-env": "^1.7.0",
