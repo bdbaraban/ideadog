@@ -27,7 +27,7 @@ const useStyles = makeStyles(
 const App = (): React.ReactElement => {
   useStyles();
 
-  // Instantiate current user
+  // Instantiate a new user session
   const user = new UserSession();
 
   return (
