@@ -17,7 +17,7 @@ export interface Idea {
     key: string;
 
     // Username
-    name: string;
+    username: string;
   };
 
   // Date of creation
