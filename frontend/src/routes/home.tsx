@@ -1,6 +1,6 @@
 import React from 'react';
 import { lazy, mount, NaviRequest, redirect, route } from 'navi';
-import { getIdeas, getTags } from '../api';
+import { getIdeas, getTags, getUser } from '../api';
 import { Navbar, NewIdeaFab } from '../components';
 import { HomeLayout } from '../grids';
 import { CheckboxTag, Idea, Tag } from '../types';
@@ -41,6 +41,12 @@ export default mount({
 
       // Set checkbox tags based on allTags and query tags
       const checkboxTags: CheckboxTag[] = setCheckboxTags(tags, allTags);
+
+      // Fetch user, if bearer token cookie exists
+      if (window.localStorage.getItem('auth')) {
+        context.user.bearer = window.localStorage['auth'];
+        context.user.current = await getUser(context.user.bearer);
+      }
 
       return {
         title: titles[sort],
