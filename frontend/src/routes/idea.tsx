@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount, NaviRequest, route } from 'navi';
-import { getIdea, getTags } from '../api';
+import { getIdea, getTags, getUser } from '../api';
 import { Navbar } from '../components';
 import { IdeaLayout } from '../grids';
 import { CheckboxTag, Idea } from '../types';
@@ -26,6 +26,12 @@ export default mount({
 
       // Set checkbox tags based on allTags and query tags
       const checkboxTags: CheckboxTag[] = setCheckboxTags(undefined, allTags);
+
+      // Fetch user, if bearer token cookie exists
+      if (window.localStorage.getItem('auth')) {
+        context.user.bearer = window.localStorage['auth'];
+        context.user.current = await getUser(context.user.bearer);
+      }
 
       return {
         title: 'IdeaDog - Idea',
