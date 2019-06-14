@@ -205,8 +205,9 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
           color="textSecondary"
           gutterBottom
         >
-          @{idea.owner.name} {bulletPoint} {MONTHS[convertedDate.getUTCMonth()]}{' '}
-          {convertedDate.getUTCDate()}, {convertedDate.getUTCFullYear()}
+          @{idea.owner.username} {bulletPoint}{' '}
+          {MONTHS[convertedDate.getUTCMonth()]} {convertedDate.getUTCDate()},{' '}
+          {convertedDate.getUTCFullYear()}
         </Typography>
         <Typography className={classes.text}>{idea.text}</Typography>
         <Container className={classes.footer}>

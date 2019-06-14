@@ -128,15 +128,21 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
               <div className={classes.infoPieces}>
                 <div className={classes.infoRight}>&nbsp;</div>
                 <div className={classes.infoRight}>
-                  <Typography color="textSecondary">7</Typography>
+                  <Typography color="textSecondary">
+                    {user.current.ideas.length}
+                  </Typography>
                 </div>
                 <div className={classes.infoRight}>
-                  <Typography color="textSecondary">{brightness}%</Typography>
+                  <Typography color="textSecondary">
+                    {!brightness || isNaN(brightness)
+                      ? 'N/A'
+                      : `${brightness}%`}
+                  </Typography>
                 </div>
                 {convertedDate && (
                   <div className={classes.infoRight}>
                     <Typography color="textSecondary">
-                      {user.current.favorite}
+                      {user.current.favorite ? user.current.favorite : 'N/A'}
                     </Typography>
                     <Typography color="textSecondary">
                       {MONTHS[convertedDate.getUTCMonth()]}{' '}
@@ -175,4 +181,4 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
   );
 };
 
-export default React.memo(UserCard);
+export default UserCard;
