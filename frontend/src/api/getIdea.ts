@@ -1,6 +1,5 @@
 import { NotFoundError } from 'navi';
 import { Idea } from '../types';
-import { API } from '../constants';
 
 /**
  * getIdea parameter types
