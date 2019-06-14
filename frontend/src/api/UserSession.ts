@@ -7,43 +7,38 @@ export default class UserSession {
   // The current logged in user
   public current: User | null;
 
+  // Bearer token for logged in user
+  public bearer: string;
+
   // Attempt to initialize the user using a cookie
   public constructor() {
-    if (window.localStorage.getItem('auth')) {
-      this.current = JSON.parse(window.localStorage['auth']);
-    } else {
-      this.current = null;
-    }
+    this.current = null;
+    this.bearer = '';
   }
 
   // Set a cookie for the current user
   private setCookie(): void {
-    window.localStorage.setItem('auth', JSON.stringify(this.current));
+    window.localStorage.setItem('auth', this.bearer);
   }
 
   // Login a user
-  public async login(
-    email: string | null,
-    username: string | null
-  ): Promise<void> {
-    /* Login with email or username on back-end */
-
-    this.current = {
-      id: '/users/7',
-      key: '7',
-      username: 'bdov_',
-      email: 'b@b.com',
-      ideas: ['1', '2', '3'],
-      favorite: 'Dogs',
-      upvotes: 9299,
-      downvotes: 1000,
-      active: true,
-      /* eslint-disable */
-      created_at: Date.now()
-      /* eslint-enable */
-    };
-
-    this.setCookie();
+  public async login(email: string): Promise<number> {
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email
+      })
+    });
+    if (response.status === 200) {
+      const data = await response.json();
+      this.bearer = data._key;
+      this.setCookie();
+    }
+    return response.status;
   }
 
   // Logout a user
@@ -53,24 +48,23 @@ export default class UserSession {
   }
 
   // Register a user
-  public register(email: string, username: string): void {
-    /* Register user with email, username on back-end */
-
-    this.current = {
-      id: '1',
-      key: '1',
-      email,
-      username,
-      ideas: ['4', '5', '6'],
-      favorite: 'Programming',
-      upvotes: 199,
-      downvotes: 1000,
-      active: true,
-      /* eslint-disable */
-      created_at: Date.now()
-      /* eslint-enable */
-    };
-
-    this.setCookie();
+  public async signup(email: string, username: string): Promise<number> {
+    const response = await fetch('/api/signup', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email,
+        username
+      })
+    });
+    if (response.status === 200) {
+      const data = await response.json();
+      this.bearer = data._key;
+      this.setCookie();
+    }
+    return response.status;
   }
 }
