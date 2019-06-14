@@ -170,7 +170,8 @@ const NewIdeaDialog = ({
       (await fetch('/api/idea', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: user.bearer
         },
         body: JSON.stringify({
           text,
