@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-navi';
 import {
   createStyles,
+  Hidden,
   makeStyles,
   Theme,
   Typography,
@@ -23,11 +24,7 @@ const useStyles = makeStyles(
       },
       title: {
         flexGrow: 1,
-        display: 'none',
-        [theme.breakpoints.up('sm')]: {
-          marginLeft: theme.spacing(1),
-          display: 'block'
-        }
+        marginLeft: theme.spacing(1)
       },
       link: {
         textDecoration: 'none',
@@ -45,9 +42,16 @@ const IdeaDogTitle = (): React.ReactElement => {
   return (
     <div className={classes.root}>
       <Link href="/home">
-        <SvgIcon component={(): React.ReactElement => HappyTully(46)}>
-          &nbsp;
-        </SvgIcon>
+        <Hidden xsDown>
+          <SvgIcon component={(): React.ReactElement => HappyTully(46)}>
+            &nbsp;
+          </SvgIcon>
+        </Hidden>
+        <Hidden smUp>
+          <SvgIcon component={(): React.ReactElement => HappyTully(42)}>
+            &nbsp;
+          </SvgIcon>
+        </Hidden>
       </Link>
       <Typography className={classes.title} variant="h5" color="inherit" noWrap>
         <Link href="/home" className={classes.link}>
