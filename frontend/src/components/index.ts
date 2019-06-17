@@ -5,7 +5,7 @@ export { default as CopyToClipboard } from './CopyToClipboard';
 export { default as CustomTextField } from './CustomTextField';
 export { default as TagsMenuList } from './TagsMenuList';
 export { NewIdeaDialog } from './NewIdeaDialog';
-export { LoginDialog, NotLoggedInDialog } from './login';
+export { AuthorizationDialog, NotLoggedInDialog } from './AuthorizationDialog';
 export {
   NewIdeaCard,
   AboutCard,
