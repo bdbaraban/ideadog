@@ -19,7 +19,7 @@ To compile and run Idea:dog: Server (in release), just run the the command below
 # from root folder.
 cargo run --release --package=ideadog-server
 ```
-Or alternativly you can goto the [release page](https://github.com/Ostoyae/ideaDog_server/releases) to get pre-/RC binaray.
+Alternatively, go to the [release page](https://github.com/Ostoyae/ideaDog_server/releases) to get the pre-/RC binary.
 
 ### Required dep *nix
 
