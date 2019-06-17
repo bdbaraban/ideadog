@@ -32,7 +32,7 @@ Alternatively, go to the [release page](https://github.com/Ostoyae/ideaDog_serve
 | [Actix](https://actix.rs/actix/actix/) | 0.7 |
 | [ArangoDB](https://www.arangodb.com/) | ^3.4 |
 
-View the complete list of back-end dependencies in the corresponding [Cargo.toml](./app/Cargo.toml).
+View the complete list of back-end dependencies in the corresponding [Cargo.toml](https://github.com/Ostoyae/ideaDog_server/blob/master/app/Cargo.toml).
  
 ## ENV
 
