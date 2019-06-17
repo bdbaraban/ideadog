@@ -10,9 +10,11 @@ import {
   Typography
 } from '@material-ui/core';
 import { Styles } from 'jss';
+import { Link } from 'react-navi';
 import { UserSession } from '../../api';
+import { User } from '../../types';
 import { MONTHS } from '../../constants';
-import { LoginDialog } from '../';
+import { AuthorizationDialog } from '../';
 
 /**
  * UserCard component style
@@ -79,12 +81,15 @@ const useStyles = makeStyles(
 interface UserCardProps {
   // Current user session
   user: UserSession;
+
+  // Current user page being viewed
+  viewingUser: User | null;
 }
 
 /**
  * User card component displayed at top of InfoGrid
  */
-const UserCard = ({ user }: UserCardProps): React.ReactElement => {
+const UserCard = ({ user, viewingUser }: UserCardProps): React.ReactElement => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState<boolean>(false);
@@ -92,16 +97,17 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
     setOpen(!open);
   };
 
+  const currentUser = viewingUser ? viewingUser : user.current;
+
   // Convert User date of account creation timestamp to Date object
-  const convertedDate: Date | null = user.current
-    ? new Date(user.current.created_at)
+  const convertedDate: Date | null = currentUser
+    ? new Date(currentUser.created_at)
     : null;
 
   // Calculate brightness based on User upvotes/downvotes
-  const brightness: number | null = user.current
+  const brightness: number | null = currentUser
     ? Math.round(
-        (user.current.upvotes /
-          (user.current.upvotes + user.current.downvotes)) *
+        (currentUser.upvotes / (currentUser.upvotes + currentUser.downvotes)) *
           100
       )
     : null;
@@ -109,12 +115,14 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
   return (
     // User info, if user is logged in
     <Card raised={true} className={classes.card}>
-      {user.current ? (
+      {currentUser ? (
         <CardContent className={classes.cardContent}>
           <Container className={classes.infoContainer}>
             <Container className={classes.infoLeft}>
               <Typography className={classes.infoTitle} color="textSecondary">
-                @{user.current.username}
+                <Link className={classes.link} href={`/${currentUser.id}`}>
+                  @{currentUser.username}
+                </Link>
               </Typography>
               <Typography color="textSecondary">Ideas:</Typography>
               <Typography color="textSecondary">Brightness:</Typography>
@@ -129,7 +137,7 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
                 <div className={classes.infoRight}>&nbsp;</div>
                 <div className={classes.infoRight}>
                   <Typography color="textSecondary">
-                    {user.current.ideas.length}
+                    {currentUser.ideas.length}
                   </Typography>
                 </div>
                 <div className={classes.infoRight}>
@@ -142,7 +150,7 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
                 {convertedDate && (
                   <div className={classes.infoRight}>
                     <Typography color="textSecondary">
-                      {user.current.favorite ? user.current.favorite : 'N/A'}
+                      {currentUser.favorite ? currentUser.favorite : 'N/A'}
                     </Typography>
                     <Typography color="textSecondary">
                       {MONTHS[convertedDate.getUTCMonth()]}{' '}
@@ -168,7 +176,7 @@ const UserCard = ({ user }: UserCardProps): React.ReactElement => {
             >
               Log In/Sign Up
             </Button>
-            <LoginDialog
+            <AuthorizationDialog
               user={user}
               open={open}
               toggleGrandparentOpen={null}
