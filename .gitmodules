@@ -1,0 +1,4 @@
+[submodule "backend/ideaDog-server"]
+	path = backend/ideaDog-server
+	url = https://github.com/Ostoyae/ideaDog_server.git
+	branch = master
