@@ -181,6 +181,8 @@ const NewIdeaDialog = ({
           tags: tags.map((tag: string): string => tag.toLowerCase())
         })
       }));
+    setText('');
+    setTags([]);
     toggleOpen();
     navigation.navigate(route.url.href);
   };
