@@ -12,11 +12,11 @@ The front-end of IdeaDog, built using React, with TypeScript.
 | [React](https://reactjs.org/) | ^16.8.6 |
 | [Material UI](https://material-ui.com/) | ^4.1.1  |
 | [Navi](https://frontarm.com/navi/en/) | ^0.12.8 |
+| [ApproveAPI](https://approveapi.com/) | ^1.0.4 |
 | [@dwqs/react-virtual-list](https://www.npmjs.com/package/@dwqs/react-virtual-list) | ^1.0.0  |
 | [clipboard-copy](https://www.npmjs.com/package/clipboard-copy) | ^3.0.0  |
-| [ApproveAPI](https://approveapi.com/) | ^1.0.4 |
 
-View the complete list of front-end dependencies in the corresponding [package.json](./frontend/package.json)
+View the complete list of front-end dependencies in the corresponding [package.json](./package.json).
 
 **Packaging/Deployment**:
 
