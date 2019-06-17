@@ -25,7 +25,14 @@ const useStyles = makeStyles(
         alignContent: 'center',
         flexGrow: 1,
         flexWrap: 'nowrap',
-        marginTop: '15vh'
+        marginTop: '15vh',
+        [theme.breakpoints.down('md')]: {
+          marginTop: '12vh'
+        },
+        [theme.breakpoints.down('sm')]: {
+          marginTop: '10vh',
+          paddingTop: '0 !important'
+        }
       },
       rootUser: {
         alignContent: 'center',
@@ -76,6 +83,9 @@ interface IdeaGridProps {
   // Current user session
   user: UserSession;
 
+  // True/false indicating if page is for current user
+  self: boolean;
+
   // Array of current ideas
   ideas: Idea[];
 
@@ -88,6 +98,7 @@ interface IdeaGridProps {
  */
 const IdeaGrid = ({
   user,
+  self,
   ideas,
   allTags
 }: IdeaGridProps): React.ReactElement => {
@@ -144,13 +155,16 @@ const IdeaGrid = ({
       spacing={2}
       xs={12}
       sm={10}
-      md={6}
+      md={7}
+      lg={6}
     >
-      <Hidden smDown>
-        <Grid item>
-          <NewIdeaCard allTags={allTags} user={user} />
-        </Grid>
-      </Hidden>
+      {self && (
+        <Hidden smDown>
+          <Grid item>
+            <NewIdeaCard allTags={allTags} user={user} />
+          </Grid>
+        </Hidden>
+      )}
       <VirtualizedList
         className={classes.list}
         itemCount={ideas.length}
