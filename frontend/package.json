@@ -40,7 +40,7 @@
     "prettier": "^1.18.2"
   },
   "scripts": {
-    "build": "parcel build src/index.html",
+    "build": "rm -rf dist && parcel build src/index.html",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "start": "parcel src/index.html"
   }
