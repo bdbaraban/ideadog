@@ -57,7 +57,7 @@ View the complete list of front-end dependencies in the corresponding [package.j
 
 ## ENV
 
-The easyiest way to set the enviorment for this project/server is to use a .env
+The easiest way to set the environment for this project/server is to use a `.env` file.
 
 ```
 # API Server
