@@ -15,14 +15,14 @@ const useStyles = makeStyles(
       root: {
         flexGrow: 1,
         flexWrap: 'nowrap',
-        marginTop: '15vh'
-      },
-      card: {
-        padding: theme.spacing(2),
-        textAlign: 'left',
-        backgroundColor: theme.palette.primary.main,
-        border: `1px solid ${theme.palette.secondary.main}`,
-        color: theme.palette.common.white
+        marginTop: '15vh',
+        [theme.breakpoints.down('md')]: {
+          marginTop: '12vh'
+        },
+        [theme.breakpoints.down('sm')]: {
+          marginTop: 0,
+          paddingTop: '0 !important'
+        }
       }
     })
 );
@@ -48,26 +48,28 @@ const InfoGrid = ({
   const classes = useStyles();
 
   return (
-    <Hidden smDown>
-      <Grid
-        className={classes.root}
-        item
-        container
-        direction="column"
-        spacing={2}
-        xs={4}
-      >
+    <Grid
+      className={classes.root}
+      item
+      container
+      direction="column"
+      spacing={2}
+      xs={12}
+      md={5}
+      lg={4}
+    >
+      <Hidden smDown>
         <Grid item>
-          <UserCard user={user} />
+          <UserCard user={user} viewingUser={null} />
         </Grid>
         <Grid item>
           <TagsCard checkboxTags={checkboxTags} />
         </Grid>
-        <Grid item>
-          <AboutCard />
-        </Grid>
+      </Hidden>
+      <Grid className={classes.responsive} item>
+        <AboutCard />
       </Grid>
-    </Hidden>
+    </Grid>
   );
 };
 
