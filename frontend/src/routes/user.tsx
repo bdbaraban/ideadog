@@ -3,7 +3,7 @@ import { mount, NaviRequest, route } from 'navi';
 import { getTags, getUser, getUserIdeas } from '../api';
 import { Navbar, NewIdeaFab } from '../components';
 import { UserLayout } from '../grids';
-import { CheckboxTag, Idea, Tag } from '../types';
+import { CheckboxTag, Idea, Tag, User } from '../types';
 import { RouteContext, RoutePromise, setCheckboxTags } from '.';
 
 /**
@@ -33,6 +33,14 @@ export default mount({
         context.user.current = await getUser(context.user.bearer);
       }
 
+      // Boolean indicating if current page is for current user
+      const self = context.user.current && context.user.current.key === key;
+
+      let viewingUser: User | null = context.user.current;
+      if (!self) {
+        viewingUser = await getUser(key);
+      }
+
       return {
         title: 'IdeaDog - User',
         view: (
@@ -42,7 +50,12 @@ export default mount({
               user={context.user}
               checkboxTags={checkboxTags}
             />
-            <UserLayout user={context.user} ideas={ideas} allTags={allTags} />
+            <UserLayout
+              user={context.user}
+              viewingUser={viewingUser}
+              ideas={ideas}
+              allTags={allTags}
+            />
             <NewIdeaFab user={context.user} allTags={allTags} />
           </div>
         )

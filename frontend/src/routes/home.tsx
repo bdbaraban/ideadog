@@ -1,7 +1,7 @@
 import React from 'react';
 import { lazy, mount, NaviRequest, redirect, route } from 'navi';
 import { getIdeas, getTags, getUser } from '../api';
-import { Navbar, NewIdeaFab } from '../components';
+import { Navbar } from '../components';
 import { HomeLayout } from '../grids';
 import { CheckboxTag, Idea, Tag } from '../types';
 import {
@@ -63,7 +63,6 @@ export default mount({
               allTags={allTags}
               checkboxTags={checkboxTags}
             />
-            <NewIdeaFab user={context.user} allTags={allTags} />
           </div>
         )
       };
