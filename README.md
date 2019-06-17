@@ -36,9 +36,12 @@ View the complete list of front-end dependencies in the corresponding [package.j
 
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
-| [Rust](https://www.rust-lang.org/) | ? |
-| [Actix](https://actix.rs/actix/actix/) | ? |
-| [ArangoDB](https://www.arangodb.com/) | ^0.14.0 |
+| [Rust](https://www.rust-lang.org/) | 1.35 |
+| [Actix](https://actix.rs/actix/actix/) | 0.7 |
+| [ArangoDB](https://www.arangodb.com/) | ^3.4 |
+
+View the back-end server [source code](https://github.com/Ostoyae/ideaDog_server)
+
 
 **Packaging/Deployment**:
 
@@ -65,14 +68,15 @@ Routes:
 Features:
 * NoSQL, but relationships? [ArangoDB](https://www.arangodb.com/) is pretty awesome.
 
+[published API](https://documenter.getpostman.com/view/253532/S1TZxahn?version=latest)
 API:
 * `GET /api`: Displays a friendly message.
 * `GET /api/ideas`: Fetches all ideas.
 * `GET /api/ideas/bright`: Fetches all ideas, sorted by brightness [upvotes / (upvotes + downvotes)]
-* `POST /api/idea`: Creates a new idea.
+* `POST /api/idea`: Creates a new idea. Requires Auth
 * `GET /api/idea/{id}`: Fetches an idea with id `{id}`.
 
-View the complete API documentation at [this Postman link](https://documenter.getpostman.com/view/253532/S1TZxahn?version=latest#66ec1bb7-e35b-4ecf-b796-f88dfbeb7d86).
+View the complete API documentation at [this Postman link](https://documenter.getpostman.com/view/253532/S1TZxahn?version=latest).
 
 ## Authors :black_nib:
 
