@@ -5,12 +5,6 @@
 
 *Currently the back-end and [front-end](https://github.com/bdbaraban/ideadog) of IdeaDog live in seperate repos, to reduce project clutter.*
 
-IdeaDog is a social web application for sharing ideas. We've all had those sudden bursts of inspiration where we go - "wow, that is simply a _great_ idea" - but know we will never follow up. Now, instead of losing those ideas, share them with the world!
-
-Why statically-typed, you ask? Well, the front-end of the application is built in React, with TypeScript, while the back-end runs on Rust. TypeScript + Rust = The Ultimate Statically-Typed Web App!
-
-Development of IdeaDog has only just begun. Stay tuned, there is much, much, much more to come!
-
 ## Usage
 
 Server [environment](#env) must be set
@@ -40,21 +34,6 @@ Alternatively, go to the [release page](https://github.com/Ostoyae/ideaDog_serve
 
 View the complete list of back-end dependencies in the corresponding [Cargo.toml](./app/Cargo.toml).
  
-**Front-End**:
-[Source](https://github.com/bdbaraban/ideadog)
-
-| Tool/Library             | Version |
-| ------------------------ | ------- |
-| [TypeScript](https://www.typescriptlang.org/) | ^3.5.1  |
-| [React](https://reactjs.org/) | ^16.8.6 |
-| [Material UI](https://material-ui.com/) | ^4.0.2  |
-| [Navi](https://frontarm.com/navi/en/) | ^0.12.7 |
-| [@dwqs/react-virtual-list](https://www.npmjs.com/package/@dwqs/react-virtual-list) | ^1.0.0  |
-| [clipboard-copy](https://www.npmjs.com/package/clipboard-copy) | ^3.0.0  |
-
-View the complete list of front-end dependencies in the corresponding [package.json](./frontend/package.json).
-
-
 ## ENV
 
 The easiest way to set the environment for this project/server is to use a `.env` file.
