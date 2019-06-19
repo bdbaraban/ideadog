@@ -111,6 +111,9 @@ const TagsSelect = ({ checkboxTags }: TagsSelectProps): React.ReactElement => {
     setAnchorEl(null);
   };
 
+  // DOM reference for TagsMenuList
+  const ref = React.createRef<HTMLUListElement>();
+
   return (
     <React.Fragment>
       <Hidden xsDown>
@@ -163,7 +166,7 @@ const TagsSelect = ({ checkboxTags }: TagsSelectProps): React.ReactElement => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <TagsMenuList checkboxTags={checkboxTags} />
+          <TagsMenuList ref={ref} checkboxTags={checkboxTags} />
         </Menu>
       </Hidden>
     </React.Fragment>

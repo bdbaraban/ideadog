@@ -33,7 +33,10 @@ interface TagsCardProps {
 /**
  * Tag-filtering menu checkbox list
  */
-const TagsMenuList = ({ checkboxTags }: TagsCardProps): React.ReactElement => {
+const TagsMenuList = (
+  { checkboxTags }: TagsCardProps,
+  ref: React.Ref<HTMLUListElement>
+): React.ReactElement => {
   const classes = useStyles();
   const route = useCurrentRoute();
   const navigation = useNavigation();
@@ -75,7 +78,7 @@ const TagsMenuList = ({ checkboxTags }: TagsCardProps): React.ReactElement => {
   };
 
   return (
-    <MenuList id="tags-menu" className={classes.list}>
+    <MenuList id="tags-menu" className={classes.list} ref={ref}>
       {currentTags.map(
         (tag: CheckboxTag, index: number): React.ReactElement => (
           <TagsCardListItem
@@ -90,4 +93,4 @@ const TagsMenuList = ({ checkboxTags }: TagsCardProps): React.ReactElement => {
   );
 };
 
-export default React.memo(TagsMenuList);
+export default React.forwardRef(TagsMenuList);
