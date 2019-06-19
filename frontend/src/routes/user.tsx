@@ -16,7 +16,7 @@ export default mount({
       context: RouteContext
     ): Promise<RoutePromise> => {
       // User key
-      const { key } = request.params;
+      let { key } = request.params;
 
       // Get ideas posted by user with key `key`
       const ideas: Idea[] = await getUserIdeas({ key });
@@ -30,11 +30,11 @@ export default mount({
       // Fetch user, if bearer token cookie exists
       if (window.localStorage.getItem('auth')) {
         context.user.bearer = window.localStorage['auth'];
-        context.user.current = await getUser(context.user.bearer);
+        context.user.current = await getUser('', context.user.bearer);
       }
 
       // Boolean indicating if current page is for current user
-      const self = context.user.current && context.user.current.key === key;
+      const self = context.user.current && key === context.user.current.key;
 
       let viewingUser: User | null = context.user.current;
       if (!self) {

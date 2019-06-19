@@ -20,7 +20,8 @@ const useStyles = makeStyles(
           order: -1,
           marginTop: '10vh',
           marginBottom: '0 !important',
-          paddingBottom: '0 !important'
+          paddingBottom: '0 !important',
+          paddingTop: '0 !important'
         }
       },
       item: {

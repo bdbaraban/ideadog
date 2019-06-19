@@ -45,7 +45,7 @@ export default mount({
       // Fetch user, if bearer token cookie exists
       if (window.localStorage.getItem('auth')) {
         context.user.bearer = window.localStorage['auth'];
-        context.user.current = await getUser(context.user.bearer);
+        context.user.current = await getUser('', context.user.bearer);
       }
 
       return {
