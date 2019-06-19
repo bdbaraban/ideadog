@@ -31,7 +31,7 @@ const useStyles = makeStyles(
         },
         [theme.breakpoints.down('sm')]: {
           marginTop: '10vh',
-          paddingTop: '0 !important'
+          paddingTop: '24'
         }
       },
       rootUser: {

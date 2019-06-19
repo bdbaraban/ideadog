@@ -20,7 +20,11 @@ const useStyles = makeStyles(
         marginTop: '15vh',
         width: '100%',
         [theme.breakpoints.up('md')]: {
-          paddingRight: 24
+          paddingRight: 24,
+          marginTop: '12vh'
+        },
+        [theme.breakpoints.down('sm')]: {
+          marginTop: '10vh'
         }
       }
     })
