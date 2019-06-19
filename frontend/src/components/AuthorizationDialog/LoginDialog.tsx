@@ -54,8 +54,9 @@ const useStyles = makeStyles(
       flip: {
         textTransform: 'none'
       },
-      typography: {
-        padding: theme.spacing(1)
+      error: {
+        padding: theme.spacing(1),
+        textAlign: 'center'
       }
     })
 );
@@ -75,6 +76,12 @@ interface LoginDialogProps {
 
   // Function to flip betweeen log in/sign up
   flip: VoidFunction;
+
+  // Authorization error message
+  authError: string;
+
+  // Authorization error toggler
+  setAuthError: (message: string) => void;
 }
 
 /**
@@ -84,7 +91,9 @@ const LoginDialog = ({
   open,
   user,
   handleClose,
-  flip
+  flip,
+  authError,
+  setAuthError
 }: LoginDialogProps): React.ReactElement => {
   const classes = useStyles();
   const navigation = useNavigation();
@@ -99,23 +108,23 @@ const LoginDialog = ({
   // Log in/sign up waiting boolean
   const [waiting, setWaiting] = React.useState<boolean>(false);
 
-  // Authorization error boolean
-  const [authError, setAuthError] = React.useState<boolean>(false);
-
+  // Email error checking
   const emailErrorRegex = !email.address.match(
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
   );
 
+  // Register email input
   const handleEmailChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    setAuthError(false);
+    setAuthError('');
     setEmail({
       address: event.target.value,
       error: false
     });
   };
 
+  // Login in with entered email
   const handleLogin = async (): Promise<void> => {
     // Run regex error matching on input
     if (emailErrorRegex) {
@@ -129,24 +138,70 @@ const LoginDialog = ({
     // Run waiting indicator
     setWaiting(true);
 
-    // Await login response
-    const status = await user.prompt(email.address);
-
-    // Close waiting indicator
-    setWaiting(false);
+    // Generate login token on back-end
+    let status = await user.setToken(email.address);
 
     if (status === 307) {
-      // If not successful, flip to sign up card
-      setAuthError(true);
+      setAuthError(
+        // If user does not exist, flip to sign up card
+        'The account with the given email does not exist. Please register a new account'
+      );
       flip();
-    } else {
-      // Otherwise, close dialog and refresh page
+      setWaiting(false);
+      return;
+    } else if (status === 400) {
+      // Otherwise, display service failure message
+      setAuthError('Authorization failed. Please try again later.');
+      setWaiting(false);
+      return;
+    }
+
+    // Send authorization prompt to user
+    status = await user.prompt(email.address);
+
+    if (status === 307) {
+      // Rejected
+      setAuthError('Authorization request rejected.');
+      setWaiting(false);
+      return;
+    } else if (status === 400) {
+      // Timed out
+      setAuthError('Authorization request timed out.');
+      setWaiting(false);
+      return;
+    }
+
+    // Log in and set bearer token for session
+    status = await user.setBearer();
+
+    if (status === 200) {
+      // Upon success, refresh page
+      setAuthError('');
+      setWaiting(false);
       handleClose();
       setEmail({
         address: '',
         error: false
       });
       navigation.navigate(route.url.href);
+    } else if (status === 307) {
+      setAuthError(
+        // If user does not exist, flip to sign up card
+        'The account with the given email does not exist. Please register a new account'
+      );
+      flip();
+      setWaiting(false);
+    } else {
+      setAuthError('Authorization failed. Please try again later.');
+      setWaiting(false);
+    }
+  };
+
+  // Enable enter-key submission
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === 'Enter') {
+      handleLogin();
+      event.preventDefault();
     }
   };
 
@@ -181,6 +236,7 @@ const LoginDialog = ({
             margin="normal"
             variant="filled"
             helperText={email.error && 'Invalid email'}
+            onKeyPress={handleKeyPress}
           />
           <Button className={classes.flipText} onClick={flip}>
             <Typography color="secondary" className={classes.flip}>
@@ -197,10 +253,9 @@ const LoginDialog = ({
           >
             Log In
           </Button>
-          {authError && (
-            <Typography className={classes.typography} color="error">
-              The account with the given email does not exist. Please register a
-              new account.
+          {authError !== '' && (
+            <Typography className={classes.error} color="error">
+              {authError}
             </Typography>
           )}
         </DialogContent>

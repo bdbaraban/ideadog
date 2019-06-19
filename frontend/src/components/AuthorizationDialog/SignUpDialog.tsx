@@ -69,8 +69,9 @@ const useStyles = makeStyles(
         textAlign: 'center',
         paddingTop: 8
       },
-      typography: {
-        padding: theme.spacing(1)
+      error: {
+        padding: theme.spacing(1),
+        textAlign: 'center'
       }
     })
 );
@@ -90,6 +91,12 @@ interface SignUpDialogProps {
 
   // Function to flip betweeen log in/sign up
   flip: VoidFunction;
+
+  // Authorization error status
+  authError: string;
+
+  // Authorization error toggler
+  setAuthError: (message: string) => void;
 }
 
 /**
@@ -99,7 +106,9 @@ const SignUpDialog = ({
   open,
   user,
   handleClose,
-  flip
+  flip,
+  authError,
+  setAuthError
 }: SignUpDialogProps): React.ReactElement => {
   const classes = useStyles();
   const navigation = useNavigation();
@@ -123,38 +132,42 @@ const SignUpDialog = ({
   // Log in/sign up waiting boolean
   const [waiting, setWaiting] = React.useState<boolean>(false);
 
-  // Log in/sign up authorization error boolean
-  const [authError, setAuthError] = React.useState<boolean>(false);
-
+  // Email error checking
   const emailErrorRegex = !email.address.match(
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
   );
+
+  // Username error checking
   const usernameErrorRegex = !username.name.match(/^[a-zA-Z0-9_]+$/);
 
+  // Register email input
   const handleEmailChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    setAuthError(false);
+    setAuthError('');
     setEmail({
       address: event.target.value,
       error: false
     });
   };
 
+  // Register username input
   const handleUsernameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    setAuthError(false);
+    setAuthError('');
     setUsername({
       name: event.target.value,
       error: false
     });
   };
 
+  // Register agreement checkbox selection
   const handleCheck = (): void => {
     setChecked(!checked);
   };
 
+  // Sign up with given email, username
   const handleSignUp = async (): Promise<void> => {
     // Run regex error matching on inputs
     if (emailErrorRegex) {
@@ -175,36 +188,72 @@ const SignUpDialog = ({
     // Run waiting indicator
     setWaiting(true);
 
-    // Await signup response
-    const status = await user.prompt(email.address);
+    // Generate login token on back-end
+    let status = await user.setToken(email.address, username.name);
 
-    // Close waiting indicator
-    setWaiting(false);
+    // If not successful, display error message
+    if (status === 307 || status === 400) {
+      setAuthError(
+        'Failed to register account. Try again or use a different email.'
+      );
+      setWaiting(false);
+      return;
+    }
+
+    // Otherwise, send authorization prompt to user
+    status = await user.prompt(email.address);
 
     if (status === 307) {
-      // If not successful, stay on signup card
-      setAuthError(true);
+      // Rejected
+      setAuthError('Authorization request rejected.');
       setChecked(false);
-      setEmail({
-        address: '',
-        error: true
-      });
-      setUsername({
-        name: '',
-        error: true
-      });
-    } else {
-      // Otherwise, close dialog and refresh page
-      setEmail({
-        address: '',
-        error: false
-      });
-      setUsername({
-        name: '',
-        error: false
-      });
+      setWaiting(false);
+      return;
+    } else if (status === 400) {
+      // Timed out
+      setAuthError('Authorization request timed out.');
+      setChecked(false);
+      setWaiting(false);
+      return;
+    }
+
+    // Sign in and set bearer token
+    status = await user.setBearer();
+
+    if (status === 200) {
+      // Upon success, refresh page
+      setAuthError('');
+      setChecked(false);
+      setWaiting(false);
       handleClose();
+      setEmail({
+        address: '',
+        error: false
+      });
+      setUsername({
+        name: '',
+        error: false
+      });
       navigation.navigate(route.url.href);
+    } else if (status === 307 || status === 400) {
+      // If user does not exist, flip to sign up card
+      setAuthError(
+        'The account with the given email does not exist. Please register a new account'
+      );
+      flip();
+      setWaiting(false);
+    } else {
+      setAuthError('Authorization failed. Please try again later.');
+      setWaiting(false);
+      setChecked(false);
+    }
+  };
+
+  // Enable enter-key submission
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === 'Enter') {
+      handleSignUp();
+      event.preventDefault();
     }
   };
 
@@ -239,6 +288,7 @@ const SignUpDialog = ({
             margin="normal"
             variant="filled"
             helperText={email.error && 'Invalid email'}
+            onKeyPress={handleKeyPress}
           />
           <CustomTextField
             id="filled-name"
@@ -253,6 +303,7 @@ const SignUpDialog = ({
             helperText={
               username.error && 'Letters, digits, or underscores only.'
             }
+            onKeyPress={handleKeyPress}
           />
           <FormControlLabel
             className={classes.agree}
@@ -275,9 +326,9 @@ const SignUpDialog = ({
           >
             Register
           </Button>
-          {authError && (
-            <Typography className={classes.typography} color="error">
-              Could not register an account with the given email.
+          {authError !== '' && (
+            <Typography className={classes.error} color="error">
+              {authError}
             </Typography>
           )}
         </DialogContent>

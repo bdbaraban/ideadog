@@ -13,6 +13,10 @@ const AuthorizationDialog = ({
   // Log in/sign up toggler booolean
   const [flipper, setFlipper] = React.useState<boolean>(false);
 
+  // Authorization error message
+  const [authError, setAuthError] = React.useState<string>('');
+
+  // Close dialog
   const handleClose = (): void => {
     if (toggleGrandparentOpen) {
       toggleGrandparentOpen();
@@ -21,6 +25,7 @@ const AuthorizationDialog = ({
     setFlipper(false);
   };
 
+  // Flip between login/signup screens
   const flip = (): void => {
     setFlipper(!flipper);
   };
@@ -31,6 +36,8 @@ const AuthorizationDialog = ({
       user={user}
       handleClose={handleClose}
       flip={flip}
+      authError={authError}
+      setAuthError={setAuthError}
     />
   ) : (
     <SignUpDialog
@@ -38,6 +45,8 @@ const AuthorizationDialog = ({
       user={user}
       handleClose={handleClose}
       flip={flip}
+      authError={authError}
+      setAuthError={setAuthError}
     />
   );
 };
