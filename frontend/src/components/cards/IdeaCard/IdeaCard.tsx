@@ -1,12 +1,16 @@
 import React from 'react';
 import {
+  Button,
   CardContent,
   Container,
   createStyles,
   Dialog,
   DialogContent,
   DialogTitle,
+  Fade,
   makeStyles,
+  Paper,
+  Popover,
   Theme,
   Typography
 } from '@material-ui/core';
@@ -56,7 +60,7 @@ const useStyles = makeStyles(
         transform: 'scale(0.8)'
       },
       text: {
-        paddingBottom: theme.spacing(1.5),
+        paddingBottom: theme.spacing(2.25),
         borderBottom: `1px solid ${fade(theme.palette.common.white, 0.5)}`
       },
       closeIcon: {
@@ -117,6 +121,13 @@ const useStyles = makeStyles(
       },
       happy: {
         transform: 'scale(1.1)'
+      },
+      popper: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: theme.spacing(2)
       }
     })
 );
@@ -138,6 +149,22 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
   // Share dialog boolean
   const [open, setOpen] = React.useState<boolean>(false);
 
+  // Delete popup anchor
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  // Boolean version of anchor
+  const deleteOpen = Boolean(anchorEl);
+
+  // Toggle delete popper
+  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  // Close search popover menu for mobile
+  const handleClose = (): void => {
+    setAnchorEl(null);
+  };
+
   // Toggle share dialog open/closed
   const toggleOpen = (): void => {
     setOpen(!open);
@@ -158,15 +185,44 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
             color="textSecondary"
             gutterBottom
           >
-            <Link className={classes.userLink} href={idea.owner.id}>
+            <Link className={classes.userLink} href={`/user/${idea.owner.key}`}>
               @{idea.owner.username} {bulletPoint}{' '}
             </Link>
             {MONTHS[convertedDate.getUTCMonth()]} {convertedDate.getUTCDate()},{' '}
             {convertedDate.getUTCFullYear()}
           </Typography>
-          <IconButton aria-label="Close" color="secondary" size="small">
+          <IconButton
+            aria-label="Close"
+            color="secondary"
+            size="small"
+            onClick={handleClick}
+          >
             <CloseIcon className={classes.closeIcon} />
           </IconButton>
+          <Popover
+            id="delete-popper"
+            open={deleteOpen}
+            onClose={handleClose}
+            anchorEl={anchorEl}
+          >
+            <Paper className={classes.popper}>
+              <Typography
+                className={classes.deleteTitle}
+                color="textSecondary"
+                variant="h6"
+              >
+                Delete this idea?
+              </Typography>
+              <div className={classes.popperButtons}>
+                <Button color="secondary" size="large">
+                  <Typography>Yes</Typography>
+                </Button>
+                <Button color="secondary" size="large" onClick={handleClose}>
+                  <Typography>No</Typography>
+                </Button>
+              </div>
+            </Paper>
+          </Popover>
         </div>
         <Typography className={classes.text}>{idea.text}</Typography>
         <Container className={classes.footer}>
