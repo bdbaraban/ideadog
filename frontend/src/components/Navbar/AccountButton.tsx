@@ -58,7 +58,7 @@ const AccountButton = ({ user }: AccountButtonProps): React.ReactElement => {
   const handleClick = (): void => {
     if (user.current) {
       // Navigate to user page, if logged in
-      navigation.navigate(`/${user.current.id}`);
+      navigation.navigate(`/user/${user.current.key}`);
     } else {
       // Otherwise, open login dialog
       toggleOpen();
