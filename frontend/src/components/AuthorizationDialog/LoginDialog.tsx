@@ -142,12 +142,12 @@ const LoginDialog = ({
     let status = await user.setToken(email.address);
 
     if (status === 307) {
+      // If user does not exist, flip to sign up card
       setAuthError(
-        // If user does not exist, flip to sign up card
-        'The account with the given email does not exist. Please register a new account'
+        'No accounts with the given email exist. Please register a new account.'
       );
-      flip();
       setWaiting(false);
+      flip();
       return;
     } else if (status === 400) {
       // Otherwise, display service failure message
@@ -171,26 +171,26 @@ const LoginDialog = ({
       return;
     }
 
-    // Log in and set bearer token for session
-    status = await user.setBearer();
+    // Fetch bearer token cookie
+    status = await user.fetchCookie();
 
     if (status === 200) {
       // Upon success, refresh page
       setAuthError('');
       setWaiting(false);
-      handleClose();
       setEmail({
         address: '',
         error: false
       });
+      handleClose();
       navigation.navigate(route.url.href);
     } else if (status === 307) {
+      // If user does not exist, flip to sign up card
       setAuthError(
-        // If user does not exist, flip to sign up card
-        'The account with the given email does not exist. Please register a new account'
+        'No accounts with the given email exist. Please register a new account.'
       );
-      flip();
       setWaiting(false);
+      flip();
     } else {
       setAuthError('Authorization failed. Please try again later.');
       setWaiting(false);

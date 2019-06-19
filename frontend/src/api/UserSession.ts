@@ -106,14 +106,13 @@ export default class UserSession {
         // Rejected
         return 307;
       }
-    } else {
-      // Timed out
-      return 400;
     }
+    // Timed out
+    return 400;
   }
 
   // Set bearer token for logged-in account
-  public async setBearer(): Promise<number> {
+  public async fetchCookie(): Promise<number> {
     const response = await fetch('http://localhost:5000/api/validate_login', {
       method: 'POST',
       credentials: 'include',

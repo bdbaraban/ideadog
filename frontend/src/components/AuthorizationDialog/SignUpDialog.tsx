@@ -175,6 +175,7 @@ const SignUpDialog = ({
         address: email.address,
         error: true
       });
+      setChecked(false);
       return;
     }
     if (usernameErrorRegex) {
@@ -182,6 +183,7 @@ const SignUpDialog = ({
         name: username.name,
         error: true
       });
+      setChecked(false);
       return;
     }
 
@@ -197,10 +199,11 @@ const SignUpDialog = ({
         'Failed to register account. Try again or use a different email.'
       );
       setWaiting(false);
+      setChecked(false);
       return;
     }
 
-    // Otherwise, send authorization prompt to user
+    // Send authorization prompt to user
     status = await user.prompt(email.address);
 
     if (status === 307) {
@@ -217,15 +220,14 @@ const SignUpDialog = ({
       return;
     }
 
-    // Sign in and set bearer token
-    status = await user.setBearer();
+    // Fetch bearer token cookie
+    status = await user.fetchCookie();
 
     if (status === 200) {
       // Upon success, refresh page
       setAuthError('');
       setChecked(false);
       setWaiting(false);
-      handleClose();
       setEmail({
         address: '',
         error: false
@@ -234,15 +236,9 @@ const SignUpDialog = ({
         name: '',
         error: false
       });
+      handleClose();
       navigation.navigate(route.url.href);
     } else if (status === 307 || status === 400) {
-      // If user does not exist, flip to sign up card
-      setAuthError(
-        'The account with the given email does not exist. Please register a new account'
-      );
-      flip();
-      setWaiting(false);
-    } else {
       setAuthError('Authorization failed. Please try again later.');
       setWaiting(false);
       setChecked(false);
