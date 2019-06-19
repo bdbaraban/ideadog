@@ -32,16 +32,12 @@ const useStyles = makeStyles(
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
         width: '30%',
-        minHeight: 85
+        [theme.breakpoints.down('md')]: {
+          minHeight: 124
+        }
       },
       label: {
         position: 'absolute'
-      },
-      sad: {
-        [theme.breakpoints.down('xs')]: {
-          display: 'flex',
-          alignSelf: 'flex-end'
-        }
       }
     })
 );
@@ -175,7 +171,6 @@ const Voters = ({
         )}
       </Button>
       <Button
-        className={classes.sad}
         classes={{
           label: classes.label
         }}
