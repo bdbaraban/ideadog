@@ -120,7 +120,10 @@ const UserCard = ({ user, viewingUser }: UserCardProps): React.ReactElement => {
           <Container className={classes.infoContainer}>
             <Container className={classes.infoLeft}>
               <Typography className={classes.infoTitle} color="textSecondary">
-                <Link className={classes.link} href={`/${currentUser.id}`}>
+                <Link
+                  className={classes.link}
+                  href={`/user/${currentUser.key}`}
+                >
                   @{currentUser.username}
                 </Link>
               </Typography>
