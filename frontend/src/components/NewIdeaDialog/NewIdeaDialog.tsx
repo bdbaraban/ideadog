@@ -181,6 +181,7 @@ const NewIdeaDialog = ({
           tags: tags.map((tag: string): string => tag.toLowerCase())
         })
       }));
+    console.log('test');
     setText('');
     setTags([]);
     toggleOpen();

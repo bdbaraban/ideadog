@@ -8,3 +8,5 @@ node_modules
 .cache
 dist
 *.lock
+
+\.idea/

@@ -8,7 +8,7 @@ const getUser = async (
   key: string = '',
   bearer: string = ''
 ): Promise<User> => {
-  let route = 'http://localhost:5000/api/user';
+  let route = '/api/user';
   if (key !== '') {
     route += key;
   }

@@ -20,18 +20,18 @@ const getIdeas = async ({ sort, tags }: SearchParameters): Promise<Idea[]> => {
   if (sort === 'home') {
     switch (tags) {
       case undefined:
-        query = `http://localhost:5000/api/ideas`;
+        query = `/api/ideas`;
         break;
       default:
-        query = `http://localhost:5000/api/ideas?tags=${tags}`;
+        query = `/api/ideas?tags=${tags}`;
     }
   } else if (sort === 'bright') {
     switch (tags) {
       case undefined:
-        query = `http://localhost:5000/api/ideas/${sort}`;
+        query = `/api/ideas/${sort}`;
         break;
       default:
-        query = `http://localhost:5000/api/ideas/${sort}?tags=${tags}`;
+        query = `/api/ideas/${sort}?tags=${tags}`;
     }
   } else {
     throw new NotFoundError(`Sorting filter '${sort}' does not exist.`);
