@@ -15,13 +15,8 @@ const useStyles = makeStyles(
       root: {
         flexGrow: 1,
         flexWrap: 'nowrap',
-        marginTop: '15vh',
-        [theme.breakpoints.down('md')]: {
-          marginTop: '12vh'
-        },
         [theme.breakpoints.down('sm')]: {
-          marginTop: 0,
-          paddingTop: '0 !important'
+          paddingTop: '8px !important'
         }
       }
     })
@@ -55,6 +50,7 @@ const InfoGrid = ({
       direction="column"
       spacing={2}
       xs={12}
+      sm={11}
       md={5}
       lg={4}
     >
@@ -66,11 +62,11 @@ const InfoGrid = ({
           <TagsCard checkboxTags={checkboxTags} />
         </Grid>
       </Hidden>
-      <Grid className={classes.responsive} item>
+      <Grid item>
         <AboutCard />
       </Grid>
     </Grid>
   );
 };
 
-export default React.memo(InfoGrid);
+export default InfoGrid;

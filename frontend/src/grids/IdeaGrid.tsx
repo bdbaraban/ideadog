@@ -24,21 +24,12 @@ const useStyles = makeStyles(
       rootDefault: {
         alignContent: 'center',
         flexGrow: 1,
-        flexWrap: 'nowrap',
-        marginTop: '15vh',
-        [theme.breakpoints.down('md')]: {
-          marginTop: '12vh'
-        },
-        [theme.breakpoints.down('sm')]: {
-          marginTop: '10vh',
-          paddingTop: '24'
-        }
+        flexWrap: 'nowrap'
       },
       rootUser: {
         alignContent: 'center',
         flexGrow: 1,
         flexWrap: 'nowrap',
-        marginTop: '15vh',
         [theme.breakpoints.down('sm')]: {
           flexWrap: 'wrap',
           order: 1,
@@ -154,7 +145,7 @@ const IdeaGrid = ({
       direction="column"
       spacing={2}
       xs={12}
-      sm={10}
+      sm={11}
       md={7}
       lg={6}
     >

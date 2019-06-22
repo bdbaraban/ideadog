@@ -17,14 +17,10 @@ const useStyles = makeStyles(
         justifyContent: 'center'
       },
       grid: {
-        marginTop: '15vh',
         width: '100%',
-        [theme.breakpoints.up('md')]: {
-          paddingRight: 24,
-          marginTop: '12vh'
-        },
+        marginTop: 72,
         [theme.breakpoints.down('sm')]: {
-          marginTop: '10vh'
+          marginTop: 66
         }
       }
     })
@@ -47,7 +43,7 @@ const IdeaLayout = ({ idea }: IdeaLayoutProps): React.ReactElement => {
   return (
     <div className={classes.root}>
       <Grid className={classes.grid} container spacing={6} justify="center">
-        <Grid item xs={12} sm={10} md={6}>
+        <Grid item xs={12} sm={11} md={7}>
           <IdeaCard idea={idea} />
         </Grid>
       </Grid>

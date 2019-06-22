@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Styles } from 'jss';
 import Grid from '@material-ui/core/Grid';
 import { UserSession } from '../api';
@@ -11,7 +11,7 @@ import { IdeaGrid, InfoGrid } from '.';
  * HomeLayout component styles
  */
 const useStyles = makeStyles(
-  (): Styles =>
+  (theme: Theme): Styles =>
     createStyles({
       root: {
         flexGrow: 1,
@@ -19,7 +19,11 @@ const useStyles = makeStyles(
         justifyContent: 'center'
       },
       grid: {
-        width: '100%'
+        width: '100%',
+        marginTop: 72,
+        [theme.breakpoints.down('sm')]: {
+          marginTop: 66
+        }
       }
     })
 );
@@ -63,4 +67,4 @@ const HomeLayout = ({
   );
 };
 
-export default React.memo(HomeLayout);
+export default HomeLayout;
