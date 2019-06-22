@@ -22,8 +22,10 @@ const useStyles = makeStyles(
       },
       grid: {
         width: '100%',
+        marginTop: 72,
         [theme.breakpoints.down('sm')]: {
-          margin: '0 auto'
+          margin: '0 auto',
+          marginTop: 66
         }
       }
     })
@@ -76,4 +78,4 @@ const UserLayout = ({
   );
 };
 
-export default React.memo(UserLayout);
+export default UserLayout;
