@@ -34,7 +34,6 @@ const useStyles = makeStyles(
         fontWeight: 'bold'
       },
       heading: {
-        fontSize: theme.typography.pxToRem(15),
         fontWeight: 'bold'
       },
       expansionPanel: {
@@ -78,13 +77,17 @@ const AboutCard = (): React.ReactElement => {
             expandIcon={<ExpandMoreIcon color="secondary" />}
           >
             <div className={classes.column}>
-              <Typography className={classes.heading} color="textSecondary">
+              <Typography
+                className={classes.heading}
+                color="textSecondary"
+                variant="subtitle1"
+              >
                 What is this?
               </Typography>
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography color="textSecondary">
+            <Typography color="textSecondary" variant="body1">
               IdeaDog is a social platform for sharing ideas.
               <br />
               <br />
@@ -104,13 +107,17 @@ const AboutCard = (): React.ReactElement => {
             expandIcon={<ExpandMoreIcon color="secondary" />}
           >
             <div className={classes.column}>
-              <Typography className={classes.heading} color="textSecondary">
+              <Typography
+                className={classes.heading}
+                color="textSecondary"
+                variant="subtitle1"
+              >
                 What&apos;s the dog&apos;s name?
               </Typography>
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography color="textSecondary">
+            <Typography color="textSecondary" variant="body1">
               His name is Tully, and he is a beloved boy.
             </Typography>
           </ExpansionPanelDetails>
@@ -122,40 +129,17 @@ const AboutCard = (): React.ReactElement => {
             expandIcon={<ExpandMoreIcon color="secondary" />}
           >
             <div className={classes.column}>
-              <Typography className={classes.heading} color="textSecondary">
-                Is that really an emoji in the URL?
-              </Typography>
-            </div>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Typography color="textSecondary">
-              <a
-                href="idea🐶.ws"
-                aria-label="github-link"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={classes.link}
+              <Typography
+                className={classes.heading}
+                color="textSecondary"
+                variant="subtitle1"
               >
-                You bet it is
-              </a>
-              .
-            </Typography>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel className={classes.expansionPanel}>
-          <ExpansionPanelSummary
-            aria-controls="what-about-content"
-            id="what-about-header"
-            expandIcon={<ExpandMoreIcon color="secondary" />}
-          >
-            <div className={classes.column}>
-              <Typography className={classes.heading} color="textSecondary">
                 Who are you?
               </Typography>
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography color="textSecondary">
+            <Typography color="textSecondary" variant="body1">
               Ah, I am not one, but many. Well... just two of us.
               <br />
               <br />
