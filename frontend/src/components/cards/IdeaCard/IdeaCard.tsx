@@ -39,14 +39,20 @@ const useStyles = makeStyles(
         color: theme.palette.common.white,
         width: '100%'
       },
+      content: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        paddingBottom: 16,
+        borderBottom: `1px solid ${fade(theme.palette.common.white, 0.5)}`
+      },
       header: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
       },
       title: {
-        color: fade(theme.palette.common.white, 0.5),
-        fontSize: 14
+        color: fade(theme.palette.common.white, 0.5)
       },
       userLink: {
         color: fade(theme.palette.common.white, 0.5),
@@ -57,10 +63,6 @@ const useStyles = makeStyles(
         display: 'inline-block',
         margin: '0 2px',
         transform: 'scale(0.8)'
-      },
-      text: {
-        paddingBottom: theme.spacing(2.25),
-        borderBottom: `1px solid ${fade(theme.palette.common.white, 0.5)}`
       },
       closeIcon: {
         display: 'flex',
@@ -178,52 +180,58 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
   return (
     <Card raised={true} className={classes.card}>
       <CardContent>
-        <div className={classes.header}>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            <Link className={classes.userLink} href={`/user/${idea.owner.key}`}>
-              @{idea.owner.username} {bulletPoint}{' '}
-            </Link>
-            {MONTHS[convertedDate.getUTCMonth()]} {convertedDate.getUTCDate()},{' '}
-            {convertedDate.getUTCFullYear()}
-          </Typography>
-          <IconButton
-            aria-label="Close"
-            color="secondary"
-            size="small"
-            onClick={handleClick}
-          >
-            <CloseIcon className={classes.closeIcon} />
-          </IconButton>
-          <Popover
-            id="delete-popper"
-            open={deleteOpen}
-            onClose={handleClose}
-            anchorEl={anchorEl}
-          >
-            <Paper className={classes.popper}>
-              <Typography
-                className={classes.deleteTitle}
-                color="textSecondary"
-                variant="h6"
+        <div className={classes.content}>
+          <div className={classes.header}>
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+              variant="body2"
+            >
+              <Link
+                className={classes.userLink}
+                href={`/user/${idea.owner.key}`}
               >
-                Delete this idea?
-              </Typography>
-              <div className={classes.popperButtons}>
-                <Button color="secondary" size="large">
-                  <Typography>Yes</Typography>
-                </Button>
-                <Button color="secondary" size="large" onClick={handleClose}>
-                  <Typography>No</Typography>
-                </Button>
-              </div>
-            </Paper>
-          </Popover>
+                @{idea.owner.username} {bulletPoint}{' '}
+              </Link>
+              {MONTHS[convertedDate.getUTCMonth()]} {convertedDate.getUTCDate()}
+              , {convertedDate.getUTCFullYear()}
+            </Typography>
+            <IconButton
+              aria-label="Close"
+              color="secondary"
+              size="small"
+              onClick={handleClick}
+            >
+              <CloseIcon className={classes.closeIcon} />
+            </IconButton>
+            <Popover
+              id="delete-popper"
+              open={deleteOpen}
+              onClose={handleClose}
+              anchorEl={anchorEl}
+            >
+              <Paper className={classes.popper}>
+                <Typography
+                  className={classes.deleteTitle}
+                  color="textSecondary"
+                  variant="body1"
+                >
+                  Delete this idea?
+                </Typography>
+                <div className={classes.popperButtons}>
+                  <Button color="secondary" size="large">
+                    <Typography>Yes</Typography>
+                  </Button>
+                  <Button color="secondary" size="large" onClick={handleClose}>
+                    <Typography>No</Typography>
+                  </Button>
+                </div>
+              </Paper>
+            </Popover>
+          </div>
+          <Typography className={classes.text}>{idea.text}</Typography>
         </div>
-        <Typography className={classes.text}>{idea.text}</Typography>
         <Container className={classes.footer}>
           <Voters
             upvotes={idea.upvotes}
