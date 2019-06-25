@@ -12,11 +12,10 @@ import {
 } from '@material-ui/core';
 import { Styles } from 'jss';
 import { fade } from '@material-ui/core/styles';
-import { useCurrentRoute, useNavigation } from 'react-navi';
 import { UserSession } from '../../api';
 import { EmailState, UsernameState } from './types';
 import { CustomTextField } from '..';
-import { WaitingIndicator } from '.';
+import { VerificationDialogContent } from '.';
 
 /**
  * SignUpDialog component style
@@ -82,25 +81,20 @@ const useStyles = makeStyles(
 interface SignUpDialogProps {
   // Open/close status boolean
   open: boolean;
-
   // Current user session
   user: UserSession;
-
   // Function to close parent dialogs
   handleClose: VoidFunction;
-
   // Function to flip betweeen log in/sign up
   flip: VoidFunction;
-
   // Authorization error status
   authError: string;
-
   // Authorization error toggler
   setAuthError: (message: string) => void;
 }
 
 /**
- * Sign up dialog
+ * Sign up dialog, accepts user email and name and verifies accoutn through Auth0
  */
 const SignUpDialog = ({
   open,
@@ -111,8 +105,6 @@ const SignUpDialog = ({
   setAuthError
 }: SignUpDialogProps): React.ReactElement => {
   const classes = useStyles();
-  const navigation = useNavigation();
-  const route = useCurrentRoute();
 
   // Entered email
   const [email, setEmail] = React.useState<EmailState>({
@@ -129,8 +121,8 @@ const SignUpDialog = ({
   // Agreement checked true/false
   const [checked, setChecked] = React.useState<boolean>(false);
 
-  // Log in/sign up waiting boolean
-  const [waiting, setWaiting] = React.useState<boolean>(false);
+  // Auth0 verification email sent true/false
+  const [sent, setSent] = React.useState<boolean>(false);
 
   // Email error checking
   const emailErrorRegex = !email.address.match(
@@ -168,27 +160,26 @@ const SignUpDialog = ({
   };
 
   // Sign up with given email, username
-  const handleSignUp = async (): Promise<void> => {
+  const handleSend = async (): Promise<void> => {
     // Run regex error matching on inputs
-    if (emailErrorRegex) {
-      setEmail({
-        address: email.address,
-        error: true
-      });
-      setChecked(false);
-      return;
-    }
-    if (usernameErrorRegex) {
-      setUsername({
-        name: username.name,
-        error: true
-      });
+    if (emailErrorRegex || usernameErrorRegex) {
+      if (emailErrorRegex) {
+        setEmail({
+          address: email.address,
+          error: true
+        });
+      }
+      if (usernameErrorRegex) {
+        setUsername({
+          name: username.name,
+          error: true
+        });
+      }
       setChecked(false);
       return;
     }
 
-    // Run waiting indicator
-    setWaiting(true);
+    setSent(true);
 
     // Generate login token on back-end
     let status = await user.setToken(email.address, username.name);
@@ -198,57 +189,37 @@ const SignUpDialog = ({
       setAuthError(
         'Failed to register account. Try again or use a different email.'
       );
-      setWaiting(false);
+      setSent(false);
       setChecked(false);
       return;
     }
 
     // Send authorization prompt to user
-    status = await user.prompt(email.address);
-
-    if (status === 307) {
-      // Rejected
-      setAuthError('Authorization request rejected.');
-      setChecked(false);
-      setWaiting(false);
-      return;
-    } else if (status === 400) {
-      // Timed out
-      setAuthError('Authorization request timed out.');
-      setChecked(false);
-      setWaiting(false);
+    try {
+      await user.send(email.address);
+    } catch (Auth0Error) {
+      setAuthError('Authorization failed. Please try again later.');
+      setSent(false);
       return;
     }
+  };
 
-    // Fetch bearer token cookie
-    status = await user.fetchCookie();
-
-    if (status === 200) {
-      // Upon success, refresh page
-      setAuthError('');
-      setChecked(false);
-      setWaiting(false);
-      setEmail({
-        address: '',
-        error: false
-      });
-      setUsername({
-        name: '',
-        error: false
-      });
-      handleClose();
-      navigation.navigate(route.url.href);
-    } else if (status === 307 || status === 400) {
-      setAuthError('Authorization failed. Please try again later.');
-      setWaiting(false);
-      setChecked(false);
+  // Verify Auth0 passwordless code
+  const handleVerification = async (
+    verificationCode: string
+  ): Promise<void> => {
+    try {
+      user.verify(email.address, verificationCode);
+    } catch (Auth0Error) {
+      setAuthError('Invalid token. Please try again.');
+      setSent(false);
     }
   };
 
   // Enable enter-key submission
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
-      handleSignUp();
+      handleSend();
       event.preventDefault();
     }
   };
@@ -258,22 +229,22 @@ const SignUpDialog = ({
       onClose={handleClose}
       aria-labelledby="sign-up-dialog"
       open={open}
-      disableBackdropClick={waiting}
+      disableBackdropClick={sent}
       fullWidth
       maxWidth="xs"
     >
       <Typography
         className={classes.title}
-        id="login-dialog-title"
+        id="sign-up-dialog-title"
         color="textSecondary"
         variant="h4"
       >
         Sign Up
       </Typography>
-      {!waiting ? (
+      {!sent ? (
         <DialogContent className={classes.content}>
           <CustomTextField
-            id="filled-name"
+            id="filled-email"
             label="Email"
             autoFocus={true}
             required={true}
@@ -287,7 +258,7 @@ const SignUpDialog = ({
             onKeyPress={handleKeyPress}
           />
           <CustomTextField
-            id="filled-name"
+            id="filled-username"
             label="Username"
             required={true}
             error={username.error}
@@ -318,7 +289,7 @@ const SignUpDialog = ({
             color="secondary"
             size="large"
             className={classes.button}
-            onClick={handleSignUp}
+            onClick={handleSend}
           >
             Register
           </Button>
@@ -330,7 +301,7 @@ const SignUpDialog = ({
         </DialogContent>
       ) : (
         <DialogContent className={classes.content}>
-          <WaitingIndicator />
+          <VerificationDialogContent handleVerification={handleVerification} />
         </DialogContent>
       )}
     </Dialog>

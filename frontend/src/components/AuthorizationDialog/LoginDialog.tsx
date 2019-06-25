@@ -9,11 +9,10 @@ import {
   Typography
 } from '@material-ui/core';
 import { Styles } from 'jss';
-import { useCurrentRoute, useNavigation } from 'react-navi';
 import { UserSession } from '../../api';
 import { VoidFunction } from '../../types';
 import { CustomTextField } from '..';
-import { EmailState, WaitingIndicator } from '.';
+import { EmailState, VerificationDialogContent } from '.';
 
 /**
  * LoginDialog component style
@@ -67,25 +66,20 @@ const useStyles = makeStyles(
 interface LoginDialogProps {
   // Open/close status boolean
   open: boolean;
-
   // Current user session
   user: UserSession;
-
   // Function to close parent dialogs
   handleClose: VoidFunction;
-
   // Function to flip betweeen log in/sign up
   flip: VoidFunction;
-
   // Authorization error message
   authError: string;
-
   // Authorization error toggler
   setAuthError: (message: string) => void;
 }
 
 /**
- * Log In dialog
+ * Login dialog, accepts user email and verifies account through Auth0
  */
 const LoginDialog = ({
   open,
@@ -96,8 +90,6 @@ const LoginDialog = ({
   setAuthError
 }: LoginDialogProps): React.ReactElement => {
   const classes = useStyles();
-  const navigation = useNavigation();
-  const route = useCurrentRoute();
 
   // Entered email
   const [email, setEmail] = React.useState<EmailState>({
@@ -105,8 +97,8 @@ const LoginDialog = ({
     error: false
   });
 
-  // Log in/sign up waiting boolean
-  const [waiting, setWaiting] = React.useState<boolean>(false);
+  // Auth0 verification email sent true/false
+  const [sent, setSent] = React.useState<boolean>(false);
 
   // Email error checking
   const emailErrorRegex = !email.address.match(
@@ -124,8 +116,8 @@ const LoginDialog = ({
     });
   };
 
-  // Login in with entered email
-  const handleLogin = async (): Promise<void> => {
+  // Send Auth0 verification email
+  const handleSend = async (): Promise<void> => {
     // Run regex error matching on input
     if (emailErrorRegex) {
       setEmail({
@@ -135,72 +127,50 @@ const LoginDialog = ({
       return;
     }
 
-    // Run waiting indicator
-    setWaiting(true);
+    setSent(true);
 
     // Generate login token on back-end
     let status = await user.setToken(email.address);
 
-    if (status === 307) {
-      // If user does not exist, flip to sign up card
-      setAuthError(
-        'No accounts with the given email exist. Please register a new account.'
-      );
-      setWaiting(false);
-      flip();
-      return;
-    } else if (status === 400) {
-      // Otherwise, display service failure message
-      setAuthError('Authorization failed. Please try again later.');
-      setWaiting(false);
-      return;
-    }
-
-    // Send authorization prompt to user
-    status = await user.prompt(email.address);
-
-    if (status === 307) {
-      // Rejected
-      setAuthError('Authorization request rejected.');
-      setWaiting(false);
-      return;
-    } else if (status === 400) {
-      // Timed out
-      setAuthError('Authorization request timed out.');
-      setWaiting(false);
+    if (status === 307 || status === 400) {
+      if (status === 307) {
+        // If user does not exist
+        setAuthError(
+          'No accounts with the given email exist. Please register a new account.'
+        );
+      } else {
+        // Otherwise, display service failure message
+        setAuthError('Authorization failed. Please try again later.');
+      }
+      setSent(false);
       return;
     }
 
-    // Fetch bearer token cookie
-    status = await user.fetchCookie();
-
-    if (status === 200) {
-      // Upon success, refresh page
-      setAuthError('');
-      setWaiting(false);
-      setEmail({
-        address: '',
-        error: false
-      });
-      handleClose();
-      navigation.navigate(route.url.href);
-    } else if (status === 307) {
-      // If user does not exist, flip to sign up card
-      setAuthError(
-        'No accounts with the given email exist. Please register a new account.'
-      );
-      setWaiting(false);
-      flip();
-    } else {
+    // Send Auth0 verification email
+    try {
+      user.send(email.address);
+    } catch (Auth0Error) {
       setAuthError('Authorization failed. Please try again later.');
-      setWaiting(false);
+      setSent(false);
+    }
+  };
+
+  // Verify Auth0 passwordless code
+  const handleVerification = async (
+    verificationCode: string
+  ): Promise<void> => {
+    try {
+      user.verify(email.address, verificationCode);
+    } catch (Auth0Error) {
+      setAuthError('Invalid token. Please try again.');
+      setSent(false);
     }
   };
 
   // Enable enter-key submission
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
-      handleLogin();
+      handleSend();
       event.preventDefault();
     }
   };
@@ -210,7 +180,7 @@ const LoginDialog = ({
       onClose={handleClose}
       aria-labelledby="login-dialog"
       open={open}
-      disableBackdropClick={waiting}
+      disableBackdropClick={sent}
       maxWidth="xs"
       fullWidth
     >
@@ -222,7 +192,7 @@ const LoginDialog = ({
       >
         Log In
       </Typography>
-      {!waiting ? (
+      {!sent ? (
         <DialogContent className={classes.content}>
           <CustomTextField
             className={classes.textField}
@@ -249,7 +219,7 @@ const LoginDialog = ({
             variant="contained"
             color="secondary"
             size="large"
-            onClick={handleLogin}
+            onClick={handleSend}
           >
             Log In
           </Button>
@@ -261,7 +231,7 @@ const LoginDialog = ({
         </DialogContent>
       ) : (
         <DialogContent className={classes.content}>
-          <WaitingIndicator />
+          <VerificationDialogContent handleVerification={handleVerification} />
         </DialogContent>
       )}
     </Dialog>

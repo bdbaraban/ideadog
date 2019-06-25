@@ -6,7 +6,6 @@ import {
   DialogContent,
   makeStyles,
   SvgIcon,
-  Theme,
   Typography
 } from '@material-ui/core';
 import { Styles } from 'jss';
@@ -19,7 +18,7 @@ import { AuthorizationDialog } from '.';
  * NotLoggedInDialog component style
  */
 const useStyles = makeStyles(
-  (theme: Theme): Styles =>
+  (): Styles =>
     createStyles({
       title: {
         textAlign: 'center',
