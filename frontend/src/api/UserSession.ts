@@ -1,60 +1,87 @@
 import { User } from '../types';
-import ApproveAPI from 'approveapi';
+import auth0, {
+  Auth0DecodedHash,
+  Auth0Error,
+  Auth0ParseHashError,
+  Auth0UserProfile
+} from 'auth0-js';
 /* eslint-disable @typescript-eslint/camelcase */
 
-// ApproveAPI client
-const client = ApproveAPI.createClient('sk_test_32dqMrJgaNdm5DpOJm5bHE');
-
-/**
- * ApproveAPI prompt response type
- */
-interface PromptResponse {
-  id: string;
-  sent_at: number;
-  is_expired: boolean;
-  request: {
-    user: string;
-    body: string;
-    approve_text: string;
-    reject_text: string;
-    expires_in: number;
-    metadata: {
-      location: string;
-      timestamp: string;
-    };
-  };
-  answer: null | {
-    result: boolean;
-    time: number;
-    metadata: {
-      ip_address: string;
-      browser: string;
-      operating_system: string;
-    };
-  };
-}
+// Auth0 client
+const webAuth = new auth0.WebAuth({
+  clientID: 'hzBQJSgcjR2QYjOXtnLeBaFOD7wmR4V4',
+  domain: 'dev-917aksrt.auth0.com',
+  redirectUri: 'http://localhost:1234',
+  responseType: 'token',
+  scope: 'openid profile'
+});
 
 /**
  * Manages a user
  */
 export default class UserSession {
-  // The current logged in user
+  // Current logged in user
   public current: User | null;
-
+  // Current user's Auth0 profile;
+  public profile: Auth0UserProfile | null;
   // Bearer token for logged in user
   public bearer: string;
-
   // Authorization token generated on back-end
   private token: string;
 
-  // ApproveAPI prompt ID
-  private promptId: string;
-
   public constructor() {
-    this.current = null;
+    [this.current, this.profile] = [null, null];
+
+    if (
+      window.localStorage.getItem('accessToken') &&
+      window.localStorage.getItem('expiresAt')
+    ) {
+      // If valid Auth0 access token exists, fetch profile
+      const accessToken = window.localStorage['accessToken'];
+      const expiresAt = parseInt(window.localStorage['expiresAt']);
+
+      if (new Date().getTime() < expiresAt) {
+        this.fetchUser(accessToken);
+      }
+    } else if (window.location.hash) {
+      // If Auth0 user verification hash exists, fetch profile
+      webAuth.parseHash(
+        { hash: window.location.hash },
+        (
+          err: Auth0ParseHashError | null,
+          authResult: Auth0DecodedHash | null
+        ): void => {
+          if (
+            !err &&
+            authResult &&
+            authResult.accessToken &&
+            authResult.expiresIn
+          ) {
+            localStorage.setItem('accessToken', authResult.accessToken);
+            localStorage.setItem(
+              'expiresAt',
+              (authResult.expiresIn * 1000 + new Date().getTime()).toString()
+            );
+            this.fetchUser(authResult.accessToken);
+          }
+        }
+      );
+    }
+
     this.bearer = '';
     this.token = '';
-    this.promptId = '';
+  }
+
+  // Fetch Auth0 user profile
+  private fetchUser(accessToken: string): void {
+    webAuth.client.userInfo(
+      accessToken,
+      (err: Auth0Error | null, user: Auth0UserProfile): void => {
+        if (!err) {
+          this.profile = user;
+        }
+      }
+    );
   }
 
   // Fetch login/signup token from back-end
@@ -84,35 +111,44 @@ export default class UserSession {
     return response.status;
   }
 
-  // Send ApproveAPI prompt
-  public async prompt(email: string): Promise<number> {
-    const params = {
-      user: email,
-      body: 'Log in to IdeaDog?',
-      approve_text: 'Authorize',
-      reject_text: 'Reject',
-      expires_in: 600,
-      long_poll: true
-    };
-
-    const response: PromptResponse = await client.createPrompt(params);
-
-    if (response.answer) {
-      if (response.answer.result) {
-        // Accepted
-        this.promptId = response.id;
-        return 200;
-      } else {
-        // Rejected
-        return 307;
+  // Send Auth0 verfication code email
+  public send = (email: string): void => {
+    webAuth.passwordlessStart(
+      {
+        connection: 'email',
+        send: 'code',
+        email
+      },
+      (err: Auth0Error | null): void => {
+        if (err) {
+          throw err;
+        }
       }
-    }
-    // Timed out
-    return 400;
-  }
+    );
+  };
+
+  // Verify Auth0 passwordless login code
+  public verify = (email: string, verificationCode: string): void => {
+    webAuth.passwordlessVerify(
+      {
+        connection: 'email',
+        email,
+        verificationCode
+      },
+      (err: Auth0Error | null): void => {
+        if (err) {
+          throw err;
+        }
+      }
+    );
+  };
 
   // Set bearer token for logged-in account
   public async fetchCookie(): Promise<number> {
+    if (!this.profile) {
+      return 400;
+    }
+
     const response = await fetch('http://localhost:5000/api/validate_login', {
       method: 'POST',
       credentials: 'include',
@@ -121,14 +157,13 @@ export default class UserSession {
       },
       body: JSON.stringify({
         token: this.token,
-        prompt_id: this.promptId
+        sub: this.profile.sub
       })
     });
 
     if (response.status === 200) {
       const data = await response.json();
       this.bearer = data._key;
-      window.localStorage.setItem('auth', this.bearer);
     }
 
     return response.status;
@@ -137,6 +172,7 @@ export default class UserSession {
   // Logout a user
   public logout(): void {
     this.current = null;
+    this.profile = null;
     window.localStorage.clear();
   }
 }
