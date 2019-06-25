@@ -28,9 +28,8 @@ export default mount({
       const checkboxTags: CheckboxTag[] = setCheckboxTags(undefined, allTags);
 
       // Fetch user, if bearer token cookie exists
-      if (window.localStorage.getItem('auth')) {
-        context.user.bearer = window.localStorage['auth'];
-        context.user.current = await getUser('', context.user.bearer);
+      if (context.user.profile) {
+        context.user.current = await getUser();
       }
 
       // Boolean indicating if current page is for current user

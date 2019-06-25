@@ -42,10 +42,9 @@ export default mount({
       // Set checkbox tags based on allTags and query tags
       const checkboxTags: CheckboxTag[] = setCheckboxTags(tags, allTags);
 
-      // Fetch user, if bearer token cookie exists
-      if (window.localStorage.getItem('auth')) {
-        context.user.bearer = window.localStorage['auth'];
-        context.user.current = await getUser('', context.user.bearer);
+      // Fetch user, if Auth0 profile cookie exists
+      if (context.user.profile) {
+        context.user.current = await getUser();
       }
 
       return {
