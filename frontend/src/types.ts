@@ -10,8 +10,6 @@ export interface Idea {
   owner: {
     // ID (user/${key})
     id: string;
-    // Key
-    key: string;
     // Username
     username: string;
   };
@@ -51,8 +49,8 @@ export interface User {
   username: string;
   // Email address
   email: string;
-  // Array of ID's of ideas posted by user
-  ideas: string[];
+  // Object of ID's of ideas posted by user
+  ideas: { [key: string]: boolean };
   // User's top-used tag
   favorite: string;
   // Total upvote count on all of user's ideas
@@ -64,7 +62,7 @@ export interface User {
   // Date of account creation
   created_at: number;
   // Object of ideas user has voted on
-  votes: { [key: string]: string };
+  votes: { [key: string]: string } | null;
 }
 
 /**
