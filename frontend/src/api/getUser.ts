@@ -2,7 +2,8 @@ import { NotFoundError } from 'navi';
 import { User } from '../types';
 
 /**
- * Fetches a single user from the IdeaDog API
+ * Fetch a logged in user from the IdeaDog API.
+ * @param bearer {string} - Bearer token of the current logged in user.
  */
 const getUser = async (key: string | undefined = undefined): Promise<User> => {
   const route = key
