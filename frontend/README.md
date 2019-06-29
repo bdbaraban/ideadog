@@ -15,6 +15,7 @@ I built the front-end of IdeaDog with modern React practices in mind. Read more 
 * Asynchronous, declarative data fetching and routing using [Navi](https://frontarm.com/navi/).
 * List virtualization for idea-displaying using [react-virtual-list](https://www.npmjs.com/package/@dwqs/react-virtual-list).
 * Passwordless user account authentication managed by [Auth0](https://auth0.com).
+* Responsive!
 
 ## Dependencies :couple:
 
