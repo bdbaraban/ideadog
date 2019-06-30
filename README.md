@@ -4,18 +4,29 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/bdbaraban/ideadog/blob/master/assets/logo.png"
+  <img src="https://github.com/bdbaraban/ideadog/blob/master/assets/ideadog-logo.png"
        alt="IdeaDog logo"
   />
 </p>
 
 ## Description :bulb:
 
-IdeaDog is a social web application for sharing ideas. We've all had those sudden bursts of inspiration where we go - "wow, that is simply a _great_ idea" - but know we will never follow up. Now, instead of losing those ideas, share them with the world!
+IdeaDog is a social web application for sharing ideas.
 
-Why statically-typed, you ask? Well, the front-end of the application is built in React, with TypeScript, while the back-end runs on Rust. In our book, TypeScript + Rust = The Ultimate Statically-Typed Web App!
+We have all had those moments, those sudden bursts of inspiration where we think - "wow, that is simply a _great_ idea" - but know we will never follow up. Now, instead of losing those ideas, share them with the world!
 
-IdeaDog is nearly, so nearly at a stable version. In fact, it's so nearly complete that, you know what, I'm just going to say it's there - IdeaDog is complete.
+### Why statically-typed?
+
+Our kind of question.
+
+The front-end of IdeaDog is built in React, with TypeScript, while the back-end runs on Rust. In our book, TypeScript + Rust = The Ultimate Statically-Typed Web App!
+
+### I have a great idea! Where can I post it?
+
+IdeaDog is nearly, so nearly at a stable version. In fact, it's so nearly complete that, you know what, I'm just going to say, it's there - IdeaDog is complete.
+
+All kidding aside, we are hard at work getting IdeaDog finished and deployed. If you want a [non-stable] sneak-peek, you
+can check out our domain, [ideadog.site](https://ideadog.site).
 
 ## Medium Blog Posts :newspaper:
 
@@ -25,7 +36,16 @@ For a more in-depth description of IdeaDog as well as an overview of its tech st
 * [IdeaDog Back-End Overview](https://medium.com/@Ostoyae/ideadog-back-end-overview-a0d66d780bea)
 * [Building a Modern React Web Application — The IdeaDog Front-End](https://medium.com/@bdov_/building-a-modern-react-web-application-the-ideadog-front-end-bc56dd3ca4b6)
 
-## Dependencies :couple:
+## Tech Stack :poodle:
+
+<p align="center">
+  <img src="https://github.com/bdbaraban/ideadog/blob/master/assets/ideadog-stack.png"
+       alt="IdeaDog Tech Stack"
+       width="450"
+  />
+</p>
+
+### Dependencies :couple:
 
 **Front-End**:
 
@@ -49,43 +69,55 @@ View the complete list of front-end dependencies in the corresponding [package.j
 | [Actix](https://actix.rs/actix/actix/) | 0.7 |
 | [ArangoDB](https://www.arangodb.com/) | ^3.4 |
 
-View the back-end server [source code](https://github.com/Ostoyae/ideaDog_server)
+View the complete list of back-end dependencies in the corresponding [Cargo.toml](https://github.com/Ostoyae/ideaDog_server/blob/master/app/Cargo.toml).
 
 **Packaging/Deployment**:
 
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
-| [Docker](https://www.docker.com/) | ^18.09.3   |
-| [Docker Compose](https://docs.docker.com/compose/) | ^1.23.2    |
 | [Node.js](https://nodejs.org/en/) | ^12.5.0  |
 | [Yarn](https://yarnpkg.com/en/) | ^1.16.0    |
 | [Parcel](https://parceljs.org/) | ^1.12.3    |
+| libssl-dev | ^1.0 |
 
-## Front-End :dog2:
+### Front-End :dog2:
 
-Features:
-* Hooks hooks hooks! IdeaDog features _zero_ traditional React components.
-* List virtualization. I tried combinations of five different list virtualization libraries before I discovered [React Virtual List](https://www.npmjs.com/package/@dwqs/react-virtual-list). Check it out!
-* Asynchronous data fetching. Did I mention that I like hooks? Do yourself a favor and give [Navi](https://frontarm.com/navi/en/) a try.
+[View the dedicated front-end README.md.](./frontend/README.md).
 
-Routes:
-* `/:sort?tags`: The home page of IdeaDog, filters displayed ideas by `:sort` and `?tags`.
-* `/idea/:id`: Displays a specific idea with id `:id`.
-* `/user/:id`: Displays a page for a user with id `:id`.
+### Back-End :feet:
 
-## Back-End :feet:
+[View the dedicated back-end README.md](./backend/README.md).
 
-Features:
-* NoSQL, but relationships? [ArangoDB](https://www.arangodb.com/) is pretty awesome.
+View the source code for the back-end Rust server at Martin's dedicated [submodule](https://github.com/Ostoyae/ideaDog_server).
 
-API:
-* `GET /api`: Displays a friendly message.
-* `GET /api/ideas`: Fetches all ideas.
-* `GET /api/ideas/bright`: Fetches all ideas, sorted by brightness [upvotes / (upvotes + downvotes)]
-* `POST /api/idea`: Creates a new idea. Requires Auth
-* `GET /api/idea/{id}`: Fetches an idea with id `{id}`.
+## Authentication :key:
 
-View the complete API documentation at [this Postman link](https://documenter.getpostman.com/view/253532/S1TZxahn?version=latest).
+<p align="center">
+  <img src="https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fd0.awsstatic.com%2Fpartner-network%2Fpartner-logos%2FMobile%2520Competency%2520Partner%2520Logos%2F600x400_AuthO_Logo.png&f="
+       alt="Auth0 Logo"
+       width="250"
+  />
+</p>
+
+Passwords are no fun. IdeaDog features a passwordless user authentication process managed by [Auth0](https://auth0.com/). The process works as follows:
+
+1. User enters email (for login) or both email + username (for signup). Front-end initially sends email/username to back-end.
+  * If logging in, and an account does not exist with the given email, back-end returns a redirect code, and user is directed to sign-up.
+  * Otherwise, back-end generates and returns a challenge token associated with the email.
+2. Front-end temporarily stores challenge token in `localStorage`, then uses the Auth0 API to send a login email to the user. The login email includes a random code that user must enter to verify account.
+3. Upon entering the verfication code, the user is redirected to the home page of IdeaDog. The redirect occurs on a URL hashed by Auth0 which the front-end parses to retrieve the user's Auth0 profile.
+4. Front-end pulls up challenge token from `localStorage` and returns it to the back-end with the verified email. Back-end generates and returns a bearer token in the form of a cookie.
+  * After being returned to the back-end, the challenge token is cleared from `localStorage`.
+5. The bearer token has been set and the user can fully acccess their profile!
+
+## Development :dog:
+
+Code can always be improved. The IdeaDog team's plans/visions for the future include:
+
+* Complete, stable, deployed site.
+* Auto-deployment scripts.
+* User-created tags.
+* Test suite.
 
 ## Authors :black_nib:
 
