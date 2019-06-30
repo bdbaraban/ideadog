@@ -1,23 +1,17 @@
 import { NotFoundError } from 'navi';
+import { API } from '../constants';
 import { Idea } from '../types';
 
 /**
- * getUserIdeas parameter types
+ * Fetch all ideas posted by a given user from the IdeaDog API.
+ * @param key {string} - Key of the user to fetch ideas from.
  */
-interface SearchParameters {
-  // The key of the user to get ideas from
-  key: string;
-}
-
-/**
- * Fetches all ideas posted by a given user from the IdeaDog API
- */
-const getUserIdeas = async ({ key }: SearchParameters): Promise<Idea[]> => {
-  const response = await fetch(`http://localhost:5000/api/user/${key}/ideas`);
+const getUserIdeas = async (key: string): Promise<Idea[]> => {
+  const response = await fetch(`${API}/user/${key}/ideas`);
   const data: Idea[] = await response.json();
 
   if (!data) {
-    throw new NotFoundError(`Idea with ID '${key}' does not exist.`);
+    throw new NotFoundError(`Could not find ideas for user with ID ${key}.`);
   }
   return data;
 };
