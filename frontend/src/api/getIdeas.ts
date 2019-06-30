@@ -1,47 +1,38 @@
 import { NotFoundError } from 'navi';
+import { API } from '../constants';
 import { Idea } from '../types';
 
 /**
- * getIdeas parameter types
- */
-interface SearchParameters {
-  // Ideas filter
-  sort: string;
-
-  // String of tags to filter ideas with
-  tags: string;
-}
-
-/**
  * Gets ideas from the IdeaDog API with sort and tags filters
+ * @param sort {string} - The sort filter.
+ * @param tags {string} - String of comma-separated tag filters.
+ * @param search {string} - Search query.
  */
-const getIdeas = async ({ sort, tags }: SearchParameters): Promise<Idea[]> => {
-  let query: string;
-  if (sort === 'home') {
-    switch (tags) {
-      case undefined:
-        query = `http://localhost:5000/api/ideas`;
-        break;
-      default:
-        query = `http://localhost:5000/api/ideas?tags=${tags}`;
-    }
-  } else if (sort === 'bright') {
-    switch (tags) {
-      case undefined:
-        query = `http://localhost:5000/api/ideas/${sort}`;
-        break;
-      default:
-        query = `http://localhost:5000/api/ideas/${sort}?tags=${tags}`;
-    }
-  } else {
+const getIdeas = async (
+  sort: string,
+  tags: string | undefined,
+  search: string | undefined
+): Promise<Idea[]> => {
+  if (!['home', 'bright'].includes(sort)) {
     throw new NotFoundError(`Sorting filter '${sort}' does not exist.`);
+  }
+
+  let query: string = `${API}/ideas`;
+  if (sort !== 'home') {
+    query += `/${sort}`;
+  }
+  if (tags) {
+    query += `?tags=${tags}`;
+  }
+  if (search) {
+    query += `?q=${search}`;
   }
 
   const response = await fetch(query);
   const data = await response.json();
 
   if (!data) {
-    throw new NotFoundError(`Filed to find ideas on route /${sort}`);
+    throw new Error(`Failed to find ideas on route /${sort}.`);
   }
   return data;
 };
