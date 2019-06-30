@@ -15,14 +15,9 @@ const useStyles = makeStyles(
       root: {
         flexGrow: 1,
         flexWrap: 'nowrap',
-        marginTop: '15vh'
-      },
-      card: {
-        padding: theme.spacing(2),
-        textAlign: 'left',
-        backgroundColor: theme.palette.primary.main,
-        border: `1px solid ${theme.palette.secondary.main}`,
-        color: theme.palette.common.white
+        [theme.breakpoints.down('sm')]: {
+          paddingTop: '8px !important'
+        }
       }
     })
 );
@@ -33,7 +28,6 @@ const useStyles = makeStyles(
 interface InfoGridProps {
   // Current user session
   user: UserSession;
-
   // Array of currently-checked tag names
   checkboxTags: CheckboxTag[];
 }
@@ -48,27 +42,29 @@ const InfoGrid = ({
   const classes = useStyles();
 
   return (
-    <Hidden smDown>
-      <Grid
-        className={classes.root}
-        item
-        container
-        direction="column"
-        spacing={2}
-        xs={4}
-      >
+    <Grid
+      className={classes.root}
+      item
+      container
+      direction="column"
+      spacing={2}
+      xs={12}
+      sm={11}
+      md={4}
+    >
+      <Hidden smDown>
         <Grid item>
-          <UserCard user={user} />
+          <UserCard user={user} viewingUser={null} />
         </Grid>
         <Grid item>
           <TagsCard checkboxTags={checkboxTags} />
         </Grid>
-        <Grid item>
-          <AboutCard />
-        </Grid>
+      </Hidden>
+      <Grid item>
+        <AboutCard />
       </Grid>
-    </Hidden>
+    </Grid>
   );
 };
 
-export default React.memo(InfoGrid);
+export default InfoGrid;

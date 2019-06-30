@@ -49,7 +49,6 @@ const useStyles = makeStyles(
 interface NewIdeaCardProps {
   // Current user session
   user: UserSession;
-
   // Array of all available tags
   allTags: Tag[];
 }

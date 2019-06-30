@@ -5,13 +5,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { Styles } from 'jss';
 import { UserSession } from '../../api';
 import { CheckboxTag } from '../../types';
-import {
-  AccountButton,
-  IdeaDogTitle,
-  Searchbar,
-  SortSelect,
-  TagsSelect
-} from '.';
+import AccountButton from './AccountButton';
+import IdeaDogTitle from './IdeaDogTitle';
+import Searchbar from './Searchbar';
+import SortSelect from './SortSelect';
+import TagsSelect from './TagsSelect';
 
 /**
  * Navbar component styles
@@ -34,10 +32,8 @@ const useStyles = makeStyles(
 interface NavbarProps {
   // Current idea-sorting filter
   sort: string;
-
   // Current user session
   user: UserSession;
-
   // Array of currently-checked tag names
   checkboxTags: CheckboxTag[];
 }

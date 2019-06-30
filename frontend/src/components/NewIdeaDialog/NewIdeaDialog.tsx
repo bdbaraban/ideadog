@@ -21,8 +21,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Styles } from 'jss';
 import { fade } from '@material-ui/core/styles';
 import { useNavigation, useCurrentRoute } from 'react-navi';
-import { UserSession } from '../../api';
-import { Tag, VoidFunction } from '../../types';
+import { postIdea, UserSession } from '../../api';
+import { Tag } from '../../types';
 import { SadTully, HappyTully } from '../../icons';
 import { CustomTextField } from '..';
 import { TagsInputLabel, TagsSelect } from '.';
@@ -120,13 +120,10 @@ const useStyles = makeStyles(
 interface NewIdeaDialogProps {
   // Current user session
   user: UserSession;
-
   // Array of all available tags
   allTags: Tag[];
-
   // Open/closed boolean
   open: boolean;
-
   // Open/closed toggler, inherited from parent component
   toggleOpen: VoidFunction;
 }
@@ -166,21 +163,11 @@ const NewIdeaDialog = ({
 
   // Post idea and refresh page
   const handlePost = async (): Promise<void> => {
-    user.current &&
-      (await fetch('/api/idea', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: user.bearer
-        },
-        body: JSON.stringify({
-          text,
-          /* eslint-disable @typescript-eslint/camelcase */
-          owner_id: user.current.key,
-          /* eslint-enable @typescript-eslint/camelcase */
-          tags: tags.map((tag: string): string => tag.toLowerCase())
-        })
-      }));
+    if (user.current) {
+      await postIdea(user.bearer, text, user.current.key, tags);
+    }
+    setText('');
+    setTags([]);
     toggleOpen();
     navigation.navigate(route.url.href);
   };

@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount, NaviRequest, route } from 'navi';
-import { getTags, getUser, getUserIdeas } from '../api';
+import { getCurrentUser, getSingleUser, getTags, getUserIdeas } from '../api';
 import { Navbar, NewIdeaFab } from '../components';
-import { UserLayout } from '../grids';
-import { CheckboxTag, Idea, Tag } from '../types';
+import { UserLayout } from '../layouts';
+import { CheckboxTag, Idea, Tag, User } from '../types';
 import { RouteContext, RoutePromise, setCheckboxTags } from '.';
 
 /**
@@ -15,11 +15,11 @@ export default mount({
       request: NaviRequest<object>,
       context: RouteContext
     ): Promise<RoutePromise> => {
-      // User key
-      const { key } = request.params;
+      // Pull out user key (hostname)
+      let { key } = request.params;
 
       // Get ideas posted by user with key `key`
-      const ideas: Idea[] = await getUserIdeas({ key });
+      const ideas: Idea[] = await getUserIdeas(key);
 
       // Get all available tags
       const allTags: Tag[] = await getTags();
@@ -27,14 +27,19 @@ export default mount({
       // Set checkbox tags based on allTags and query tags
       const checkboxTags: CheckboxTag[] = setCheckboxTags(undefined, allTags);
 
-      // Fetch user, if bearer token cookie exists
-      if (window.localStorage.getItem('auth')) {
-        context.user.bearer = window.localStorage['auth'];
-        context.user.current = await getUser(context.user.bearer);
+      // Fetch user, if bearer token is available
+      if (context.user.bearer !== '') {
+        context.user.current = await getCurrentUser(context.user.bearer);
       }
 
+      // Set/fetch currently-viewing user
+      let viewingUser: User | null =
+        context.user.current && key === context.user.current.key
+          ? context.user.current
+          : await getSingleUser(key);
+
       return {
-        title: 'IdeaDog - User',
+        title: `IdeaDog - User ${key}`,
         view: (
           <div>
             <Navbar
@@ -42,7 +47,12 @@ export default mount({
               user={context.user}
               checkboxTags={checkboxTags}
             />
-            <UserLayout user={context.user} ideas={ideas} allTags={allTags} />
+            <UserLayout
+              user={context.user}
+              viewingUser={viewingUser}
+              ideas={ideas}
+              allTags={allTags}
+            />
             <NewIdeaFab user={context.user} allTags={allTags} />
           </div>
         )

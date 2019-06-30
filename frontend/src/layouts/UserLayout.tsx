@@ -3,8 +3,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Styles } from 'jss';
 import Grid from '@material-ui/core/Grid';
 import { UserSession } from '../api';
-import { IdeaGrid, UserGrid } from '.';
-import { Idea, Tag } from '../types';
+import { IdeaGrid, UserGrid } from '../grids';
+import { Idea, Tag, User } from '../types';
 
 /**
  * UserLayout component styles
@@ -22,8 +22,10 @@ const useStyles = makeStyles(
       },
       grid: {
         width: '100%',
+        marginTop: 72,
         [theme.breakpoints.down('sm')]: {
-          margin: '0 auto'
+          margin: '0 auto',
+          marginTop: 66
         }
       }
     })
@@ -35,10 +37,10 @@ const useStyles = makeStyles(
 interface UserLayoutProps {
   // Current user session
   user: UserSession;
-
+  // Current user being viewed
+  viewingUser: User | null;
   // Array of current ideas
   ideas: Idea[];
-
   // Array of all available tags
   allTags: Tag[];
 }
@@ -48,6 +50,7 @@ interface UserLayoutProps {
  */
 const UserLayout = ({
   user,
+  viewingUser,
   ideas,
   allTags
 }: UserLayoutProps): React.ReactElement => {
@@ -56,11 +59,20 @@ const UserLayout = ({
   return (
     <div className={classes.root}>
       <Grid className={classes.grid} container spacing={6} justify="center">
-        <IdeaGrid user={user} ideas={ideas} allTags={allTags} />
-        <UserGrid user={user} />
+        <IdeaGrid
+          user={user}
+          self={
+            user.current && viewingUser
+              ? viewingUser.key === user.current.key
+              : false
+          }
+          ideas={ideas}
+          allTags={allTags}
+        />
+        <UserGrid user={user} viewingUser={viewingUser} />
       </Grid>
     </div>
   );
 };
 
-export default React.memo(UserLayout);
+export default UserLayout;

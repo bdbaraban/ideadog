@@ -1,3 +1,3 @@
 // Icons barrel file
-export { default as HappyTully } from './HappyTully';
-export { default as SadTully } from './SadTully';
+export { HappyTully, SadTully } from './Tully';
+export { BrightHappyTully, BrightSadTully } from './BrightTully';

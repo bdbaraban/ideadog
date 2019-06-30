@@ -3,36 +3,40 @@ import {
   Button,
   createStyles,
   Dialog,
-  DialogTitle,
   DialogContent,
   makeStyles,
   SvgIcon,
-  Theme
+  Typography
 } from '@material-ui/core';
 import { Styles } from 'jss';
 import { SadTully } from '../../icons';
 import { UserSession } from '../../api';
-import { VoidFunction } from '../../types';
-import { LoginDialog } from '.';
+import { AuthorizationDialog } from '.';
 
 /**
  * NotLoggedInDialog component style
  */
 const useStyles = makeStyles(
-  (theme: Theme): Styles =>
+  (): Styles =>
     createStyles({
       title: {
-        color: theme.palette.common.white,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: '1.75rem',
+        fontWeight: 'bold',
+        flex: '0 0 auto',
+        margin: 0,
+        padding: '24px 24px 8px 24px'
       },
       content: {
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 8,
+        marginBottom: 16
       },
       button: {
         fontWeight: 'bold',
-        marginTop: 8
+        marginTop: 16
       }
     })
 );
@@ -43,10 +47,8 @@ const useStyles = makeStyles(
 interface NotLoggedInDialogProps {
   // Current user session
   user: UserSession;
-
   // Open/closed status
   open: boolean;
-
   // Open/close toggler inherited from parent component
   toggleParentOpen: VoidFunction;
 }
@@ -71,27 +73,36 @@ const NotLoggedInDialog = ({
       onClose={toggleParentOpen}
       aria-labelledby="not-logged-in-dialog"
       open={open}
+      maxWidth="xs"
+      fullWidth
     >
-      <DialogTitle id="not-logged-in-dialog-title" className={classes.title}>
-        You must be logged in to post ideas.
-        <DialogContent className={classes.content}>
-          <SvgIcon component={(): React.ReactElement => SadTully(92)}>
-            &nbsp;
-          </SvgIcon>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="large"
-            className={classes.button}
-            onClick={toggleOpen}
-          >
-            Log In/Sign Up
-          </Button>
-        </DialogContent>
-      </DialogTitle>
+      <Typography
+        className={classes.title}
+        id="login-dialog-title"
+        color="textSecondary"
+        variant="h4"
+      >
+        You must be logged in
+        <br />
+        to post ideas.
+      </Typography>
+      <DialogContent className={classes.content}>
+        <SvgIcon component={(): React.ReactElement => SadTully(92)}>
+          &nbsp;
+        </SvgIcon>
+        <Button
+          variant="contained"
+          color="secondary"
+          size="large"
+          className={classes.button}
+          onClick={toggleOpen}
+        >
+          Log In/Sign Up
+        </Button>
+      </DialogContent>
     </Dialog>
   ) : (
-    <LoginDialog
+    <AuthorizationDialog
       open={open}
       toggleGrandparentOpen={toggleParentOpen}
       toggleParentOpen={toggleOpen}

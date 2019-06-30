@@ -24,14 +24,12 @@ const useStyles = makeStyles(
       rootDefault: {
         alignContent: 'center',
         flexGrow: 1,
-        flexWrap: 'nowrap',
-        marginTop: '15vh'
+        flexWrap: 'nowrap'
       },
       rootUser: {
         alignContent: 'center',
         flexGrow: 1,
         flexWrap: 'nowrap',
-        marginTop: '15vh',
         [theme.breakpoints.down('sm')]: {
           flexWrap: 'wrap',
           order: 1,
@@ -75,10 +73,10 @@ interface RenderItemParams {
 interface IdeaGridProps {
   // Current user session
   user: UserSession;
-
+  // True/false indicating if page is for current user
+  self: boolean;
   // Array of current ideas
   ideas: Idea[];
-
   // Array of all available tags
   allTags: Tag[];
 }
@@ -88,6 +86,7 @@ interface IdeaGridProps {
  */
 const IdeaGrid = ({
   user,
+  self,
   ideas,
   allTags
 }: IdeaGridProps): React.ReactElement => {
@@ -143,14 +142,17 @@ const IdeaGrid = ({
       direction="column"
       spacing={2}
       xs={12}
-      sm={10}
-      md={6}
+      sm={11}
+      md={7}
+      lg={6}
     >
-      <Hidden smDown>
-        <Grid item>
-          <NewIdeaCard allTags={allTags} user={user} />
-        </Grid>
-      </Hidden>
+      {self && (
+        <Hidden smDown>
+          <Grid item>
+            <NewIdeaCard allTags={allTags} user={user} />
+          </Grid>
+        </Hidden>
+      )}
       <VirtualizedList
         className={classes.list}
         itemCount={ideas.length}
@@ -161,7 +163,7 @@ const IdeaGrid = ({
         onEnded={onEnded}
         noContentRenderer={noContentRenderer}
         renderItem={({ index }: RenderItemParams): React.ReactElement => (
-          <IdeaGridItem idea={ideas[index]} />
+          <IdeaGridItem user={user} idea={ideas[index]} />
         )}
       />
     </Grid>

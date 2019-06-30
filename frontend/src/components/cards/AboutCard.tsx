@@ -34,7 +34,6 @@ const useStyles = makeStyles(
         fontWeight: 'bold'
       },
       heading: {
-        fontSize: theme.typography.pxToRem(15),
         fontWeight: 'bold'
       },
       expansionPanel: {
@@ -78,13 +77,17 @@ const AboutCard = (): React.ReactElement => {
             expandIcon={<ExpandMoreIcon color="secondary" />}
           >
             <div className={classes.column}>
-              <Typography className={classes.heading} color="textSecondary">
+              <Typography
+                className={classes.heading}
+                color="textSecondary"
+                variant="subtitle1"
+              >
                 What is this?
               </Typography>
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography color="textSecondary">
+            <Typography color="textSecondary" variant="body1">
               IdeaDog is a social platform for sharing ideas.
               <br />
               <br />
@@ -104,13 +107,17 @@ const AboutCard = (): React.ReactElement => {
             expandIcon={<ExpandMoreIcon color="secondary" />}
           >
             <div className={classes.column}>
-              <Typography className={classes.heading} color="textSecondary">
+              <Typography
+                className={classes.heading}
+                color="textSecondary"
+                variant="subtitle1"
+              >
                 What&apos;s the dog&apos;s name?
               </Typography>
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography color="textSecondary">
+            <Typography color="textSecondary" variant="body1">
               His name is Tully, and he is a beloved boy.
             </Typography>
           </ExpansionPanelDetails>
@@ -122,23 +129,23 @@ const AboutCard = (): React.ReactElement => {
             expandIcon={<ExpandMoreIcon color="secondary" />}
           >
             <div className={classes.column}>
-              <Typography className={classes.heading} color="textSecondary">
-                Is that really an emoji in the URL?
+              <Typography
+                className={classes.heading}
+                color="textSecondary"
+                variant="subtitle1"
+              >
+                How is brightness calculated?
               </Typography>
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography color="textSecondary">
-              <a
-                href="idea🐶.ws"
-                aria-label="github-link"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={classes.link}
-              >
-                You bet it is
-              </a>
-              .
+            <Typography color="textSecondary" variant="body1">
+              brightness = upvotes / (upvotes + downvotes)
+              <br />
+              <br />
+              Brightness corresponds directly to the transparency of the
+              happy/sad Tully indicators on ideas. We will never display numeric
+              ratings on ideas.
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -149,13 +156,17 @@ const AboutCard = (): React.ReactElement => {
             expandIcon={<ExpandMoreIcon color="secondary" />}
           >
             <div className={classes.column}>
-              <Typography className={classes.heading} color="textSecondary">
+              <Typography
+                className={classes.heading}
+                color="textSecondary"
+                variant="subtitle1"
+              >
                 Who are you?
               </Typography>
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography color="textSecondary">
+            <Typography color="textSecondary" variant="body1">
               Ah, I am not one, but many. Well... just two of us.
               <br />
               <br />

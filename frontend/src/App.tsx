@@ -2,7 +2,8 @@ import React, { Suspense } from 'react';
 import { Router, View } from 'react-navi';
 import { makeStyles } from '@material-ui/core';
 import { Styles } from 'jss';
-import { home, Layout } from './routes';
+import { Layout } from './layouts';
+import { home } from './routes';
 import { UserSession } from './api';
 
 // Hide page scrollbars

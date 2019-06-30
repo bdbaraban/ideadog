@@ -4,6 +4,7 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core';
 import { Styles } from 'jss';
 import { UserCard, SettingsCard } from '../components';
 import { UserSession } from '../api';
+import { User } from '../types';
 
 /**
  * UserGrid component styles
@@ -13,14 +14,7 @@ const useStyles = makeStyles(
     createStyles({
       root: {
         flexGrow: 1,
-        flexWrap: 'nowrap',
-        marginTop: '15vh',
-        [theme.breakpoints.down('sm')]: {
-          order: -1,
-          marginTop: '10vh',
-          marginBottom: '0 !important',
-          paddingBottom: '0 !important'
-        }
+        flexWrap: 'nowrap'
       },
       item: {
         [theme.breakpoints.down('sm')]: {
@@ -43,12 +37,14 @@ const useStyles = makeStyles(
 interface UserGridProps {
   // Current user session
   user: UserSession;
+  // Current user being viewed
+  viewingUser: User | null;
 }
 
 /**
  * User page column grid layout
  */
-const UserGrid = ({ user }: UserGridProps): React.ReactElement => {
+const UserGrid = ({ user, viewingUser }: UserGridProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
@@ -59,15 +55,17 @@ const UserGrid = ({ user }: UserGridProps): React.ReactElement => {
       direction="column"
       spacing={2}
       xs={12}
-      sm={10}
+      sm={11}
       md={4}
     >
       <Grid item>
-        <UserCard user={user} />
+        <UserCard user={user} viewingUser={viewingUser} />
       </Grid>
-      <Grid className={classes.item} item>
-        <SettingsCard user={user} />
-      </Grid>
+      {user.current && viewingUser && viewingUser.key === user.current.key && (
+        <Grid className={classes.item} item>
+          <SettingsCard user={user} />
+        </Grid>
+      )}
     </Grid>
   );
 };

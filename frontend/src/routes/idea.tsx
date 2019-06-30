@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount, NaviRequest, route } from 'navi';
-import { getIdea, getTags, getUser } from '../api';
+import { getCurrentUser, getIdea, getTags } from '../api';
 import { Navbar } from '../components';
-import { IdeaLayout } from '../grids';
+import { IdeaLayout } from '../layouts';
 import { CheckboxTag, Idea } from '../types';
 import { RouteContext, RoutePromise, setCheckboxTags } from '.';
 
@@ -15,11 +15,11 @@ export default mount({
       request: NaviRequest<object>,
       context: RouteContext
     ): Promise<RoutePromise> => {
-      // Idea key
+      // Pull out idea key (hostname)
       const { key } = request.params;
 
       // Get idea with key `key`
-      const idea: Idea = await getIdea({ key });
+      const idea: Idea = await getIdea(key);
 
       // Get all available tags
       const allTags = await getTags();
@@ -27,14 +27,13 @@ export default mount({
       // Set checkbox tags based on allTags and query tags
       const checkboxTags: CheckboxTag[] = setCheckboxTags(undefined, allTags);
 
-      // Fetch user, if bearer token cookie exists
-      if (window.localStorage.getItem('auth')) {
-        context.user.bearer = window.localStorage['auth'];
-        context.user.current = await getUser(context.user.bearer);
+      // Fetch user, if bearer token is available
+      if (context.user.bearer !== '') {
+        context.user.current = await getCurrentUser(context.user.bearer);
       }
 
       return {
-        title: 'IdeaDog - Idea',
+        title: `IdeaDog - Idea ${key}`,
         view: (
           <div>
             <Navbar
@@ -42,7 +41,7 @@ export default mount({
               user={context.user}
               checkboxTags={checkboxTags}
             />
-            <IdeaLayout idea={idea} />
+            <IdeaLayout user={context.user} idea={idea} />
           </div>
         )
       };

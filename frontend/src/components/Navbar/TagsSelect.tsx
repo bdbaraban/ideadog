@@ -3,8 +3,11 @@ import {
   createMuiTheme,
   createStyles,
   FormControl,
+  Hidden,
   Icon,
+  IconButton,
   makeStyles,
+  Menu,
   MenuItem,
   OutlinedInput,
   Select,
@@ -95,39 +98,78 @@ interface TagsSelectProps {
 const TagsSelect = ({ checkboxTags }: TagsSelectProps): React.ReactElement => {
   const classes = useStyles();
 
+  // Menu component anchor status
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  // Open menu component anchored on selected sort filter
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>): void => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Close menu component
+  const handleClose = (): void => {
+    setAnchorEl(null);
+  };
+
+  // DOM reference for TagsMenuList
+  const ref = React.createRef<HTMLUListElement>();
+
   return (
-    <FormControl className={classes.formControl} variant="outlined">
-      <MuiThemeProvider theme={theme}>
-        <Select
-          classes={{
-            root: classes.root,
-            select: classes.select,
-            icon: classes.mainIcon
-          }}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                color: '#fff',
-                backgroundColor: 'rgba(48, 60, 108, 1)'
+    <React.Fragment>
+      <Hidden xsDown>
+        <FormControl className={classes.formControl} variant="outlined">
+          <MuiThemeProvider theme={theme}>
+            <Select
+              classes={{
+                root: classes.root,
+                select: classes.select,
+                icon: classes.mainIcon
+              }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    color: '#fff',
+                    backgroundColor: 'rgba(48, 60, 108, 1)'
+                  }
+                }
+              }}
+              displayEmpty={true}
+              value={'Tags'}
+              input={
+                <OutlinedInput labelWidth={0} name="sort" id="outlined-tags" />
               }
-            }
-          }}
-          displayEmpty={true}
-          value={'Tags'}
-          input={
-            <OutlinedInput labelWidth={0} name="sort" id="outlined-tags" />
-          }
+            >
+              <MenuItem value={'Tags'}>
+                <Icon className={classes.sideIcon} fontSize="inherit">
+                  local_offer
+                </Icon>
+                Tags
+              </MenuItem>
+              <TagsMenuList checkboxTags={checkboxTags} />
+            </Select>
+          </MuiThemeProvider>
+        </FormControl>
+      </Hidden>
+      <Hidden smUp>
+        <IconButton
+          aria-controls="customized-menu"
+          aria-haspopup="true"
+          color="inherit"
+          onClick={handleClickListItem}
         >
-          <MenuItem value={'Tags'}>
-            <Icon className={classes.sideIcon} fontSize="inherit">
-              local_offer
-            </Icon>
-            Tags
-          </MenuItem>
-          <TagsMenuList checkboxTags={checkboxTags} />
-        </Select>
-      </MuiThemeProvider>
-    </FormControl>
+          <Icon fontSize="inherit">local_offer</Icon>
+        </IconButton>
+        <Menu
+          id="sort-filter-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <TagsMenuList ref={ref} checkboxTags={checkboxTags} />
+        </Menu>
+      </Hidden>
+    </React.Fragment>
   );
 };
 

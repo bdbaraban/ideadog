@@ -3,7 +3,7 @@ import { useLoadingRoute } from 'react-navi';
 import { LinearProgress, makeStyles } from '@material-ui/core';
 import { createStyles } from '@material-ui/styles';
 import { Styles } from 'jss';
-import { ErrorBoundary } from '.';
+import { ErrorBoundary } from '../components';
 
 /**
  * Layout component styles

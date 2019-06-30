@@ -16,7 +16,6 @@ interface ChildProps {
 interface CopyToClipboardProps {
   // Props passed to Tooltip component
   TooltipProps?: Partial<TooltipProps>;
-
   // ReactElement child component
   children: (props: ChildProps) => React.ReactElement;
 }

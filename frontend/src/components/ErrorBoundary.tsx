@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorPage } from '.';
+import { ErrorPage } from '../routes';
 
 /**
  * ErrorBoundary prop types

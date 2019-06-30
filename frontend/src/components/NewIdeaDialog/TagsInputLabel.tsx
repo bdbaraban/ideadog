@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStyles, InputLabel, makeStyles, Theme } from '@material-ui/core';
+import { fade } from '@material-ui/core/styles';
 import { Styles } from 'jss';
 
 /**
@@ -8,14 +9,13 @@ import { Styles } from 'jss';
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
     createStyles({
+      root: {
+        color: `${fade(theme.palette.common.white, 0.5)} !important`
+      },
       formControl: {
-        color: theme.palette.primary.dark,
-        fontWeight: 'bold',
         transform: 'translate(0, 31px) scale(1)'
       },
       shrink: {
-        color: theme.palette.primary.dark,
-        fontWeight: 'bold',
         transform: 'translate(0, 1.5px) scale(0.75)',
         transformOrigin: 'top left'
       }
