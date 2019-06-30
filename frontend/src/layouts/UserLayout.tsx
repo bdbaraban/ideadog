@@ -3,12 +3,11 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Styles } from 'jss';
 import Grid from '@material-ui/core/Grid';
 import { UserSession } from '../api';
-import { CheckboxTag, Idea, Tag } from '../types';
-import { NewIdeaFab } from '../components';
-import { IdeaGrid, InfoGrid } from '.';
+import { IdeaGrid, UserGrid } from '../grids';
+import { Idea, Tag, User } from '../types';
 
 /**
- * HomeLayout component styles
+ * UserLayout component styles
  */
 const useStyles = makeStyles(
   (theme: Theme): Styles =>
@@ -16,12 +15,16 @@ const useStyles = makeStyles(
       root: {
         flexGrow: 1,
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        [theme.breakpoints.down('sm')]: {
+          flexDirection: 'column'
+        }
       },
       grid: {
         width: '100%',
         marginTop: 72,
         [theme.breakpoints.down('sm')]: {
+          margin: '0 auto',
           marginTop: 66
         }
       }
@@ -29,42 +32,47 @@ const useStyles = makeStyles(
 );
 
 /**
- * HomeLayout component prop types
+ * UserLayout component prop types
  */
-interface HomeLayoutProps {
+interface UserLayoutProps {
   // Current user session
   user: UserSession;
-
+  // Current user being viewed
+  viewingUser: User | null;
   // Array of current ideas
   ideas: Idea[];
-
   // Array of all available tags
   allTags: Tag[];
-
-  // Array of currently-checked tag names
-  checkboxTags: CheckboxTag[];
 }
 
 /**
- * Home page layout grid
+ * User page layout grid
  */
-const HomeLayout = ({
+const UserLayout = ({
   user,
+  viewingUser,
   ideas,
-  allTags,
-  checkboxTags
-}: HomeLayoutProps): React.ReactElement => {
+  allTags
+}: UserLayoutProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Grid className={classes.grid} container spacing={6} justify="center">
-        <IdeaGrid user={user} self={true} ideas={ideas} allTags={allTags} />
-        <InfoGrid user={user} checkboxTags={checkboxTags} />
-        <NewIdeaFab user={user} allTags={allTags} />
+        <IdeaGrid
+          user={user}
+          self={
+            user.current && viewingUser
+              ? viewingUser.key === user.current.key
+              : false
+          }
+          ideas={ideas}
+          allTags={allTags}
+        />
+        <UserGrid user={user} viewingUser={viewingUser} />
       </Grid>
     </div>
   );
 };
 
-export default HomeLayout;
+export default UserLayout;

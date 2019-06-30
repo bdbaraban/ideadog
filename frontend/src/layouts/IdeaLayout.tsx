@@ -2,6 +2,7 @@ import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Styles } from 'jss';
 import Grid from '@material-ui/core/Grid';
+import { UserSession } from '../api';
 import { IdeaCard } from '../components';
 import { Idea } from '../types';
 
@@ -30,25 +31,27 @@ const useStyles = makeStyles(
  * IdeaLayout component props
  */
 interface IdeaLayoutProps {
+  // Current user session
+  user: UserSession;
   // Current idea
   idea: Idea;
 }
 
 /**
- * Single idea page grid layout
+ * Grid layout for the single-idea page
  */
-const IdeaLayout = ({ idea }: IdeaLayoutProps): React.ReactElement => {
+const IdeaLayout = ({ user, idea }: IdeaLayoutProps): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Grid className={classes.grid} container spacing={6} justify="center">
         <Grid item xs={12} sm={11} md={7}>
-          <IdeaCard idea={idea} />
+          <IdeaCard user={user} idea={idea} />
         </Grid>
       </Grid>
     </div>
   );
 };
 
-export default React.memo(IdeaLayout);
+export default IdeaLayout;
