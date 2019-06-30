@@ -82,11 +82,11 @@ View the complete list of back-end dependencies in the corresponding [Cargo.toml
 
 ### Front-End :dog2:
 
-[View the dedicated front-end README.md.](./frontend/README.md)
+[View the dedicated front-end README.md.](./frontend)
 
 ### Back-End :feet:
 
-[View the dedicated back-end README.md.](./backend/README.md)
+[View the dedicated back-end README.md.](./backend)
 
 [View the source code for the back-end Rust server at Martin's dedicated submodule](https://github.com/Ostoyae/ideaDog_server).
 
