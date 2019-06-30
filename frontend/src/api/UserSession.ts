@@ -1,3 +1,4 @@
+import { API, DOMAIN } from '../constants';
 import { User } from '../types';
 import auth0, {
   Auth0DecodedHash,
@@ -5,13 +6,12 @@ import auth0, {
   Auth0ParseHashError,
   Auth0UserProfile
 } from 'auth0-js';
-/* eslint-disable @typescript-eslint/camelcase */
 
 // Auth0 client
 const webAuth = new auth0.WebAuth({
   clientID: 'hzBQJSgcjR2QYjOXtnLeBaFOD7wmR4V4',
   domain: 'dev-917aksrt.auth0.com',
-  redirectUri: 'http://localhost:1234',
+  redirectUri: DOMAIN,
   responseType: 'token',
   scope: 'openid profile'
 });
@@ -22,74 +22,43 @@ const webAuth = new auth0.WebAuth({
 export default class UserSession {
   // Current logged in user
   public current: User | null;
-  // Current user's Auth0 profile;
-  public profile: Auth0UserProfile | null;
-  // Bearer token for logged in user
+  // API Bearer token for logged in user
   public bearer: string;
-  // Authorization token generated on back-end
-  private token: string;
 
   public constructor() {
-    [this.current, this.profile] = [null, null];
+    this.current = null;
+    this.bearer = '';
 
-    if (
-      window.localStorage.getItem('accessToken') &&
-      window.localStorage.getItem('expiresAt')
-    ) {
-      // If valid Auth0 access token exists, fetch profile
-      const accessToken = window.localStorage['accessToken'];
-      const expiresAt = parseInt(window.localStorage['expiresAt']);
-
-      if (new Date().getTime() < expiresAt) {
-        this.fetchUser(accessToken);
-      }
+    if (window.localStorage.getItem('bearer')) {
+      this.bearer = window.localStorage['bearer'];
     } else if (window.location.hash) {
-      // If Auth0 user verification hash exists, fetch profile
       webAuth.parseHash(
         { hash: window.location.hash },
         (
           err: Auth0ParseHashError | null,
           authResult: Auth0DecodedHash | null
         ): void => {
-          if (
-            !err &&
-            authResult &&
-            authResult.accessToken &&
-            authResult.expiresIn
-          ) {
-            localStorage.setItem('accessToken', authResult.accessToken);
-            localStorage.setItem(
-              'expiresAt',
-              (authResult.expiresIn * 1000 + new Date().getTime()).toString()
+          if (!err && authResult && authResult.accessToken) {
+            webAuth.client.userInfo(
+              authResult.accessToken,
+              (err: Auth0Error | null, user: Auth0UserProfile): void => {
+                if (!err) {
+                  this.setBearer(user.name);
+                }
+              }
             );
-            this.fetchUser(authResult.accessToken);
           }
         }
       );
     }
-
-    this.bearer = '';
-    this.token = '';
   }
 
-  // Fetch Auth0 user profile
-  private fetchUser(accessToken: string): void {
-    webAuth.client.userInfo(
-      accessToken,
-      (err: Auth0Error | null, user: Auth0UserProfile): void => {
-        if (!err) {
-          this.profile = user;
-        }
-      }
-    );
-  }
-
-  // Fetch login/signup token from back-end
-  public async setToken(email: string, username: string = ''): Promise<number> {
-    const route =
-      username === ''
-        ? 'http://localhost:5000/api/login'
-        : 'http://localhost:5000/api/signup';
+  // Set API login/signup authorization token from back-end
+  public async setChallengeToken(
+    email: string,
+    username: string = ''
+  ): Promise<number> {
+    const route = username === '' ? `${API}/login` : `${API}/signup`;
 
     const body = JSON.stringify(
       username === '' ? { email } : { email, username }
@@ -106,9 +75,38 @@ export default class UserSession {
 
     if (response.status === 200) {
       const data = await response.json();
-      this.token = data.token;
+      window.localStorage.setItem('challengeToken', data.token);
     }
     return response.status;
+  }
+
+  // Set bearer token for logged-in account
+  public async setBearer(email: string): Promise<void> {
+    let challengeToken = '';
+    if (window.localStorage.getItem('challengeToken')) {
+      challengeToken = window.localStorage['challengeToken'];
+      window.localStorage.removeItem('challengeToken');
+    } else {
+      return;
+    }
+
+    const response = await fetch(`${API}/validate_login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        token: challengeToken,
+        email
+      })
+    });
+
+    if (response.status === 200) {
+      const data = await response.json();
+      this.bearer = data._key;
+      window.localStorage.setItem('bearer', this.bearer);
+    }
   }
 
   // Send Auth0 verfication code email
@@ -143,36 +141,10 @@ export default class UserSession {
     );
   };
 
-  // Set bearer token for logged-in account
-  public async fetchCookie(): Promise<number> {
-    if (!this.profile) {
-      return 400;
-    }
-
-    const response = await fetch('http://localhost:5000/api/validate_login', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        token: this.token,
-        sub: this.profile.sub
-      })
-    });
-
-    if (response.status === 200) {
-      const data = await response.json();
-      this.bearer = data._key;
-    }
-
-    return response.status;
-  }
-
   // Logout a user
   public logout(): void {
     this.current = null;
-    this.profile = null;
+    this.bearer = '';
     window.localStorage.clear();
   }
 }
