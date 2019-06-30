@@ -5,6 +5,8 @@ import {
   Icon,
   IconButton,
   makeStyles,
+  Menu,
+  MenuItem,
   Theme
 } from '@material-ui/core';
 import { AuthorizationDialog } from '..';
@@ -54,16 +56,36 @@ const AccountButton = ({ user }: AccountButtonProps): React.ReactElement => {
     setOpen(!open);
   };
 
-  // User account icon navigation
-  const handleClick = (): void => {
+  // Menu component anchor status
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  // Close menu component
+  const handleMenuClose = (): void => {
+    setAnchorEl(null);
+  };
+
+  // Open user profile page
+  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
     if (user.current) {
-      // Navigate to user page, if logged in
-      navigation.navigate(`/user/${user.current.key}`);
+      setAnchorEl(event.currentTarget);
     } else {
       // Otherwise, open login dialog
       toggleOpen();
     }
   };
+
+  // Open user profile page
+  const handleProfileClick = (): void => {
+    if (user.current) {
+      navigation.navigate(`/user/${user.current.key}`)
+    }
+  }
+
+  // Log out user and refresh to home page
+  const handleLogoutClick = (): void => {
+    user.logout();
+    navigation.navigate('/home');
+  }
 
   return (
     <div className={classes.root}>
@@ -75,6 +97,18 @@ const AccountButton = ({ user }: AccountButtonProps): React.ReactElement => {
           <Icon classes={{ root: classes.responsive }}>account_circle</Icon>
         </Hidden>
       </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        id="account-menu"
+        keepMounted
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={handleProfileClick}>View Profile</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Log Out</MenuItem>
+      </Menu>
       <AuthorizationDialog
         user={user}
         open={open}
