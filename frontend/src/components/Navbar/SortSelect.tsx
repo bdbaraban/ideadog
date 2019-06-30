@@ -63,7 +63,7 @@ const useStyles = makeStyles(
       select: {
         padding: theme.spacing(1),
         paddingLeft: theme.spacing(2),
-        width: 'auto'
+        width: '100%'
       },
       icon: {
         color: theme.palette.common.white,
@@ -136,7 +136,7 @@ const SortSelect = ({ sort }: SortSelectProps): React.ReactElement => {
   // Refresh page with new sort
   const refresh = (sort: string): void => {
     let redirect = `/${encodeURIComponent(sort)}`;
-    if (route.url.query.tags !== undefined) {
+    if (route.url.query.tags) {
       redirect += `?tags=${encodeURIComponent(route.url.query.tags)}`;
     }
     navigation.navigate(redirect);
