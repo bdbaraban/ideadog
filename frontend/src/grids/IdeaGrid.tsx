@@ -73,13 +73,10 @@ interface RenderItemParams {
 interface IdeaGridProps {
   // Current user session
   user: UserSession;
-
   // True/false indicating if page is for current user
   self: boolean;
-
   // Array of current ideas
   ideas: Idea[];
-
   // Array of all available tags
   allTags: Tag[];
 }
@@ -166,7 +163,7 @@ const IdeaGrid = ({
         onEnded={onEnded}
         noContentRenderer={noContentRenderer}
         renderItem={({ index }: RenderItemParams): React.ReactElement => (
-          <IdeaGridItem idea={ideas[index]} />
+          <IdeaGridItem user={user} idea={ideas[index]} />
         )}
       />
     </Grid>

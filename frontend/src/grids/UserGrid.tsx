@@ -14,15 +14,7 @@ const useStyles = makeStyles(
     createStyles({
       root: {
         flexGrow: 1,
-        flexWrap: 'nowrap',
-        marginTop: '15vh',
-        [theme.breakpoints.down('sm')]: {
-          order: -1,
-          marginTop: '10vh',
-          marginBottom: '0 !important',
-          paddingBottom: '0 !important',
-          paddingTop: '0 !important'
-        }
+        flexWrap: 'nowrap'
       },
       item: {
         [theme.breakpoints.down('sm')]: {
@@ -45,7 +37,6 @@ const useStyles = makeStyles(
 interface UserGridProps {
   // Current user session
   user: UserSession;
-
   // Current user being viewed
   viewingUser: User | null;
 }
@@ -64,7 +55,7 @@ const UserGrid = ({ user, viewingUser }: UserGridProps): React.ReactElement => {
       direction="column"
       spacing={2}
       xs={12}
-      sm={10}
+      sm={11}
       md={4}
     >
       <Grid item>
