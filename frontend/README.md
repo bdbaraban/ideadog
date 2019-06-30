@@ -10,12 +10,12 @@ I built the front-end of IdeaDog with modern React practices in mind. Read more 
 
 ## Features :open_mouth:
 
-* *Modern design.* With help from [Material-UI](https://material-ui.com/).
-* *Hooks hooks hooks!* IdeaDog features _zero_ traditional React components.
-* *List virtualization.* I tried combinations of five different list virtualization libraries before I discovered [React Virtual List](https://www.npmjs.com/package/@dwqs/react-virtual-list). Check it out!
-* *Asynchronous, declarative routing and data-fetching.* Did I mention like hooks? Shout-out to [Navi](https://frontarm.com/navi/en/).
-* *Passwordless user account authentication.* Managed by [Auth0](https://auth0.com).
-* *Responsive.* Mobile-first!
+* **Modern design.** With help from [Material-UI](https://material-ui.com/).
+* **Hooks hooks hooks!** IdeaDog features _zero_ traditional React components.
+* **List virtualization.** I tried combinations of five different list virtualization libraries before I discovered [React Virtual List](https://www.npmjs.com/package/@dwqs/react-virtual-list). Check it out!
+* **Asynchronous, declarative routing and data-fetching.** Did I mention like hooks? Shout-out to [Navi](https://frontarm.com/navi/en/).
+* **Passwordless user account authentication.** Managed by [Auth0](https://auth0.com).
+* **Responsive.** Mobile-first!
 
 ## Routes :light_rail:
 

@@ -13,7 +13,7 @@ Read my dedicated Medium article discussing the back-end at the link below:
 
 ## Features :open_mouth:
 
-* *NoSQL, but relational querying?* [ArangoDB](https://www.arangodb.com/) is pretty awesome.
+* **NoSQL, but relational querying?** [ArangoDB](https://www.arangodb.com/) is pretty awesome.
 
 ## API :round_pushpin:
 
