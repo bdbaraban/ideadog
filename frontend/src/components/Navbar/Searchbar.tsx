@@ -78,7 +78,11 @@ const Searchbar = (): React.ReactElement => {
   const navigation = useNavigation();
   const route = useCurrentRoute();
 
+  // Search text
   const [text, setText] = React.useState<string>('');
+
+  // Field focus
+  const [focus, setFocus] = React.useState(false);
 
   // Save text input changes
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -88,7 +92,16 @@ const Searchbar = (): React.ReactElement => {
   // Filter tags by search query
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
-      navigation.navigate(`${route.url.href}?search=${encodeURIComponent(text)}`);
+      let redirect = route.url.pathname;
+      if (route.url.query.tags) {
+        redirect += `?tags=${route.url.query.tags}`;
+      }
+      if (text !== '') {
+        redirect += `?search=${encodeURIComponent(text)}`;
+      }
+      navigation.navigate(redirect);
+      setText('');
+      setFocus(false);
       event.preventDefault();
     }
   };
@@ -120,6 +133,10 @@ const Searchbar = (): React.ReactElement => {
         value={text}
         onChange={handleChange}
         onKeyPress={handleKeyPress}
+        autoFocus={focus}
+        key={`search-${focus}`}
+        onFocus={(): void => setFocus(true)}
+        onBlur={() => setFocus(false)}
       />
     </div>
   );
