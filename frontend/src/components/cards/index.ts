@@ -1,5 +1,5 @@
 // Cards barrel file
-export { IdeaCard } from './IdeaCard';
+export { default as IdeaCard } from './IdeaCard/IdeaCard';
 export { default as NewIdeaCard } from './NewIdeaCard';
 export { default as AboutCard } from './AboutCard';
 export { default as TagsCard } from './TagsCard';

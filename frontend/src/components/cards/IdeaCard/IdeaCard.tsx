@@ -27,7 +27,7 @@ import { Link } from 'react-navi';
 import { Idea } from '../../../types';
 import { DOMAIN, MONTHS } from '../../../constants';
 import { deleteIdea, UserSession } from '../../../api';
-import { Voters } from '.';
+import Voters from './Voters';
 
 /**
  * IdeaCard component style
