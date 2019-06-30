@@ -6,4 +6,3 @@ export { default as NotLoggedInDialog } from './NotLoggedInDialog';
 export {
   default as VerificationDialogContent
 } from './VerificationDialogContent';
-export { AuthorizationDialogProps, EmailState, UsernameState } from './types';
