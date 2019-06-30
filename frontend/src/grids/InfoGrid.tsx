@@ -28,7 +28,6 @@ const useStyles = makeStyles(
 interface InfoGridProps {
   // Current user session
   user: UserSession;
-
   // Array of currently-checked tag names
   checkboxTags: CheckboxTag[];
 }
@@ -51,8 +50,7 @@ const InfoGrid = ({
       spacing={2}
       xs={12}
       sm={11}
-      md={5}
-      lg={4}
+      md={4}
     >
       <Hidden smDown>
         <Grid item>
