@@ -134,6 +134,33 @@ const AboutCard = (): React.ReactElement => {
                 color="textSecondary"
                 variant="subtitle1"
               >
+                How is brightness calculated?
+              </Typography>
+            </div>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Typography color="textSecondary" variant="body1">
+              brightness = upvotes / (upvotes + downvotes)
+              <br />
+              <br />
+              Brightness corresponds directly to the transparency of the
+              happy/sad Tully indicators on ideas. We will never display numeric
+              ratings on ideas.
+            </Typography>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExpansionPanel className={classes.expansionPanel}>
+          <ExpansionPanelSummary
+            aria-controls="what-about-content"
+            id="what-about-header"
+            expandIcon={<ExpandMoreIcon color="secondary" />}
+          >
+            <div className={classes.column}>
+              <Typography
+                className={classes.heading}
+                color="textSecondary"
+                variant="subtitle1"
+              >
                 Who are you?
               </Typography>
             </div>
