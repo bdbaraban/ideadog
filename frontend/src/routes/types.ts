@@ -15,7 +15,6 @@ export interface Title {
 export interface RoutePromise {
   // Page meta title
   title: string;
-
   // View component
   view: React.ReactElement;
 }
