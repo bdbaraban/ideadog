@@ -102,15 +102,15 @@ View the complete list of back-end dependencies in the corresponding [Cargo.toml
 Passwords are no fun. IdeaDog features a passwordless user authentication process managed by [Auth0](https://auth0.com/). The process works as follows:
 
 1. User enters email (for login) or both email + username (for signup). Front-end initially sends email/username to back-end.
-  * If logging in, and an account does not exist with the given email, back-end returns a redirect code, and user is directed to sign-up.
-  * Otherwise, back-end generates and returns a challenge token associated with the email.
+   1. If logging in, and an account does not exist with the given email, back-end returns a redirect code, and user is directed to sign-up.
+   2. Otherwise, back-end generates and returns a challenge token associated with the email.
 
 2. Front-end temporarily stores challenge token in `localStorage`, then uses the Auth0 API to send a login email to the user. The login email includes a random code that user must enter to verify account.
 
 3. Upon entering the verfication code, the user is redirected to the home page of IdeaDog. The redirect occurs on a URL hashed by Auth0 which the front-end parses to retrieve the user's Auth0 profile.
 
 4. Front-end pulls up challenge token from `localStorage` and returns it to the back-end with the verified email. Back-end generates and returns a bearer token in the form of a cookie.
-  * After being returned to the back-end, the challenge token is cleared from `localStorage`.
+   1. After being returned to the back-end, the challenge token is cleared from `localStorage`.
 
 5. The bearer token has been set and the user can fully acccess their profile!
 
