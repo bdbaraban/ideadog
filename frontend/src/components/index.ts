@@ -1,5 +1,5 @@
 // Components barrel file
-export { Navbar } from './Navbar';
+export { default as Navbar } from './Navbar/Navbar';
 export { default as NewIdeaFab } from './NewIdeaFab';
 export { default as CopyToClipboard } from './CopyToClipboard';
 export { default as CustomTextField } from './CustomTextField';
