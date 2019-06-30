@@ -1,14 +1,15 @@
+import { API } from '../constants';
 import { Tag } from '../types';
 
 /**
- * Fetches all available tags from the IdeaDog API.
+ * Fetch all available tags from the IdeaDog API.
  */
 const getTags = async (): Promise<Tag[]> => {
-  const response = await fetch('http://localhost:5000/api/tags');
+  const response = await fetch(`${API}/tags`);
   const data = await response.json();
 
   if (!data) {
-    throw new Error();
+    throw new Error('Failed to fetch tags.');
   }
   return Object.values(data);
 };

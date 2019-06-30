@@ -1,23 +1,17 @@
 import { NotFoundError } from 'navi';
+import { API } from '../constants';
 import { Idea } from '../types';
 
 /**
- * getIdea parameter types
+ * Fetch a single idea from the IdeaDog API.
+ * @param key {string} - The ID of the idea to fetch.
  */
-interface SearchParameters {
-  // The key of the ID to get
-  key: string;
-}
-
-/**
- * Fetches a single ID from the IdeaDog API
- */
-const getIdea = async ({ key }: SearchParameters): Promise<Idea> => {
-  const response = await fetch(`http://localhost:5000/api/idea/${key}`);
+const getIdea = async (key: string): Promise<Idea> => {
+  const response = await fetch(`${API}/idea/${key}`);
   const data: Idea[] = await response.json();
 
   if (!data) {
-    throw new NotFoundError(`Idea with ID '${key}' does not exist.`);
+    throw new NotFoundError(`Could not find idea with ID '${key}'.`);
   }
   return data[0];
 };
