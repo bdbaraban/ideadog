@@ -26,7 +26,7 @@ const useStyles = makeStyles(
           marginRight: 4
         }
       },
-      icon: {
+      white: {
         color: theme.palette.common.white
       },
       responsive: {
@@ -77,19 +77,21 @@ const AccountButton = ({ user }: AccountButtonProps): React.ReactElement => {
   // Open user profile page
   const handleProfileClick = (): void => {
     if (user.current) {
-      navigation.navigate(`/user/${user.current.key}`)
+      handleMenuClose();
+      navigation.navigate(`/user/${user.current.key}`);
     }
-  }
+  };
 
   // Log out user and refresh to home page
   const handleLogoutClick = (): void => {
     user.logout();
+    handleMenuClose();
     navigation.navigate('/home');
-  }
+  };
 
   return (
     <div className={classes.root}>
-      <IconButton className={classes.icon} onClick={handleClick}>
+      <IconButton className={classes.white} onClick={handleClick}>
         <Hidden xsDown>
           <Icon fontSize="large">account_circle</Icon>
         </Hidden>
@@ -106,8 +108,12 @@ const AccountButton = ({ user }: AccountButtonProps): React.ReactElement => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleProfileClick}>View Profile</MenuItem>
-        <MenuItem onClick={handleLogoutClick}>Log Out</MenuItem>
+        <MenuItem className={classes.white} onClick={handleProfileClick}>
+          View Profile
+        </MenuItem>
+        <MenuItem className={classes.white} onClick={handleLogoutClick}>
+          Log Out
+        </MenuItem>
       </Menu>
       <AuthorizationDialog
         user={user}
