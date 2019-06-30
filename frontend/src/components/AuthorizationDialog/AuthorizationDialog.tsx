@@ -1,5 +1,20 @@
 import React from 'react';
-import { AuthorizationDialogProps, LoginDialog, SignUpDialog } from '.';
+import { UserSession } from '../../api';
+import { LoginDialog, SignUpDialog } from '.';
+
+/**
+ * AuthorizationDialog component prop types
+ */
+export interface AuthorizationDialogProps {
+  // Current User session
+  user: UserSession;
+  // Open/closed status
+  open: boolean;
+  // Open/close toggler inherited from grandparent component
+  toggleGrandparentOpen: VoidFunction | null;
+  // Open/close toggler inherited from parent component
+  toggleParentOpen: VoidFunction;
+}
 
 /**
  * Log in/sign up component
