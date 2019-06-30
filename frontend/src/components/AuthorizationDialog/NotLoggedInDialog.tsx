@@ -11,7 +11,6 @@ import {
 import { Styles } from 'jss';
 import { SadTully } from '../../icons';
 import { UserSession } from '../../api';
-import { VoidFunction } from '../../types';
 import { AuthorizationDialog } from '.';
 
 /**
@@ -48,10 +47,8 @@ const useStyles = makeStyles(
 interface NotLoggedInDialogProps {
   // Current user session
   user: UserSession;
-
   // Open/closed status
   open: boolean;
-
   // Open/close toggler inherited from parent component
   toggleParentOpen: VoidFunction;
 }

@@ -99,7 +99,7 @@ const VerificationDialogContent = ({
       />
       <Button
         className={classes.button}
-        disabled={verificationCode.length !== 6}
+        disabled={verificationCode.length !== 8}
         variant="contained"
         color="secondary"
         size="large"
