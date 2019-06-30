@@ -4,7 +4,7 @@ import { Tag } from '../types';
 /**
  * Fetch all available tags from the IdeaDog API.
  */
-const getTags = async (): Promise<Tag[]> => {
+export const getTags = async (): Promise<Tag[]> => {
   const response = await fetch(`${API}/tags`);
   const data = await response.json();
 
@@ -13,5 +13,3 @@ const getTags = async (): Promise<Tag[]> => {
   }
   return Object.values(data);
 };
-
-export default getTags;
