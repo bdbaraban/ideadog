@@ -15,3 +15,5 @@ export {
   SettingsCard
 } from './cards';
 export { IdeaGridItem, TagsCardListItem } from './items';
+export { default as ErrorBoundary } from './ErrorBoundary';
+export { default as ErrorPage } from './ErrorPage';
