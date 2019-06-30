@@ -13,7 +13,6 @@ import {
 import { Styles } from 'jss';
 import { fade } from '@material-ui/core/styles';
 import { UserSession } from '../../api';
-import { EmailState, UsernameState } from './types';
 import { CustomTextField } from '..';
 import { VerificationDialogContent } from '.';
 
@@ -74,6 +73,26 @@ const useStyles = makeStyles(
       }
     })
 );
+
+/**
+ * Email state type
+ */
+interface EmailState {
+  // Email address
+  address: string;
+  // Invalid email true/false
+  error: boolean;
+}
+
+/**
+ * Username state type
+ */
+interface UsernameState {
+  // Username
+  name: string;
+  // Invalid username true/false
+  error: boolean;
+}
 
 /**
  * SignUpDialog component prop types
@@ -182,7 +201,7 @@ const SignUpDialog = ({
     setSent(true);
 
     // Generate login token on back-end
-    let status = await user.setToken(email.address, username.name);
+    let status = await user.setChallengeToken(email.address, username.name);
 
     // If not successful, display error message
     if (status === 307 || status === 400) {

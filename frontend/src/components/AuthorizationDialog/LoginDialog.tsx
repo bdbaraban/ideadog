@@ -12,7 +12,7 @@ import { Styles } from 'jss';
 import { UserSession } from '../../api';
 import { VoidFunction } from '../../types';
 import { CustomTextField } from '..';
-import { EmailState, VerificationDialogContent } from '.';
+import { VerificationDialogContent } from '.';
 
 /**
  * LoginDialog component style
@@ -59,6 +59,16 @@ const useStyles = makeStyles(
       }
     })
 );
+
+/**
+ * Email state type
+ */
+interface EmailState {
+  // Email address
+  address: string;
+  // Invalid email true/false
+  error: boolean;
+}
 
 /**
  * LoginDialog component prop types
@@ -130,7 +140,7 @@ const LoginDialog = ({
     setSent(true);
 
     // Generate login token on back-end
-    let status = await user.setToken(email.address);
+    let status = await user.setChallengeToken(email.address);
 
     if (status === 307 || status === 400) {
       if (status === 307) {
