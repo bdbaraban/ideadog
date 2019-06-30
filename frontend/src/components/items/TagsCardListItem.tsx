@@ -13,7 +13,7 @@ import { Styles } from 'jss';
 import { fade } from '@material-ui/core/styles';
 import Label from '@material-ui/icons/Label';
 import LabelOutlined from '@material-ui/icons/LabelOutlined';
-import { CheckboxTag, VoidFunction } from '../../types';
+import { CheckboxTag } from '../../types';
 
 /**
  * TagsCardListItem component style
@@ -52,10 +52,8 @@ const useStyles = makeStyles(
 interface TagsCardListItemProps {
   // Index of item in virtualized list
   index: number;
-
   // Current tag
   tag: CheckboxTag;
-
   // Checkbox toggler, inherited from parent list component
   handleToggle: (tag: CheckboxTag, index: number) => VoidFunction;
 }
