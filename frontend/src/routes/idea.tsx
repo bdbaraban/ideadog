@@ -15,11 +15,11 @@ export default mount({
       request: NaviRequest<object>,
       context: RouteContext
     ): Promise<RoutePromise> => {
-      // Idea key
+      // Pull out idea key (hostname)
       const { key } = request.params;
 
       // Get idea with key `key`
-      const idea: Idea = await getIdea({ key });
+      const idea: Idea = await getIdea(key);
 
       // Get all available tags
       const allTags = await getTags();
@@ -27,13 +27,13 @@ export default mount({
       // Set checkbox tags based on allTags and query tags
       const checkboxTags: CheckboxTag[] = setCheckboxTags(undefined, allTags);
 
-      // Fetch user, if Auth0 profile cookie exists
-      if (context.user.profile) {
-        context.user.current = await getUser();
+      // Fetch user, if bearer token is available
+      if (context.user.bearer !== '') {
+        context.user.current = await getUser(undefined, context.user.bearer);
       }
 
       return {
-        title: 'IdeaDog - Idea',
+        title: `IdeaDog - Idea ${key}`,
         view: (
           <div>
             <Navbar
@@ -41,7 +41,7 @@ export default mount({
               user={context.user}
               checkboxTags={checkboxTags}
             />
-            <IdeaLayout idea={idea} />
+            <IdeaLayout user={context.user} idea={idea} />
           </div>
         )
       };

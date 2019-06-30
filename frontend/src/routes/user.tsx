@@ -15,11 +15,11 @@ export default mount({
       request: NaviRequest<object>,
       context: RouteContext
     ): Promise<RoutePromise> => {
-      // User key
+      // Pull out user key (hostname)
       let { key } = request.params;
 
       // Get ideas posted by user with key `key`
-      const ideas: Idea[] = await getUserIdeas({ key });
+      const ideas: Idea[] = await getUserIdeas(key);
 
       // Get all available tags
       const allTags: Tag[] = await getTags();
@@ -27,21 +27,19 @@ export default mount({
       // Set checkbox tags based on allTags and query tags
       const checkboxTags: CheckboxTag[] = setCheckboxTags(undefined, allTags);
 
-      // Fetch user, if bearer token cookie exists
-      if (context.user.profile) {
-        context.user.current = await getUser();
+      // Fetch user, if bearer token is available
+      if (context.user.bearer !== '') {
+        context.user.current = await getUser(undefined, context.user.bearer);
       }
 
-      // Boolean indicating if current page is for current user
-      const self = context.user.current && key === context.user.current.key;
-
-      let viewingUser: User | null = context.user.current;
-      if (!self) {
-        viewingUser = await getUser(key);
-      }
+      // Set/fetch currently-viewing user
+      let viewingUser: User | null =
+        context.user.current && key === context.user.current.key
+          ? context.user.current
+          : await getUser(key);
 
       return {
-        title: 'IdeaDog - User',
+        title: `IdeaDog - User ${key}`,
         view: (
           <div>
             <Navbar

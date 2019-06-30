@@ -30,11 +30,11 @@ export default mount({
       request: NaviRequest<object>,
       context: RouteContext
     ): Promise<RoutePromise> => {
-      // Pull out `sort` filter (hostname) and checked tags (query params)
-      const { sort, tags } = request.params;
+      // Pull out sort filter (hostname), checked tags (query param), and search string (query param)
+      const { sort, tags, search } = request.params;
 
-      // Get current ideas based on sort and query tags
-      const ideas: Idea[] = await getIdeas({ sort, tags });
+      // Get current ideas based on sort, tags, and search filters
+      const ideas: Idea[] = await getIdeas(sort, tags, search);
 
       // Get all available tags
       const allTags: Tag[] = await getTags();
@@ -42,9 +42,9 @@ export default mount({
       // Set checkbox tags based on allTags and query tags
       const checkboxTags: CheckboxTag[] = setCheckboxTags(tags, allTags);
 
-      // Fetch user, if Auth0 profile cookie exists
-      if (context.user.profile) {
-        context.user.current = await getUser();
+      // Fetch user, if bearer token is available
+      if (context.user.bearer !== '') {
+        context.user.current = await getUser(undefined, context.user.bearer);
       }
 
       return {
