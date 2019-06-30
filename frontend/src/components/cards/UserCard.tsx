@@ -81,7 +81,6 @@ const useStyles = makeStyles(
 interface UserCardProps {
   // Current user session
   user: UserSession;
-
   // Current user page being viewed
   viewingUser: User | null;
 }
@@ -140,7 +139,7 @@ const UserCard = ({ user, viewingUser }: UserCardProps): React.ReactElement => {
                 <div className={classes.infoRight}>&nbsp;</div>
                 <div className={classes.infoRight}>
                   <Typography color="textSecondary">
-                    {currentUser.ideas.length}
+                    {Object.keys(currentUser.ideas).length}
                   </Typography>
                 </div>
                 <div className={classes.infoRight}>
