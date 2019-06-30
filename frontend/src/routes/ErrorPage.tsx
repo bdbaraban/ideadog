@@ -8,6 +8,7 @@ import {
   Theme,
   Typography
 } from '@material-ui/core';
+import { DOMAIN } from '../constants';
 import { SadTully } from '../icons';
 import { Styles } from 'jss';
 import { Link } from 'react-navi';
@@ -61,7 +62,6 @@ const useStyles = makeStyles(
 interface ErrorPageProps {
   // Error title
   title: string;
-
   // Error message
   message: string;
 }
@@ -93,7 +93,7 @@ const ErrorPage = ({ title, message }: ErrorPageProps): React.ReactElement => {
           <SvgIcon component={(): React.ReactElement => SadTully(72)}>
             &nbsp;
           </SvgIcon>
-          <Link href={'http://localhost:1234/home'} className={classes.link}>
+          <Link href={`${DOMAIN}/home`} className={classes.link}>
             Return home.
           </Link>
         </CardContent>
