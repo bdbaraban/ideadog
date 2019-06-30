@@ -25,7 +25,6 @@ const useStyles = makeStyles(
 interface NewIdeaFabProps {
   // Current user session
   user: UserSession;
-
   // Array of all available tags
   allTags: Tag[];
 }
