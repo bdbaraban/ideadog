@@ -77,8 +77,3 @@ export interface CheckboxTag {
     checked: boolean;
   };
 }
-
-/**
- * Generic void function type
- */
-export type VoidFunction = () => void;
