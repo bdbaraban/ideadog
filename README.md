@@ -41,7 +41,7 @@ For a more in-depth description of IdeaDog as well as an overview of its tech st
 <p align="center">
   <img src="https://github.com/bdbaraban/ideadog/blob/master/assets/ideadog-stack.png"
        alt="IdeaDog Tech Stack"
-       width="450"
+       width="600"
   />
 </p>
 
@@ -82,13 +82,13 @@ View the complete list of back-end dependencies in the corresponding [Cargo.toml
 
 ### Front-End :dog2:
 
-[View the dedicated front-end README.md.](./frontend/README.md).
+[View the dedicated front-end README.md.](./frontend/README.md)
 
 ### Back-End :feet:
 
-[View the dedicated back-end README.md](./backend/README.md).
+[View the dedicated back-end README.md.](./backend/README.md)
 
-View the source code for the back-end Rust server at Martin's dedicated [submodule](https://github.com/Ostoyae/ideaDog_server).
+[View the source code for the back-end Rust server at Martin's dedicated submodule](https://github.com/Ostoyae/ideaDog_server).
 
 ## Authentication :key:
 
@@ -104,10 +104,14 @@ Passwords are no fun. IdeaDog features a passwordless user authentication proces
 1. User enters email (for login) or both email + username (for signup). Front-end initially sends email/username to back-end.
   * If logging in, and an account does not exist with the given email, back-end returns a redirect code, and user is directed to sign-up.
   * Otherwise, back-end generates and returns a challenge token associated with the email.
+
 2. Front-end temporarily stores challenge token in `localStorage`, then uses the Auth0 API to send a login email to the user. The login email includes a random code that user must enter to verify account.
+
 3. Upon entering the verfication code, the user is redirected to the home page of IdeaDog. The redirect occurs on a URL hashed by Auth0 which the front-end parses to retrieve the user's Auth0 profile.
+
 4. Front-end pulls up challenge token from `localStorage` and returns it to the back-end with the verified email. Back-end generates and returns a bearer token in the form of a cookie.
   * After being returned to the back-end, the challenge token is cleared from `localStorage`.
+
 5. The bearer token has been set and the user can fully acccess their profile!
 
 ## Development :dog:
