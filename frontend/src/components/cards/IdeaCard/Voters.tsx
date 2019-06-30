@@ -14,6 +14,7 @@ import {
   SadTully,
   BrightSadTully
 } from '../../../icons';
+import { downvoteIdea, upvoteIdea, UserSession } from '../../../api';
 
 /**
  * Voters component style
@@ -48,7 +49,6 @@ const useStyles = makeStyles(
 interface VotesState {
   // Idea upvotes count
   up: number;
-
   // Idea downvotes count
   down: number;
 }
@@ -59,7 +59,6 @@ interface VotesState {
 interface VoteStatusState {
   // User upvoted true/false
   upvoted: boolean;
-
   // User downvoted true/false
   downvoted: boolean;
 }
@@ -68,17 +67,18 @@ interface VoteStatusState {
  * Voters component prop types
  */
 interface VotersProps {
+  // Current user session
+  user: UserSession;
   // Idea upvote count
   upvotes: number;
-
   // Idea downvote count
   downvotes: number;
-
   // Unique idea key
   ideaKey: string;
 }
 
 const Voters = ({
+  user,
   upvotes,
   downvotes,
   ideaKey
@@ -102,11 +102,19 @@ const Voters = ({
       down: downvotes ? downvotes : 1
     });
     setVoteStatus({
-      upvoted: false,
-      downvoted: false
+      upvoted:
+        user.current &&
+        user.current.votes &&
+        user.current.votes[ideaKey] === 'upvote'
+          ? true
+          : false,
+      downvoted:
+        user.current &&
+        user.current.votes &&
+        user.current.votes[ideaKey] === 'downvote'
+          ? true
+          : false
     });
-
-    // Return update function
   }, [ideaKey]);
 
   const handleUpvoteClick = (): void => {
@@ -118,6 +126,8 @@ const Voters = ({
       upvoted: true,
       downvoted: false
     });
+
+    upvoteIdea(ideaKey, user.bearer);
   };
 
   const handleDownvoteClick = (): void => {
@@ -129,17 +139,18 @@ const Voters = ({
       upvoted: false,
       downvoted: true
     });
+    downvoteIdea(ideaKey, user.bearer);
   };
 
   // Calculate opacity of SVG logos based on upvotes/downvotes
   const calculateOpacity = (type: string): number => {
     if (type === 'up') {
-      return votes.up / (votes.up + votes.down) < 0.05
-        ? 0.05
+      return votes.up / (votes.up + votes.down) < 0.1
+        ? 0.1
         : votes.up / (votes.up + votes.down);
     }
-    return votes.down / (votes.up + votes.down) < 0.05
-      ? 0.05
+    return votes.down / (votes.up + votes.down) < 0.1
+      ? 0.1
       : votes.down / (votes.up + votes.down);
   };
 
@@ -150,7 +161,7 @@ const Voters = ({
           label: classes.label
         }}
         onClick={handleUpvoteClick}
-        disabled={voteStatus.upvoted}
+        disabled={voteStatus.upvoted || !user.current}
       >
         {voteStatus.upvoted ? (
           <SvgIcon
@@ -175,7 +186,7 @@ const Voters = ({
           label: classes.label
         }}
         onClick={handleDownvoteClick}
-        disabled={voteStatus.downvoted}
+        disabled={voteStatus.downvoted || !user.current}
       >
         {voteStatus.downvoted ? (
           <SvgIcon

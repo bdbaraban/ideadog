@@ -22,9 +22,11 @@ import IconButton from '@material-ui/core/IconButton';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import Forward from '@material-ui/icons/Forward';
 import CopyToClipboard from '../../CopyToClipboard';
+import { useNavigation, useCurrentRoute } from 'react-navi';
 import { Link } from 'react-navi';
 import { Idea } from '../../../types';
-import { MONTHS } from '../../../constants';
+import { DOMAIN, MONTHS } from '../../../constants';
+import { deleteIdea, UserSession } from '../../../api';
 import { Voters } from '.';
 
 /**
@@ -137,6 +139,8 @@ const useStyles = makeStyles(
  * IdeaCard component prop types
  */
 interface IdeaCardProps {
+  // Current user session
+  user: UserSession;
   // Idea to display
   idea: Idea;
 }
@@ -144,8 +148,10 @@ interface IdeaCardProps {
 /**
  * Idea card template component
  */
-const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
+const IdeaCard = ({ user, idea }: IdeaCardProps): React.ReactElement => {
   const classes = useStyles();
+  const navigation = useNavigation();
+  const route = useCurrentRoute();
 
   // Share dialog boolean
   const [open, setOpen] = React.useState<boolean>(false);
@@ -159,6 +165,12 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
   // Toggle delete popper
   const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  // Delete idea function
+  const handleDelete = async (): Promise<void> => {
+    await deleteIdea(idea.key, user.bearer);
+    navigation.navigate(route.url.href);
   };
 
   // Close search popover menu for mobile
@@ -190,50 +202,59 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
             >
               <Link
                 className={classes.userLink}
-                href={`/user/${idea.owner.key}`}
+                href={`/user/${idea.owner.id}`}
               >
                 @{idea.owner.username} {bulletPoint}{' '}
               </Link>
               {MONTHS[convertedDate.getUTCMonth()]} {convertedDate.getUTCDate()}
               , {convertedDate.getUTCFullYear()}
             </Typography>
-            <IconButton
-              aria-label="Close"
-              color="secondary"
-              size="small"
-              onClick={handleClick}
-            >
-              <CloseIcon className={classes.closeIcon} />
-            </IconButton>
-            <Popover
-              id="delete-popper"
-              open={deleteOpen}
-              onClose={handleClose}
-              anchorEl={anchorEl}
-            >
-              <Paper className={classes.popper}>
-                <Typography
-                  className={classes.deleteTitle}
-                  color="textSecondary"
-                  variant="body1"
+            {user.current && user.current.ideas[idea.key] && (
+              <React.Fragment>
+                <IconButton
+                  aria-label="Close"
+                  color="secondary"
+                  size="small"
+                  onClick={handleClick}
                 >
-                  Delete this idea?
-                </Typography>
-                <div className={classes.popperButtons}>
-                  <Button color="secondary" size="large">
-                    <Typography>Yes</Typography>
-                  </Button>
-                  <Button color="secondary" size="large" onClick={handleClose}>
-                    <Typography>No</Typography>
-                  </Button>
-                </div>
-              </Paper>
-            </Popover>
+                  <CloseIcon className={classes.closeIcon} />
+                </IconButton>
+                <Popover
+                  id="delete-popper"
+                  open={deleteOpen}
+                  onClose={handleClose}
+                  anchorEl={anchorEl}
+                >
+                  <Paper className={classes.popper}>
+                    <Typography
+                      className={classes.deleteTitle}
+                      color="textSecondary"
+                      variant="body1"
+                    >
+                      Delete this idea?
+                    </Typography>
+                    <div className={classes.popperButtons}>
+                      <Button color="secondary" size="large" onClick={handleDelete}>
+                        <Typography>Yes</Typography>
+                      </Button>
+                      <Button
+                        color="secondary"
+                        size="large"
+                        onClick={handleClose}
+                      >
+                        <Typography>No</Typography>
+                      </Button>
+                    </div>
+                  </Paper>
+                </Popover>
+              </React.Fragment>
+            )}
           </div>
           <Typography className={classes.text}>{idea.text}</Typography>
         </div>
         <Container className={classes.footer}>
           <Voters
+            user={user}
             upvotes={idea.upvotes}
             downvotes={idea.downvotes}
             ideaKey={idea.key}
@@ -270,7 +291,7 @@ const IdeaCard = ({ idea }: IdeaCardProps): React.ReactElement => {
                 Share this great idea.
                 <DialogContent className={classes.shareDialogContent}>
                   <Link href={`/idea/${idea.key}`} className={classes.link}>
-                    localhost:1234/idea/{idea.key}
+                    {DOMAIN}/idea/{idea.key}
                   </Link>
                   <CopyToClipboard
                     TooltipProps={{ title: 'Copied', leaveDelay: 1000 }}
