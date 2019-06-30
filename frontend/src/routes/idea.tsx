@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount, NaviRequest, route } from 'navi';
-import { getIdea, getTags, getUser } from '../api';
+import { getCurrentUser, getIdea, getTags } from '../api';
 import { Navbar } from '../components';
-import { IdeaLayout } from '../grids';
+import { IdeaLayout } from '../layouts';
 import { CheckboxTag, Idea } from '../types';
 import { RouteContext, RoutePromise, setCheckboxTags } from '.';
 
@@ -29,7 +29,7 @@ export default mount({
 
       // Fetch user, if bearer token is available
       if (context.user.bearer !== '') {
-        context.user.current = await getUser(undefined, context.user.bearer);
+        context.user.current = await getCurrentUser(context.user.bearer);
       }
 
       return {

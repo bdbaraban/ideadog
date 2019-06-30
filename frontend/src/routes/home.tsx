@@ -1,8 +1,8 @@
 import React from 'react';
 import { lazy, mount, NaviRequest, redirect, route } from 'navi';
-import { getIdeas, getTags, getUser } from '../api';
+import { getCurrentUser, getIdeas, getTags } from '../api';
 import { Navbar } from '../components';
-import { HomeLayout } from '../grids';
+import { HomeLayout } from '../layouts';
 import { CheckboxTag, Idea, Tag } from '../types';
 import {
   LazyImport,
@@ -44,7 +44,7 @@ export default mount({
 
       // Fetch user, if bearer token is available
       if (context.user.bearer !== '') {
-        context.user.current = await getUser(undefined, context.user.bearer);
+        context.user.current = await getCurrentUser(context.user.bearer);
       }
 
       return {

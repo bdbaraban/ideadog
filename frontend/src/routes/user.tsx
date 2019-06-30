@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount, NaviRequest, route } from 'navi';
-import { getTags, getUser, getUserIdeas } from '../api';
+import { getCurrentUser, getSingleUser, getTags, getUserIdeas } from '../api';
 import { Navbar, NewIdeaFab } from '../components';
-import { UserLayout } from '../grids';
+import { UserLayout } from '../layouts';
 import { CheckboxTag, Idea, Tag, User } from '../types';
 import { RouteContext, RoutePromise, setCheckboxTags } from '.';
 
@@ -29,14 +29,14 @@ export default mount({
 
       // Fetch user, if bearer token is available
       if (context.user.bearer !== '') {
-        context.user.current = await getUser(undefined, context.user.bearer);
+        context.user.current = await getCurrentUser(context.user.bearer);
       }
 
       // Set/fetch currently-viewing user
       let viewingUser: User | null =
         context.user.current && key === context.user.current.key
           ? context.user.current
-          : await getUser(key);
+          : await getSingleUser(key);
 
       return {
         title: `IdeaDog - User ${key}`,
