@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { Styles } from 'jss';
 import { fade } from '@material-ui/core/styles';
+import { useCurrentRoute, useNavigation } from 'react-navi';
 
 /**
  * Searchbar component styles
@@ -74,6 +75,8 @@ const useStyles = makeStyles(
  */
 const Searchbar = (): React.ReactElement => {
   const classes = useStyles();
+  const navigation = useNavigation();
+  const route = useCurrentRoute();
 
   const [text, setText] = React.useState<string>('');
 
@@ -85,7 +88,7 @@ const Searchbar = (): React.ReactElement => {
   // Filter tags by search query
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
-      // Search with text
+      navigation.navigate(`${route.url.href}?search=${encodeURIComponent(text)}`);
       event.preventDefault();
     }
   };
