@@ -13,9 +13,17 @@
 
 IdeaDog is a social web application for sharing ideas. We've all had those sudden bursts of inspiration where we go - "wow, that is simply a _great_ idea" - but know we will never follow up. Now, instead of losing those ideas, share them with the world!
 
-Why statically-typed, you ask? Well, the front-end of the application is built in React, with TypeScript, while the back-end runs on Rust. TypeScript + Rust = The Ultimate Statically-Typed Web App!
+Why statically-typed, you ask? Well, the front-end of the application is built in React, with TypeScript, while the back-end runs on Rust. In our book, TypeScript + Rust = The Ultimate Statically-Typed Web App!
 
-IdeaDog is still in the development phase, but is nearing completion. Stay tuned, there is much, much, much more to come!
+IdeaDog is nearly, so nearly at a stable version. In fact, it's so nearly complete that, you know what, I'm just going to say it's there - IdeaDog is complete.
+
+## Medium Blog Posts :newspaper:
+
+For a more in-depth description of IdeaDog as well as an overview of its tech stack and development process, we have written a series of articles on Medium. You can read them at the links below:
+
+* [Introducing IdeaDog — A \[Statically-Typed\] Social Ideas Platform](https://medium.com/@bdov_/introducing-ideadog-a-statically-typed-social-ideas-platform-aeb3a6dcf04f)
+* [IdeaDog Back-End Overview](https://medium.com/@Ostoyae/ideadog-back-end-overview-a0d66d780bea)
+* [Building a Modern React Web Application — The IdeaDog Front-End](https://medium.com/@bdov_/building-a-modern-react-web-application-the-ideadog-front-end-bc56dd3ca4b6)
 
 ## Dependencies :couple:
 
@@ -25,9 +33,9 @@ IdeaDog is still in the development phase, but is nearing completion. Stay tuned
 | ------------------------ | ------- |
 | [TypeScript](https://www.typescriptlang.org/) | ^3.5.2  |
 | [React](https://reactjs.org/) | ^16.8.6 |
-| [Material UI](https://material-ui.com/) | ^4.1.1  |
-| [Navi](https://frontarm.com/navi/en/) | ^0.12.8 |
-| [ApproveAPI](https://approveapi.com/) | ^1.0.4 |
+| [Material UI](https://material-ui.com/) | ^4.1.3  |
+| [Navi](https://frontarm.com/navi/en/) | ^0.12.9 |
+| [Auth0 JS](https://www.npmjs.com/package/auth0-js) | ^9.10.4 |
 | [@dwqs/react-virtual-list](https://www.npmjs.com/package/@dwqs/react-virtual-list) | ^1.0.0  |
 | [clipboard-copy](https://www.npmjs.com/package/clipboard-copy) | ^3.0.0  |
 
@@ -37,9 +45,11 @@ View the complete list of front-end dependencies in the corresponding [package.j
 
 | Tool/Library     | Version    |
 | ---------------- | ---------- |
-| [Rust](https://www.rust-lang.org/) | ? |
-| [Actix](https://actix.rs/actix/actix/) | ? |
-| [ArangoDB](https://www.arangodb.com/) | ^0.14.0 |
+| [Rust](https://www.rust-lang.org/) | 1.35 |
+| [Actix](https://actix.rs/actix/actix/) | 0.7 |
+| [ArangoDB](https://www.arangodb.com/) | ^3.4 |
+
+View the back-end server [source code](https://github.com/Ostoyae/ideaDog_server)
 
 **Packaging/Deployment**:
 
@@ -47,7 +57,7 @@ View the complete list of front-end dependencies in the corresponding [package.j
 | ---------------- | ---------- |
 | [Docker](https://www.docker.com/) | ^18.09.3   |
 | [Docker Compose](https://docs.docker.com/compose/) | ^1.23.2    |
-| [Node.js](https://nodejs.org/en/) | ^12.4.0  |
+| [Node.js](https://nodejs.org/en/) | ^12.5.0  |
 | [Yarn](https://yarnpkg.com/en/) | ^1.16.0    |
 | [Parcel](https://parceljs.org/) | ^1.12.3    |
 
@@ -61,7 +71,7 @@ Features:
 Routes:
 * `/:sort?tags`: The home page of IdeaDog, filters displayed ideas by `:sort` and `?tags`.
 * `/idea/:id`: Displays a specific idea with id `:id`.
-* `/user/:id`: Displays an idea page for a user with id `:id`.
+* `/user/:id`: Displays a page for a user with id `:id`.
 
 ## Back-End :feet:
 
@@ -72,10 +82,10 @@ API:
 * `GET /api`: Displays a friendly message.
 * `GET /api/ideas`: Fetches all ideas.
 * `GET /api/ideas/bright`: Fetches all ideas, sorted by brightness [upvotes / (upvotes + downvotes)]
-* `POST /api/idea`: Creates a new idea.
+* `POST /api/idea`: Creates a new idea. Requires Auth
 * `GET /api/idea/{id}`: Fetches an idea with id `{id}`.
 
-View the complete API documentation at [this Postman link](https://documenter.getpostman.com/view/253532/S1TZxahn?version=latest#66ec1bb7-e35b-4ecf-b796-f88dfbeb7d86).
+View the complete API documentation at [this Postman link](https://documenter.getpostman.com/view/253532/S1TZxahn?version=latest).
 
 ## Authors :black_nib:
 
