@@ -51,7 +51,9 @@ View the complete list of front-end dependencies in the corresponding [package.j
 
 Assuming the above packaging/deployment dependencies have been installed, set the up front-end React environment as follows:
 
-1. Install dependencies: `yarn install`
+1. Install dependencies: `yarn install --network-timeout 500000`
+   * _Network timeout must be increased to permit `@material-ui/icons` sufficient time to download._
+
 2. Run the development server: `yarn start`
 3. Build the production folder (outputs to `/dist`): `yarn build`
 
