@@ -97,7 +97,7 @@ const Searchbar = (): React.ReactElement => {
         redirect += `?tags=${route.url.query.tags}`;
       }
       if (text !== '') {
-        redirect += `?search=${encodeURIComponent(text)}`;
+        redirect += `?q=${encodeURIComponent(text)}`;
       }
       navigation.navigate(redirect);
       setText('');
