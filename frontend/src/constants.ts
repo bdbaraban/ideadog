@@ -1,12 +1,12 @@
 /**
  * IdeaDog domain
  */
-export const DOMAIN = 'http://localhost:1234';
+export const DOMAIN = 'https://ideadog.site';
 
 /**
  * IdeaDog API URL
  */
-export const API = 'http://localhost:5000/api';
+export const API = 'https://ideadog.site/api';
 
 /**
  * Common months object codex
