@@ -84,7 +84,7 @@ const TagsCardListItem = ({
         />
       </ListItemIcon>
       <div className={classes.container}>
-        <ListItemText className={classes.text} id={name} primary={name} />
+        <ListItemText className={classes.text} id={name} primary={name.replace(/_/g, ' ')} />
         <Typography className={classes.count}>{count}</Typography>
       </div>
     </MenuItem>
