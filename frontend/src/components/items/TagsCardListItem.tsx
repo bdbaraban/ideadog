@@ -68,7 +68,7 @@ const TagsCardListItem = ({
 }: TagsCardListItemProps): React.ReactElement => {
   const classes = useStyles();
 
-  const name: string = Object.keys(tag)[0].replace(/_/g, ' ');
+  const name: string = Object.keys(tag)[0].replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   const { count, checked } = Object.values(tag)[0];
 
   return (
