@@ -68,7 +68,7 @@ const TagsCardListItem = ({
 }: TagsCardListItemProps): React.ReactElement => {
   const classes = useStyles();
 
-  const name: string = Object.keys(tag)[0];
+  const name: string = Object.keys(tag)[0].replace(/_/g, ' ');
   const { count, checked } = Object.values(tag)[0];
 
   return (
@@ -84,7 +84,7 @@ const TagsCardListItem = ({
         />
       </ListItemIcon>
       <div className={classes.container}>
-        <ListItemText className={classes.text} id={name} primary={name.replace(/_/g, ' ')} />
+        <ListItemText className={classes.text} id={name} primary={name} />
         <Typography className={classes.count}>{count}</Typography>
       </div>
     </MenuItem>
