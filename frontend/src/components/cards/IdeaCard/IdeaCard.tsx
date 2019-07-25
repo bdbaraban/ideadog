@@ -13,14 +13,14 @@ import {
   Theme,
   Typography
 } from '@material-ui/core';
+import Share from 'mdi-material-ui/Share';
 import { fade } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
+import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import Card from '@material-ui/core/Card';
 import Chip from '@material-ui/core/Chip';
 import { Styles } from 'jss';
 import IconButton from '@material-ui/core/IconButton';
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
-import Forward from '@material-ui/icons/Forward';
 import CopyToClipboard from '../../CopyToClipboard';
 import { useNavigation, useCurrentRoute } from 'react-navi';
 import { Link } from 'react-navi';
@@ -234,7 +234,11 @@ const IdeaCard = ({ user, idea }: IdeaCardProps): React.ReactElement => {
                       Delete this idea?
                     </Typography>
                     <div className={classes.popperButtons}>
-                      <Button color="secondary" size="large" onClick={handleDelete}>
+                      <Button
+                        color="secondary"
+                        size="large"
+                        onClick={handleDelete}
+                      >
                         <Typography>Yes</Typography>
                       </Button>
                       <Button
@@ -262,22 +266,17 @@ const IdeaCard = ({ user, idea }: IdeaCardProps): React.ReactElement => {
           <Container className={classes.tags}>
             {idea.tags.map(
               (tag: string): React.ReactElement => {
-                const uppercaseTag = `${tag[0].toUpperCase()}${tag.substring(
-                  1
-                )}`;
+                let name: string = tag.replace(/_/g, ' ');
+                name = name.replace(/\b\w/g, l => l.toUpperCase());
                 return (
-                  <Chip
-                    key={uppercaseTag}
-                    label={uppercaseTag}
-                    className={classes.chip}
-                  />
+                  <Chip key={name} label={name} className={classes.chip} />
                 );
               }
             )}
           </Container>
           <Container className={classes.share}>
             <IconButton onClick={toggleOpen} color="inherit">
-              <Forward fontSize="large" />
+              <Share fontSize="large" />
             </IconButton>
             <Dialog
               onClose={toggleOpen}

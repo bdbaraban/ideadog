@@ -28,9 +28,10 @@ export default mount({
       const checkboxTags: CheckboxTag[] = setCheckboxTags(undefined, allTags);
 
       // Fetch user, if bearer token is available
+      await context.user.getBearer();
       if (context.user.bearer !== '') {
         context.user.current = await getCurrentUser(context.user.bearer);
-      }
+      } 
 
       return {
         title: `IdeaDog - Idea ${key}`,

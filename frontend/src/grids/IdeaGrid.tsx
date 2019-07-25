@@ -45,7 +45,9 @@ const useStyles = makeStyles(
         },
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
-        width: '100%'
+        width: '100%',
+        height: 'min-content !important',
+        maxHeight: 1500
       },
       container: {
         display: 'flex',
@@ -158,7 +160,7 @@ const IdeaGrid = ({
         itemCount={ideas.length}
         overscanCount={15}
         useWindow={false}
-        height={1000}
+        height={1500}
         onLoading={onLoading}
         onEnded={onEnded}
         noContentRenderer={noContentRenderer}
@@ -170,4 +172,4 @@ const IdeaGrid = ({
   );
 };
 
-export default React.memo(IdeaGrid);
+export default IdeaGrid;

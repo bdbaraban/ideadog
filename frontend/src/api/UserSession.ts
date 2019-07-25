@@ -28,29 +28,6 @@ export default class UserSession {
   public constructor() {
     this.current = null;
     this.bearer = '';
-
-    if (window.localStorage.getItem('bearer')) {
-      this.bearer = window.localStorage['bearer'];
-    } else if (window.location.hash) {
-      webAuth.parseHash(
-        { hash: window.location.hash },
-        (
-          err: Auth0ParseHashError | null,
-          authResult: Auth0DecodedHash | null
-        ): void => {
-          if (!err && authResult && authResult.accessToken) {
-            webAuth.client.userInfo(
-              authResult.accessToken,
-              (err: Auth0Error | null, user: Auth0UserProfile): void => {
-                if (!err) {
-                  this.setBearer(user.name);
-                }
-              }
-            );
-          }
-        }
-      );
-    }
   }
 
   // Set API login/signup authorization token from back-end
@@ -78,6 +55,32 @@ export default class UserSession {
       window.localStorage.setItem('challengeToken', data.token);
     }
     return response.status;
+  }
+
+  // Get bearer token for logged-in accout
+  public async getBearer(): Promise<void> {
+    if (window.localStorage.getItem('bearer')) {
+      this.bearer = window.localStorage['bearer'];
+    } else if (window.location.hash) {
+      await webAuth.parseHash(
+        { hash: window.location.hash },
+        (
+          err: Auth0ParseHashError | null,
+          authResult: Auth0DecodedHash | null
+        ): void => {
+          if (!err && authResult && authResult.accessToken) {
+            webAuth.client.userInfo(
+              authResult.accessToken,
+              (err: Auth0Error | null, user: Auth0UserProfile): void => {
+                if (!err) {
+                  this.setBearer(user.name);
+                }
+              }
+            );
+          }
+        }
+      );
+    }
   }
 
   // Set bearer token for logged-in account

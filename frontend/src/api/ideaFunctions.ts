@@ -39,7 +39,7 @@ export const getIdeas = async (
     query += `?tags=${tags}`;
   }
   if (search) {
-    query += `?q=${search}`;
+    query += tags !== undefined ? `&q=${search}` : `?q=${search}`;
   }
 
   const response = await fetch(query);
@@ -92,7 +92,7 @@ export const deleteIdea = async (
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${bearer}`
-    },
+    }
   });
 };
 
@@ -106,11 +106,11 @@ export const upvoteIdea = async (
   bearer: string
 ): Promise<void> => {
   fetch(`${API}/idea/${key}/upvote`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${bearer}`
-      }
-    });
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${bearer}`
+    }
+  });
 };
 
 /**
@@ -123,9 +123,9 @@ export const downvoteIdea = async (
   bearer: string
 ): Promise<void> => {
   fetch(`${API}/idea/${key}/downvote`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${bearer}`
-      }
-    });
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${bearer}`
+    }
+  });
 };

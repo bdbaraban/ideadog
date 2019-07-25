@@ -10,9 +10,9 @@ import {
 } from '@material-ui/core';
 import { Styles } from 'jss';
 import { UserSession } from '../../api';
-import { VoidFunction } from '../../types';
 import { CustomTextField } from '..';
 import { VerificationDialogContent } from '.';
+import { useNavigation } from 'react-navi';
 
 /**
  * LoginDialog component style
@@ -37,10 +37,7 @@ const useStyles = makeStyles(
         width: '100%'
       },
       textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        marginTop: 8,
-        marginBottom: 8
+        margin: `8px ${theme.spacing(1)} 8px ${theme.spacing(1)}`
       },
       flipText: {
         marginTop: 8,
@@ -100,6 +97,7 @@ const LoginDialog = ({
   setAuthError
 }: LoginDialogProps): React.ReactElement => {
   const classes = useStyles();
+  const navigation = useNavigation();
 
   // Entered email
   const [email, setEmail] = React.useState<EmailState>({
@@ -177,6 +175,16 @@ const LoginDialog = ({
     }
   };
 
+  // Log in to dummy account
+  const loginDummy = (): void => {
+    window.localStorage.setItem(
+      'bearer',
+      '9WURFiA0hozMhQWEV614De8c25bNqUhMZZCJ8CaQ4hM='
+    );
+    navigation.navigate('/');
+    handleClose();
+  };
+
   // Enable enter-key submission
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
@@ -221,6 +229,11 @@ const LoginDialog = ({
           <Button className={classes.flipText} onClick={flip}>
             <Typography color="secondary" className={classes.flip}>
               No account? Sign up here.
+            </Typography>
+          </Button>
+          <Button onClick={loginDummy}>
+            <Typography color="secondary" className={classes.flip}>
+              Or, log into a dummy account.
             </Typography>
           </Button>
           <Button

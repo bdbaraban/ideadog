@@ -98,8 +98,8 @@ const Voters = ({
 
   React.useEffect((): void => {
     setVotes({
-      up: upvotes ? upvotes : 1,
-      down: downvotes ? downvotes : 1
+      up: upvotes !== undefined ? upvotes : 1,
+      down: downvotes !== undefined ? downvotes : 1
     });
     setVoteStatus({
       upvoted:

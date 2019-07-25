@@ -6,9 +6,7 @@ import { Idea, User } from '../types';
  * Fetch a user from the IdeaDog API.
  * @param bearer {string} - Logged in user's bearer token (undefined if not fetching logged in user).
  */
-export const getCurrentUser = async (
-  bearer: string
-): Promise<User> => {
+export const getCurrentUser = async (bearer: string): Promise<User> => {
   const response = await fetch(`${API}/user`, {
     method: 'GET',
     credentials: 'include',
@@ -19,8 +17,8 @@ export const getCurrentUser = async (
 
   const data: User = await response.json();
   if (!data) {
-    throw new Error(`Failed to fetch user profile.`);
     window.localStorage.clear();
+    throw new Error(`Failed to fetch user profile.`);
   }
   return data;
 };
@@ -30,7 +28,7 @@ export const getCurrentUser = async (
  * @param key {string} - The ID of the user to fetch (undefined if fetching logged in user).
  */
 export const getSingleUser = async (
-  key: string | undefined = undefined,
+  key: string | undefined = undefined
 ): Promise<User> => {
   const response = await fetch(`${API}/user/${key}`, {
     method: 'GET',
