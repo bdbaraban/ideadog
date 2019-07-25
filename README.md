@@ -73,12 +73,12 @@ View the complete list of back-end dependencies in the corresponding [Cargo.toml
 
 **Packaging/Deployment**:
 
-| Tool/Library                      | Version |
-| --------------------------------- | ------- |
-| [Node.js](https://nodejs.org/en/) | ^12.5.0 |
-| [Yarn](https://yarnpkg.com/en/)   | ^1.16.0 |
-| [Parcel](https://parceljs.org/)   | ^1.12.3 |
-| libssl-dev                        | ^1.0    |
+| Tool/Library                      | Version  |
+| --------------------------------- | -------- |
+| [Node.js](https://nodejs.org/en/) | ^10.16.0 |
+| [Yarn](https://yarnpkg.com/en/)   | ^1.17.3  |
+| [Parcel](https://parceljs.org/)   | ^1.12.3  |
+| libssl-dev                        | ^1.0     |
 
 ### Front-End :dog2:
 
