@@ -118,9 +118,11 @@ Passwords are no fun. IdeaDog features a passwordless user authentication proces
 
 ## Development :dog:
 
-Code can always be improved. The IdeaDog team's plans/visions for the future include:
+Code can always be improved. The IdeaDog team's plans/dreams for the future include:
 
-- Complete, stable, deployed site.
+- Conversion to server-side-rendered site.
+- Live idea feed with web sockets.
+- Spice up the back-end with some GraphQL.
 - Auto-deployment scripts.
 - User-created tags.
 - Test suite.
