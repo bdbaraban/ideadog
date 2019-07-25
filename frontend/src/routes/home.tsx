@@ -31,10 +31,10 @@ export default mount({
       context: RouteContext
     ): Promise<RoutePromise> => {
       // Pull out sort filter (hostname), checked tags (query param), and search string (query param)
-      const { sort, tags, search } = request.params;
+      const { sort, tags, q } = request.params;
 
       // Get current ideas based on sort, tags, and search filters
-      const ideas: Idea[] = await getIdeas(sort, tags, search);
+      const ideas: Idea[] = await getIdeas(sort, tags, q);
 
       // Get all available tags
       const allTags: Tag[] = await getTags();
@@ -43,6 +43,7 @@ export default mount({
       const checkboxTags: CheckboxTag[] = setCheckboxTags(tags, allTags);
 
       // Fetch user, if bearer token is available
+      await context.user.getBearer();
       if (context.user.bearer !== '') {
         context.user.current = await getCurrentUser(context.user.bearer);
       }
