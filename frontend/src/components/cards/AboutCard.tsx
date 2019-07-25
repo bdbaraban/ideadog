@@ -161,32 +161,45 @@ const AboutCard = (): React.ReactElement => {
                 color="textSecondary"
                 variant="subtitle1"
               >
-                Who are you?
+                Who are you two?
               </Typography>
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Typography color="textSecondary" variant="body1">
-              Ah, I am not one, but many. Well... just two of us.
-              <br />
-              <br />
-              The IdeaDog team is made up of two Holberton School full-stack
-              software engineering students. We are passionate about static
+              Martin and I are two software engineers passionate about static
               typing and the most trendy (but for a reason, always for a reason)
-              technologies.
-              <br />
-              <br />
-              Check us out at our{' '}
+              technologies. Reach out to us at our contact links above!
+            </Typography>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExpansionPanel className={classes.expansionPanel}>
+          <ExpansionPanelSummary
+            aria-controls="what-about-content"
+            id="what-about-header"
+            expandIcon={<ExpandMoreIcon color="secondary" />}
+          >
+            <div className={classes.column}>
+              <Typography
+                className={classes.heading}
+                color="textSecondary"
+                variant="subtitle1"
+              >
+                Can I see the code behind this?
+              </Typography>
+            </div>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Typography color="textSecondary" variant="body1">
               <a
                 href="https://github.com/bdbaraban/ideadog"
-                aria-label="github-link"
+                aria-label="IdeaDog GitHub"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={classes.link}
               >
-                GitHub link
+                Please do!
               </a>
-              .
             </Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
