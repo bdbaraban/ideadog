@@ -32,9 +32,9 @@ can check out our domain, [ideadog.site](https://ideadog.site).
 
 For a more in-depth description of IdeaDog as well as an overview of its tech stack and development process, we have written a series of articles on Medium. You can read them at the links below:
 
-* [Introducing IdeaDog — A \[Statically-Typed\] Social Ideas Platform](https://medium.com/@bdov_/introducing-ideadog-a-statically-typed-social-ideas-platform-aeb3a6dcf04f)
-* [IdeaDog Back-End Overview](https://medium.com/@Ostoyae/ideadog-back-end-overview-a0d66d780bea)
-* [Building a Modern React Web Application — The IdeaDog Front-End](https://medium.com/@bdov_/building-a-modern-react-web-application-the-ideadog-front-end-bc56dd3ca4b6)
+- [Introducing IdeaDog — A \[Statically-Typed\] Social Ideas Platform](https://medium.com/@bdov_/introducing-ideadog-a-statically-typed-social-ideas-platform-aeb3a6dcf04f)
+- [IdeaDog Back-End Overview](https://medium.com/@Ostoyae/ideadog-back-end-overview-a0d66d780bea)
+- [Building a Modern React Web Application — The IdeaDog Front-End](https://medium.com/@bdov_/building-a-modern-react-web-application-the-ideadog-front-end-bc56dd3ca4b6)
 
 ## Tech Stack :poodle:
 
@@ -49,36 +49,36 @@ For a more in-depth description of IdeaDog as well as an overview of its tech st
 
 **Front-End**:
 
-| Tool/Library             | Version |
-| ------------------------ | ------- |
-| [TypeScript](https://www.typescriptlang.org/) | ^3.5.2  |
-| [React](https://reactjs.org/) | ^16.8.6 |
-| [Material UI](https://material-ui.com/) | ^4.1.3  |
-| [Navi](https://frontarm.com/navi/en/) | ^0.12.9 |
-| [Auth0 JS](https://www.npmjs.com/package/auth0-js) | ^9.10.4 |
+| Tool/Library                                                                       | Version |
+| ---------------------------------------------------------------------------------- | ------- |
+| [TypeScript](https://www.typescriptlang.org/)                                      | ^3.5.3  |
+| [React](https://reactjs.org/)                                                      | ^16.8.6 |
+| [Material UI](https://material-ui.com/)                                            | ^4.2.1  |
+| [Navi](https://frontarm.com/navi/en/)                                              | ^0.13.3 |
+| [Auth0 JS](https://www.npmjs.com/package/auth0-js)                                 | ^9.11.2 |
 | [@dwqs/react-virtual-list](https://www.npmjs.com/package/@dwqs/react-virtual-list) | ^1.0.0  |
-| [clipboard-copy](https://www.npmjs.com/package/clipboard-copy) | ^3.0.0  |
+| [clipboard-copy](https://www.npmjs.com/package/clipboard-copy)                     | ^3.0.0  |
 
 View the complete list of front-end dependencies in the corresponding [package.json](./frontend/package.json).
 
 **Back-End**:
 
-| Tool/Library     | Version    |
-| ---------------- | ---------- |
-| [Rust](https://www.rust-lang.org/) | 1.35 |
-| [Actix](https://actix.rs/actix/actix/) | 0.7 |
-| [ArangoDB](https://www.arangodb.com/) | ^3.4 |
+| Tool/Library                           | Version |
+| -------------------------------------- | ------- |
+| [Rust](https://www.rust-lang.org/)     | 1.35    |
+| [Actix](https://actix.rs/actix/actix/) | 0.7     |
+| [ArangoDB](https://www.arangodb.com/)  | ^3.4    |
 
 View the complete list of back-end dependencies in the corresponding [Cargo.toml](https://github.com/Ostoyae/ideaDog_server/blob/master/app/Cargo.toml).
 
 **Packaging/Deployment**:
 
-| Tool/Library     | Version    |
-| ---------------- | ---------- |
-| [Node.js](https://nodejs.org/en/) | ^12.5.0  |
-| [Yarn](https://yarnpkg.com/en/) | ^1.16.0    |
-| [Parcel](https://parceljs.org/) | ^1.12.3    |
-| libssl-dev | ^1.0 |
+| Tool/Library                      | Version |
+| --------------------------------- | ------- |
+| [Node.js](https://nodejs.org/en/) | ^12.5.0 |
+| [Yarn](https://yarnpkg.com/en/)   | ^1.16.0 |
+| [Parcel](https://parceljs.org/)   | ^1.12.3 |
+| libssl-dev                        | ^1.0    |
 
 ### Front-End :dog2:
 
@@ -102,6 +102,7 @@ View the complete list of back-end dependencies in the corresponding [Cargo.toml
 Passwords are no fun. IdeaDog features a passwordless user authentication process managed by [Auth0](https://auth0.com/). The process works as follows:
 
 1. User enters email (for login) or both email + username (for signup). Front-end initially sends email/username to back-end.
+
    1. If logging in, and an account does not exist with the given email, back-end returns a redirect code, and user is directed to sign-up.
    2. Otherwise, back-end generates and returns a challenge token associated with the email.
 
@@ -110,6 +111,7 @@ Passwords are no fun. IdeaDog features a passwordless user authentication proces
 3. Upon entering the verfication code, the user is redirected to the home page of IdeaDog. The redirect occurs on a URL hashed by Auth0 which the front-end parses to retrieve the user's Auth0 profile.
 
 4. Front-end pulls up challenge token from `localStorage` and returns it to the back-end with the verified email. Back-end generates and returns a bearer token in the form of a cookie.
+
    1. After being returned to the back-end, the challenge token is cleared from `localStorage`.
 
 5. The bearer token has been set and the user can fully acccess their profile!
@@ -118,15 +120,15 @@ Passwords are no fun. IdeaDog features a passwordless user authentication proces
 
 Code can always be improved. The IdeaDog team's plans/visions for the future include:
 
-* Complete, stable, deployed site.
-* Auto-deployment scripts.
-* User-created tags.
-* Test suite.
+- Complete, stable, deployed site.
+- Auto-deployment scripts.
+- User-created tags.
+- Test suite.
 
 ## Authors :black_nib:
 
-* __Brennan D Baraban__ <[bdbaraban](https://github.com/bdbaraban)>
-* __Martin Smith__ <[Ostoyae](https://github.com/Ostoyae)>
+- **Brennan D Baraban** <[bdbaraban](https://github.com/bdbaraban)>
+- **Martin Smith** <[Ostoyae](https://github.com/Ostoyae)>
 
 ## License :lock:
 
