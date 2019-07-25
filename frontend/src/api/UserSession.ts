@@ -24,10 +24,13 @@ export default class UserSession {
   public current: User | null;
   // API Bearer token for logged in user
   public bearer: string;
+  // Auth0 verification hash
+  private hash: string;
 
   public constructor() {
     this.current = null;
     this.bearer = '';
+    this.hash = window.location.hash ? window.location.hash : '';
   }
 
   // Set API login/signup authorization token from back-end
@@ -61,8 +64,8 @@ export default class UserSession {
   public async getBearer(): Promise<void> {
     if (window.localStorage.getItem('bearer')) {
       this.bearer = window.localStorage['bearer'];
-    } else if (window.location.hash) {
-      await webAuth.parseHash(
+    } else if (this.hash !== '') {
+      webAuth.parseHash(
         { hash: window.location.hash },
         (
           err: Auth0ParseHashError | null,
