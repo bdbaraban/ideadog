@@ -244,14 +244,13 @@ const NewIdeaDialog = ({
               >
                 {allTags.map(
                   (tag: Tag): React.ReactElement => {
-                    const name = `${tag.key[0].toUpperCase()}${tag.key.substring(
-                      1
-                    )}`;
+                    let name: string = tag.key.replace(/_/g, ' ');
+                    name = name.replace(/\b\w/g, l => l.toUpperCase());
                     return (
-                      <MenuItem key={name} value={name}>
+                      <MenuItem key={tag.key} value={tag.key}>
                         <Checkbox
                           color="default"
-                          checked={tags.indexOf(name) > -1}
+                          checked={tags.indexOf(tag.key) > -1}
                         />
                         <ListItemText primary={name} />
                       </MenuItem>
