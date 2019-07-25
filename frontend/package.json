@@ -18,6 +18,7 @@
     "@material-ui/icons": "^4.2.1",
     "auth0-js": "^9.11.2",
     "clipboard-copy": "^3.0.0",
+    "mdi-material-ui": "^6.2.0",
     "navi": "^0.13.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -39,7 +40,7 @@
     "prettier": "^1.18.2"
   },
   "scripts": {
-    "build": "parcel build src/index.html",
+    "build": "parcel build --experimental-scope-hoisting src/index.html",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "start": "parcel src/index.html"
   }
