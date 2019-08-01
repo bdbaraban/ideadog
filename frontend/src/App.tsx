@@ -15,7 +15,8 @@ const useStyles = makeStyles(
       },
       html: {
         scrollbarWidth: 'none',
-        overflow: '-moz-scrollbars-none'
+        overflow: '-moz-scrollbars-none',
+        '-ms-overflow-style': 'none'
       }
     }
   }),
