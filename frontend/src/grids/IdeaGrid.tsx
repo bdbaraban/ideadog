@@ -43,11 +43,12 @@ const useStyles = makeStyles(
         '&::-webkit-scrollbar': {
           width: 0
         },
+        '-ms-overflow-style': 'none',
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
         width: '100%',
-        height: 'min-content !important',
-        maxHeight: 1500
+        height: 'auto !important',
+        maxHeight: '1500px !important'
       },
       container: {
         display: 'flex',
