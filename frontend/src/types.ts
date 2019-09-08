@@ -2,78 +2,41 @@
  * Idea type
  */
 export interface Idea {
-  // ID (idea/${key})
-  id: string;
-  // Key
-  key: string;
-  // User owner
+  id: string; // ID (idea/${key})
+  key: string; // Key
   owner: {
-    // ID (user/${key})
-    id: string;
-    // Username
-    username: string;
+    id: string; // User ID (user/${key})
+    username: string; // Username
   };
-  // Date of creation
-  date: number;
-  // Content
-  text: string;
-  // Associated tags
-  tags: string[];
-  // Upvote count
-  upvotes: number;
-  // Downvote count
-  downvotes: number;
+  date: number; // Date of creation
+  text: string; // Content
+  tags: string[]; // Associated tags
+  upvotes: number; // Upvote count
+  downvotes: number; // Downvote count
 }
 
 /**
  * Tag type
  */
 export interface Tag {
-  // ID (tag/${key})
-  id: string;
-  // Key
-  key: string;
-  // Count of ideas associated with tag
-  count: number;
+  id: string; // ID (tag/${key})
+  key: string; // Key
+  count: number; // Count of ideas associated with tag
 }
 
 /**
  * User type
  */
 export interface User {
-  // ID (user/${key})
-  id: string;
-  // Key
-  key: string;
-  // Username
-  username: string;
-  // Email address
-  email: string;
-  // Object of ID's of ideas posted by user
-  ideas: { [key: string]: boolean };
-  // User's top-used tag
-  favorite: string;
-  // Total upvote count on all of user's ideas
-  upvotes: number;
-  // Total downvote count on all of user's ideas
-  downvotes: number;
-  // Account status
-  active: boolean;
-  // Date of account creation
-  created_at: number;
-  // Object of ideas user has voted on
-  votes: { [key: string]: string } | null;
-}
-
-/**
- * CheckboxTag type, used by tag-filtering components
- */
-export interface CheckboxTag {
-  // Tag name
-  [key: string]: {
-    // Total count of ideas associated with tag
-    count: number;
-    // Tag filter's checked status
-    checked: boolean;
-  };
+  id: string; // ID (user/${key})
+  key: string; // Key
+  username: string; // Username
+  email: string; // Email address
+  ideas: { [key: string]: boolean }; // Object of ID's of ideas posted by user
+  favorite: string; // User's top-used tag
+  upvotes: number; // Total upvote count on all of user's ideas
+  downvotes: number; // Total downvote count on all of user's ideas
+  active: boolean; // Account status
+  created_at: number; // Date of account creation
+  votes: { [key: string]: string } | null; // Object of ideas user has voted on
 }
