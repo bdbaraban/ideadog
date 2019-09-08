@@ -9,9 +9,23 @@
   />
 </p>
 
+## NOTE ON IDEADOG DEVELOPMENT :dog:
+
+Note that the current state of this repo and project will soon be outdated - I am currently hard, hard at work at completely revamping the front-end of IdeaDog. And I mean completely revamping. I am in the process of:
+
+- Converting the app onto server-side rendering with Next.js.
+- Converting authorization process into magic link sign in.
+- Moving authorization logic onto server with Express.
+- Reorganizing global state management with Redux & Redux Thunk.
+- Design overhaul.
+
+If you would like a sneak peek at the code behind this revamp, you can check out [this branch](https://github.com/bdbaraban/ideadog/tree/nextjs).
+
+Stay tuned, there are some big-time updates in the works for IdeaDog. - Brennan
+
 ## Description :bulb:
 
-IdeaDog is a social web application for sharing ideas.
+IdeaDog is a social media web application for sharing ideas.
 
 We have all had those moments, those sudden bursts of inspiration where we think - "wow, that is simply a _great_ idea" - but know we will never follow up. Now, instead of losing those ideas, share them with the world!
 
@@ -23,10 +37,11 @@ The front-end of IdeaDog is built in React, with TypeScript, while the back-end 
 
 ### I have a great idea! Where can I post it?
 
-IdeaDog is nearly, so nearly at a stable version. In fact, it's so nearly complete that, you know what, I'm just going to say, it's there - IdeaDog is complete.
+IdeaDog is currently deployed at [ideadog.site](https://ideadog.site) - please do check it out!
 
-All kidding aside, we are hard at work getting IdeaDog finished and deployed. If you want a [non-stable] sneak-peek, you
-can check out our domain, [ideadog.site](https://ideadog.site).
+#### NOTE
+
+Note that authorization is currently buggy. If you attempt to log in/sign up, you will need to refresh the page twice upon verification for your account to register. Read the development note above for news on coming fixes ^^^.
 
 ## Medium Blog Posts :newspaper:
 
@@ -115,17 +130,6 @@ Passwords are no fun. IdeaDog features a passwordless user authentication proces
    1. After being returned to the back-end, the challenge token is cleared from `localStorage`.
 
 5. The bearer token has been set and the user can fully acccess their profile!
-
-## Development :dog:
-
-Code can always be improved. The IdeaDog team's plans/dreams for the future include:
-
-- Conversion to server-side-rendered site.
-- Live idea feed with web sockets.
-- Spice up the back-end with some GraphQL.
-- Auto-deployment scripts.
-- User-created tags.
-- Test suite.
 
 ## Authors :black_nib:
 
