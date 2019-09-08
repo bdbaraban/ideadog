@@ -1,33 +1,26 @@
-import React from 'react';
+import React, { ReactElement, useState } from 'react';
 import Tooltip, { TooltipProps } from '@material-ui/core/Tooltip';
 import copy from 'clipboard-copy';
 
-/**
- * CopyToClipBoard children prop types
- */
+// ClipboardCopy children prop types
 interface ChildProps {
-  // clipboard-copy function type
-  copy: (content: string) => void;
+  copy: (content: string) => void; // clipboard-copy function type
 }
 
-/**
- * CopyToClipboard component prop types
- */
+// ClipboardCopy component prop types
 interface CopyToClipboardProps {
-  // Props passed to Tooltip component
-  TooltipProps?: Partial<TooltipProps>;
-  // ReactElement child component
-  children: (props: ChildProps) => React.ReactElement;
+  TooltipProps?: Partial<TooltipProps>; // Props passed to Tooltip component
+  children: (props: ChildProps) => ReactElement; // ReactElement child component
 }
 
 /**
  * Clipboard copy functional component
  */
-const CopyToClipboard = ({
+const ClipboardCopy = ({
   TooltipProps,
   children
-}: CopyToClipboardProps): React.ReactElement => {
-  const [showTooltip, setShowTooltip] = React.useState<boolean>(false);
+}: CopyToClipboardProps): ReactElement => {
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   const onCopy = (content: string): void => {
     copy(content);
@@ -46,9 +39,9 @@ const CopyToClipboard = ({
       onClose={handleOnTooltipClose}
       {...(TooltipProps || {})}
     >
-      {children({ copy: onCopy }) as React.ReactElement}
+      {children({ copy: onCopy }) as ReactElement}
     </Tooltip>
   );
 };
 
-export default React.memo(CopyToClipboard);
+export default ClipboardCopy;

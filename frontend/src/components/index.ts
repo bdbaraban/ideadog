@@ -1,20 +1,23 @@
-// Components barrel file
-export { AuthorizationDialog, NotLoggedInDialog } from './AuthorizationDialog';
-export { default as CopyToClipboard } from './CopyToClipboard';
+// components barrel file
+export { default as AccountButton } from './AccountButton';
+export { default as ApplicationBar } from './ApplicationBar';
+export { default as AuthButton } from './AuthButton';
+export { default as ClipboardCopy } from './ClipboardCopy';
 export { default as CustomTextField } from './CustomTextField';
-export { default as ErrorBoundary } from './ErrorBoundary';
-export { default as ErrorPage } from './ErrorPage';
-export { default as Navbar } from './Navbar/Navbar';
-export { NewIdeaDialog } from './NewIdeaDialog';
-export { default as NewIdeaFab } from './NewIdeaFab';
-export { default as TagsMenuList } from './TagsMenuList';
-export {
-  AboutCard,
-  ContactCard,
-  IdeaCard,
-  NewIdeaCard,
-  SettingsCard,
-  TagsCard,
-  UserCard
-} from './cards';
-export { IdeaGridItem, TagsCardListItem } from './items';
+export { default as HappyTully } from './HappyTully';
+export { default as IdeaCard } from './IdeaCard';
+export { default as IdeaFeed } from './IdeaFeed';
+export { default as Layout } from './Layout';
+export { default as Link } from './Link';
+export { default as LoginDialog } from './LoginDialog';
+export { default as NewIdeaButton } from './NewIdeaButton';
+export { default as NewIdeaCard } from './NewIdeaCard';
+export { default as SadTully } from './SadTully';
+export { default as Searchbar } from './Searchbar';
+export { default as SignUpDialog } from './SignUpDialog';
+export { default as SortSelect } from './SortSelect';
+export { default as TagsCard } from './TagsCard';
+export { default as TagsSelect } from './TagsSelect';
+export { default as TagsList } from './TagsList';
+export { default as UserCard } from './UserCard';
+export { default as VerificationDialog } from './VerificationDialog';
