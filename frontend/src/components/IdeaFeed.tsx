@@ -1,5 +1,12 @@
-import React, { ReactElement, useEffect, useMemo, useRef } from 'react';
+import React, {
+  ReactElement,
+  useEffect,
+  useMemo,
+  useState,
+  useRef
+} from 'react';
 import Grid from '@material-ui/core/Grid';
+import Snackbar from '@material-ui/core/Snackbar';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { IdeaCard, NewIdeaCard } from 'components';
 import { useSelector } from 'react-redux';
@@ -36,11 +43,20 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     grid: {
       marginBottom: theme.spacing(2),
+      marginLeft: 0,
+      marginRight: 0,
       marginTop: theme.spacing(2)
     },
     idea: {
       paddingLeft: '0 !important',
       paddingRight: '0 !important'
+    },
+    snackbarContent: {
+      alignItems: 'center',
+      backgroundColor: theme.palette.error.main,
+      display: 'flex',
+      fontWeight: 'bold',
+      justifyContent: 'center'
     }
   })
 );
@@ -66,6 +82,9 @@ const IdeaFeed = (): ReactElement => {
   // Mutable ref tracking whether component is on first render
   const firstRender = useRef<boolean>(true);
 
+  // Snackbar open/closed status
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
   // Memoize conversion of tags into API query format
   const memoizedTags = useMemo(
     (): string =>
@@ -84,39 +103,73 @@ const IdeaFeed = (): ReactElement => {
     dispatch(fetchIdeas(sort.current.key, search.query, memoizedTags));
   }, [dispatch, search, sort, memoizedTags]);
 
+  const handleClose = (
+    _: React.SyntheticEvent | React.MouseEvent,
+    reason?: string
+  ): void => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
   return (
-    <div className={classes.root}>
-      <Grid
-        className={classes.grid}
-        container
-        alignContent="flex-start"
-        justify="center"
-        spacing={2}
-      >
-        {user.isAuthenticated && (
-          <Grid item xs={12} sm={10} lg={8}>
-            <NewIdeaCard />
-          </Grid>
-        )}
+    <>
+      <div className={classes.root}>
         <Grid
+          className={classes.grid}
           container
-          item
-          xs={12}
-          sm={10}
-          lg={8}
+          alignContent="flex-start"
           justify="center"
           spacing={2}
         >
-          {ideas.all.map(
-            (idea: Idea, index: number): ReactElement => (
-              <Grid key={index} item xs={12} classes={{ item: classes.idea }}>
-                <IdeaCard idea={idea} />
-              </Grid>
-            )
+          {user.isAuthenticated && (
+            <Grid item xs={12} sm={10} lg={8}>
+              <NewIdeaCard />
+            </Grid>
           )}
+          <Grid
+            container
+            item
+            xs={12}
+            sm={10}
+            lg={8}
+            justify="center"
+            spacing={2}
+          >
+            {ideas.all.map(
+              (idea: Idea, index: number): ReactElement => (
+                <Grid key={index} item xs={12} classes={{ item: classes.idea }}>
+                  <IdeaCard idea={idea} setSnackbarOpen={setSnackbarOpen} />
+                </Grid>
+              )
+            )}
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
+      </div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        ContentProps={{
+          'aria-describedby': 'idea-deleted-message',
+          className: classes.snackbarContent
+        }}
+        message={
+          <span id="idea-deleted-message">
+            Idea deleted.
+            <span role="img" aria-label="wastebasket">
+              🗑️
+            </span>
+          </span>
+        }
+      />
+    </>
   );
 };
 
