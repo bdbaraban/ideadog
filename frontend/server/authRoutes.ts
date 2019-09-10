@@ -51,27 +51,26 @@ authRoutes.get('/login', (req, res): void => {
     res.redirect(
       `/home?error=${encodeURIComponent('Invalid login credentials.')}`
     );
-  }
+  } else {
+    login(
+      challenge.email,
+      challenge.token,
+      jwtToken,
+      (success, bearer, message): void => {
+        // Delete challenge data on session
+        delete req.session!.challenge;
 
-  login(
-    challenge.email,
-    challenge.token,
-    jwtToken,
-    (success, bearer, message): void => {
-      // Delete challenge data on session
-      delete req.session!.challenge;
-
-      if (!success) {
-        res.redirect(`/home?error=${encodeURIComponent(message as string)}`);
+        if (!success) {
+          res.redirect(`/home?error=${encodeURIComponent(message as string)}`);
+        } else {
+          // Store bearer token on session
+          req.session!.bearer = bearer;
+          // Redirect back home
+          res.redirect('/home');
+        }
       }
-
-      // Store bearer token on session
-      req.session!.bearer = bearer;
-
-      // Redirect back home
-      res.redirect('/home');
-    }
-  );
+    );
+  }
 });
 
 // Delete bearer token for logged in user and redirect
