@@ -1,4 +1,10 @@
-import React, { ReactElement } from 'react';
+import React, {
+  Dispatch,
+  MouseEvent,
+  ReactElement,
+  SetStateAction,
+  useState
+} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -27,9 +33,13 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import { AppState, useThunkDispatch } from 'store';
+import { fetchIdeas } from 'store/ideas/actions';
+import { UserState } from 'store/user/types';
 import { ClipboardCopy, Link } from 'components';
 import { Idea } from 'types';
-import { calculateBrightness, formatDate, formatTag, getHostname } from 'utils';
+import { formatLongDate, formatTag } from 'utils';
 
 // IdeaCard component style
 const useStyles = makeStyles((theme: Theme) =>
@@ -128,29 +138,77 @@ const useStyles = makeStyles((theme: Theme) =>
 // IdeaCard component prop types
 interface IdeaCardProps {
   idea: Idea;
+  setSnackbarOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 /**
  * Card for displaying an idea
  */
-const IdeaCard = ({ idea }: IdeaCardProps): ReactElement => {
+const IdeaCard = ({ idea, setSnackbarOpen }: IdeaCardProps): ReactElement => {
   const classes = useStyles();
+  const dispatch = useThunkDispatch();
+
+  // Select user from Redux store
+  const user = useSelector((state: AppState): UserState => state.user);
 
   // Share dialog boolean
-  const [open, setOpen] = React.useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
   // Delete popup anchor
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // Boolean version of anchor
   const deleteOpen = Boolean(anchorEl);
   // User voted on idea boolean
-  const [voted, setVoted] = React.useState<boolean>(false);
+  const [voted, setVoted] = useState<boolean>(
+    user.profile.votes && user.profile.votes[idea.key] === 'upvote'
+      ? true
+      : false
+  );
 
-  const toggleVote = (): void => {
+  const toggleVote = async (): Promise<void> => {
+    if (!voted) {
+      await fetch(`${process.env.IDEADOG_API}/idea/${idea.key}/upvote`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.bearer}`
+        }
+      });
+    } else {
+      await fetch(`${process.env.IDEADOG_API}/idea/${idea.key}/downvote`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.bearer}`
+        }
+      });
+    }
+
+    await dispatch(fetchIdeas());
+
     setVoted(!voted);
   };
 
+  // Delete idea
+  const handleDelete = async (): Promise<void> => {
+    // Delete idea
+    await fetch(`${process.env.IDEADOG_API}/idea/${idea.key}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.bearer}`
+      }
+    });
+
+    // Update ideas
+    await dispatch(fetchIdeas());
+
+    // Flash idea posted snackbar
+    setSnackbarOpen(true);
+    setTimeout((): void => {
+      setSnackbarOpen(false);
+    }, 5000);
+  };
+
   // Toggle delete popper
-  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
+  const handleClick = (event: MouseEvent<HTMLElement>): void => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
@@ -177,40 +235,44 @@ const IdeaCard = ({ idea }: IdeaCardProps): ReactElement => {
             {`@${idea.owner.username}`}
           </Link>
         }
-        subheader={formatDate(new Date(idea.date))}
+        subheader={formatLongDate(new Date(idea.date))}
         subheaderTypographyProps={{
           className: classes.subheaderTypographyProps
         }}
         action={
-          <IconButton
-            aria-label="close"
-            color="secondary"
-            onClick={handleClick}
-          >
-            <CloseIcon />
-          </IconButton>
+          idea.owner.id === user.profile.key && (
+            <IconButton
+              aria-label="delete-idea"
+              color="secondary"
+              onClick={handleClick}
+            >
+              <CloseIcon />
+            </IconButton>
+          )
         }
       />
-      <Popover
-        id="delete-popper"
-        open={deleteOpen}
-        onClose={handleClose}
-        anchorEl={anchorEl}
-      >
-        <Paper className={classes.popper}>
-          <Typography color="textSecondary" variant="body1">
-            Delete this idea?
-          </Typography>
-          <div>
-            <Button color="secondary" size="large">
-              <Typography>Yes</Typography>
-            </Button>
-            <Button color="secondary" size="large" onClick={handleClose}>
-              <Typography>No</Typography>
-            </Button>
-          </div>
-        </Paper>
-      </Popover>
+      {idea.owner.id === user.profile.key && (
+        <Popover
+          id="delete-idea-popper"
+          open={deleteOpen}
+          onClose={handleClose}
+          anchorEl={anchorEl}
+        >
+          <Paper className={classes.popper}>
+            <Typography color="textSecondary" variant="body1">
+              Delete this idea?
+            </Typography>
+            <div>
+              <Button color="secondary" size="large" onClick={handleDelete}>
+                <Typography>Yes</Typography>
+              </Button>
+              <Button color="secondary" size="large" onClick={handleClose}>
+                <Typography>No</Typography>
+              </Button>
+            </div>
+          </Paper>
+        </Popover>
+      )}
       <Divider />
       <CardContent>
         <Typography>{idea.text}</Typography>
@@ -233,7 +295,7 @@ const IdeaCard = ({ idea }: IdeaCardProps): ReactElement => {
                 <LightbulbOutline />
               )}
             </IconButton>
-            {`${calculateBrightness(idea.upvotes, idea.downvotes)}%`}
+            {`${idea.upvotes}`}
           </Box>
           <Box>
             <IconButton color="inherit">
@@ -257,7 +319,7 @@ const IdeaCard = ({ idea }: IdeaCardProps): ReactElement => {
             Share this great idea.
             <DialogContent className={classes.shareDialogContent}>
               <Link href={`/idea/${idea.key}`} className={classes.link}>
-                {`${getHostname()}/idea/${idea.key}`}
+                {`${process.env.IDEADOG_DOMAIN}/idea/${idea.key}`}
               </Link>
               <ClipboardCopy
                 TooltipProps={{ title: 'Copied', leaveDelay: 1000 }}
@@ -266,7 +328,7 @@ const IdeaCard = ({ idea }: IdeaCardProps): ReactElement => {
                   <IconButton
                     color="inherit"
                     onClick={(): void =>
-                      copy(`${getHostname()}/idea/${idea.key}`)
+                      copy(`${process.env.IDEADOG_DOMAIN}/idea/${idea.key}`)
                     }
                   >
                     <FileCopyIcon fontSize="large" />
