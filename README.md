@@ -19,7 +19,7 @@ Note that the current state of this repo and project will soon be outdated - I a
 - Reorganizing global state management with Redux & Redux Thunk.
 - Design overhaul.
 
-If you would like a sneak peek at the code behind this revamp, you can check out [this branch](https://github.com/bdbaraban/ideadog/tree/nextjs).
+If you would like a sneak peek at the code behind this revamp, you can check out [this branch](https://github.com/bdbaraban/ideadog/tree/nextjs/frontend).
 
 Stay tuned, there are some big-time updates in the works for IdeaDog. - Brennan
 
