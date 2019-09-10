@@ -13,7 +13,6 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { CustomTextField } from 'components';
 import { EmailState } from 'components/AuthButton';
 import fetch from 'isomorphic-unfetch';
-import { getHostname } from 'utils';
 
 // LoginDialog component style
 const useStyles = makeStyles((theme: Theme) =>
@@ -97,7 +96,7 @@ const LoginDialog = ({
       return;
     }
 
-    const response = await fetch(`${getHostname()}/startLogin`, {
+    const response = await fetch(`${process.env.IDEADOG_DOMAIN}/startLogin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
