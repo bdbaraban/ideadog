@@ -65,7 +65,7 @@ export const startLogin = async (
   const link = `${process.env.IDEADOG_DOMAIN}/login?token=${jwtToken}`;
 
   if (process.env.NODE_ENV === 'development') {
-    console.log('Magic link ✨🐕:', link);
+    console.log('JWT:', jwtToken);
     return done(true, challenge.token);
   }
 
@@ -130,7 +130,7 @@ export const startSignup = async (
   const link = `${process.env.IDEADOG_DOMAIN}/login?token=${jwtToken}`;
 
   if (process.env.NODE_ENV === 'development') {
-    console.log('Magic link ✨🐕:', link);
+    console.log('JWT:', jwtToken);
     return done(true, challenge.token);
   }
 
