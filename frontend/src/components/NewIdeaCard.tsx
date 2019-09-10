@@ -9,6 +9,10 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import { AppState, useThunkDispatch } from 'store';
+import { NewIdeaState } from 'store/newIdea/types';
+import { setOpen } from 'store/newIdea/actions';
 
 // NewIdeaCard component style
 const useStyles = makeStyles((theme: Theme) =>
@@ -47,6 +51,15 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 const NewIdeaCard = (): ReactElement => {
   const classes = useStyles();
+  const dispatch = useThunkDispatch();
+
+  // Select new idea state from Redux store
+  const newIdea = useSelector((state: AppState): NewIdeaState => state.newIdea);
+
+  // Toggle new idea dialog open/closed
+  const toggleOpen = (): void => {
+    dispatch(setOpen(!newIdea.open));
+  };
 
   return (
     <Card raised={true} className={classes.card}>
@@ -55,6 +68,7 @@ const NewIdeaCard = (): ReactElement => {
           variant="contained"
           color="primary"
           className={classes.cardButton}
+          onClick={toggleOpen}
         >
           I&apos;ve got a bright new idea...
           <Icon fontSize="small">edit</Icon>
