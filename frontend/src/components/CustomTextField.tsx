@@ -11,7 +11,7 @@ import {
 /**
  * CustomTextField component styles
  */
-const useStyles = makeStyles((theme: Theme) =>
+const useInputStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       color: theme.palette.common.white,
@@ -31,16 +31,36 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
+ * CustomTextField component styles
+ */
+const useInputLabelStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '&.Mui-focused': {
+        color: theme.palette.common.white,
+        opacity: 0.42
+      }
+    },
+    error: {
+      color: theme.palette.error.main
+    }
+  })
+);
+
+/**
  * Customized Material UI TextField component
  */
 const CustomTextField = (props: TextFieldProps): ReactElement => {
   const InputProps = {
-    classes: useStyles(),
+    classes: useInputStyles(),
     disableUnderline: true
   };
 
   return (
     <TextField
+      InputLabelProps={{
+        classes: useInputLabelStyles()
+      }}
       InputProps={InputProps as Partial<OutlinedInputProps>}
       {...props}
     />
