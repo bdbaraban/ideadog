@@ -9,7 +9,6 @@ import {
   REMOVE_SELECTED_TAG,
   TagsActionTypes
 } from 'store/tags/types';
-import { getAPI } from 'utils';
 
 /**
  * Fetch tags from the API.
@@ -20,8 +19,8 @@ export const fetchTags = (): ThunkAction<
   null,
   Action<string>
 > => async (dispatch): Promise<Action<string>> => {
-  const query = `${getAPI()}/tags`;
-  console.log('Fetching tags at ', query);
+  const query = `${process.env.IDEADOG_API}/tags`;
+  console.log('Fetching tags at', query);
   const response = await fetch(query);
 
   const data = await response.json();
