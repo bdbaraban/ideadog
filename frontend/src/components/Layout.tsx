@@ -1,6 +1,6 @@
 import React, { HTMLAttributes, ReactElement, PropsWithChildren } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { ApplicationBar } from 'components';
+import { ApplicationBar, NewIdeaDialog } from 'components';
 
 // Layout component styles
 const useStyles = makeStyles(() =>
@@ -24,7 +24,10 @@ const Layout = ({
       <header>
         <ApplicationBar />
       </header>
-      <main>{children}</main>
+      <main>
+        <NewIdeaDialog />
+        {children}
+      </main>
     </div>
   );
 };
