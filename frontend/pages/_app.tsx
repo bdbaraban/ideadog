@@ -7,8 +7,6 @@ import theme from 'theme';
 import { DeepPartial, Store } from 'redux';
 import { Provider } from 'react-redux';
 import { AppState, AppStore, initializeStore } from 'store';
-import { fetchIdeas } from 'store/ideas/actions';
-import { fetchTags } from 'store/tags/actions';
 import { fetchUser } from 'store/user/actions';
 
 /**
@@ -40,24 +38,28 @@ interface CustomAppProps {
  */
 export default class CustomApp extends App {
   public static async getInitialProps({
-    Component,
-    ctx
+    ctx,
+    Component
   }: AppContext): Promise<CustomAppProps> {
     // Initialize store
     const store = getOrCreateStore();
 
-    // Fetch ideas
-    await store.dispatch(fetchIdeas());
-    // Fetch tags
-    await store.dispatch(fetchTags());
-    // Fetch user, if bearer token exists
-    if (
-      ctx.req &&
-      (ctx.req as any).session &&
-      (ctx.req as any).session.bearer
-    ) {
-      console.log((ctx.req as any).session);
-      await store.dispatch(fetchUser((ctx.req as any).session.bearer));
+    // Provide the store to getInitialProps of pages
+    (ctx as any).store = store;
+
+    if (process.env.NODE_ENV === 'production') {
+      // Fetch user, if bearer token exists
+      if (
+        ctx.req &&
+        (ctx.req as any).session &&
+        (ctx.req as any).session.bearer
+      ) {
+        await store.dispatch(fetchUser((ctx.req as any).session.bearer));
+      }
+    } else {
+      await store.dispatch(
+        fetchUser('9WURFiA0hozMhQWEV614De8c25bNqUhMZZCJ8CaQ4hM=')
+      );
     }
 
     // Fetch any NextPage props
