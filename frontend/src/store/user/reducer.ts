@@ -23,6 +23,7 @@ const empty = {
 // Initial user state
 export const initialUserState: UserState = {
   profile: empty,
+  bearer: '',
   isAuthenticated: false
 };
 
@@ -38,13 +39,15 @@ const userReducer = (
   switch (action.type) {
     case FETCH_USER_SUCCESS:
       return {
-        profile: action.payload,
+        profile: action.payload.profile,
+        bearer: action.payload.bearer,
         isAuthenticated: true
       };
 
     case FETCH_USER_FAILURE:
       return {
         profile: empty,
+        bearer: '',
         isAuthenticated: false
       };
 

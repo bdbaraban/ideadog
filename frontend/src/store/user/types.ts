@@ -3,6 +3,7 @@ import { User } from 'types';
 // Reducer state
 export interface UserState {
   profile: User;
+  bearer: string;
   isAuthenticated: boolean;
 }
 
@@ -12,7 +13,10 @@ export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
 
 interface FetchUserSuccess {
   type: typeof FETCH_USER_SUCCESS;
-  payload: User;
+  payload: {
+    profile: User;
+    bearer: string;
+  };
 }
 
 interface FetchUserFailure {
