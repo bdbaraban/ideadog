@@ -19,6 +19,7 @@ import {
 } from '@material-ui/core/styles';
 import { CustomTextField } from 'components';
 import { EmailState, UsernameState } from 'components/AuthButton';
+import fetch from 'isomorphic-unfetch';
 
 // SignUpDialog component styles
 const useStyles = makeStyles((theme: Theme) =>
@@ -147,7 +148,21 @@ const SignUpDialog = ({
       return;
     }
 
-    handleSubmit();
+    const response = await fetch(`${process.env.IDEADOG_DOMAIN}/startSignup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email.address, username: username.name })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      console.log(data.message);
+    } else {
+      handleSubmit();
+    }
   };
 
   // Enable enter-key submission
