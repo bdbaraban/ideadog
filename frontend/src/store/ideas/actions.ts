@@ -3,7 +3,6 @@ import { ThunkAction } from 'redux-thunk';
 import fetch from 'isomorphic-unfetch';
 import { AppState } from 'store';
 import { FETCH_IDEAS_FAILURE, FETCH_IDEAS_SUCCESS } from 'store/ideas/types';
-import { getAPI } from 'utils';
 
 /**
  * Fetch ideas from the API.
@@ -15,11 +14,11 @@ export const fetchIdeas = (
 ): ThunkAction<void, AppState, null, Action<string>> => async (
   dispatch
 ): Promise<Action<string>> => {
-  let query = `${getAPI()}/ideas`;
+  let query = `${process.env.IDEADOG_API}/ideas`;
   query += sort !== 'all' ? `/${encodeURI(sort)}` : '';
   query += search !== '' ? `?q=${encodeURI(search)}` : '';
   query += tags !== '' ? `?tags=${encodeURI(tags)}` : '';
-  console.log('Fetching ideas at ', query);
+  console.log('Fetching ideas at', query);
   const response = await fetch(query);
 
   const data = await response.json();
