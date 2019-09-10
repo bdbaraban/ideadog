@@ -60,9 +60,15 @@ module.exports = {
       }
     },
     {
-      files: ['pages/_app.tsx'],
+      files: ['pages/_app.tsx', 'src/components/TagsInput.tsx'],
       rules: {
         '@typescript-eslint/no-explicit-any': 'off'
+      }
+    },
+    {
+      files: ['src/components/TagsInput.tsx'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off'
       }
     },
     {
@@ -94,6 +100,13 @@ module.exports = {
       files: ['src/store/tags/reducer.ts'],
       rules: {
         '@typescript-eslint/no-unused-vars': 'off'
+      }
+    },
+    {
+      files: ['src/components/TagsInput.tsx'],
+      rules: {
+        'import/named': 'off',
+        'import/namespace': 'off'
       }
     }
   ]
