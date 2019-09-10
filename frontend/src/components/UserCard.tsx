@@ -18,6 +18,7 @@ import {
 import { useSelector } from 'react-redux';
 import { AppState } from 'store';
 import { UserState } from 'store/user/types';
+import { formatShortDate } from 'utils';
 
 // UserCard component styles
 const useStyles = makeStyles((theme: Theme) =>
@@ -78,7 +79,7 @@ const UserCard = (): ReactElement => {
 
   // Log user out
   const logout = (): void => {
-    router.push(`${process.env.BASE_URL}/logout`);
+    router.push(`/logout`);
   };
 
   return (
@@ -107,11 +108,15 @@ const UserCard = (): ReactElement => {
 
           <Container className={classes.informationRight}>
             <Typography color="textSecondary">
-              {user.profile.ideas.length}
+              {user.profile.ideas.length || 0}
             </Typography>
             <Typography color="textSecondary">88%</Typography>
-            <Typography color="textSecondary">Dogs</Typography>
-            <Typography color="textSecondary">1 · 1 · 19</Typography>
+            <Typography color="textSecondary">
+              {user.profile.favorite || 'N/A'}
+            </Typography>
+            <Typography color="textSecondary">
+              {formatShortDate(new Date(user.profile.created_at))}
+            </Typography>
           </Container>
         </Container>
       </CardContent>
