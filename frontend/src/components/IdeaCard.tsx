@@ -145,7 +145,10 @@ interface IdeaCardProps {
  * Card for displaying an idea
  */
 const IdeaCard = ({ idea, setSnackbarOpen }: IdeaCardProps): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
+
+  // Load Redux dispatcher
   const dispatch = useThunkDispatch();
 
   // Select user from Redux store
@@ -153,10 +156,13 @@ const IdeaCard = ({ idea, setSnackbarOpen }: IdeaCardProps): ReactElement => {
 
   // Share dialog boolean
   const [open, setOpen] = useState<boolean>(false);
+
   // Delete popup anchor
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   // Boolean version of anchor
   const deleteOpen = Boolean(anchorEl);
+
   // User voted on idea boolean
   const [voted, setVoted] = useState<boolean>(
     user.profile.votes && user.profile.votes[idea.key] === 'upvote'
