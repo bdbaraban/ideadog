@@ -1,4 +1,10 @@
-import React, { ReactElement, useState } from 'react';
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  MouseEvent,
+  ReactElement,
+  useState
+} from 'react';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
@@ -69,12 +75,12 @@ const Searchbar = (): ReactElement => {
   const [text, setText] = useState<string>('');
 
   // Save text input changes
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setText(event.target.value);
   };
 
   // Filter tags by search query
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+  const handleKeyPress = (event: KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
       dispatch(setSearch(text));
       event.preventDefault();
@@ -82,10 +88,10 @@ const Searchbar = (): ReactElement => {
   };
 
   // Search popover anchoring for mobile menu
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   // Open search popover menu for mobile
-  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
+  const handleClick = (event: MouseEvent<HTMLElement>): void => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -115,8 +121,10 @@ const Searchbar = (): ReactElement => {
 
   return (
     <>
-      <Hidden xsDown>{SearchField}</Hidden>
-      <Hidden smUp>
+      <Hidden xsDown implementation="css">
+        {SearchField}
+      </Hidden>
+      <Hidden smUp implementation="css">
         <IconButton
           className={classes.mobileSearchIcon}
           aria-controls="searchbar-popper"
@@ -147,4 +155,5 @@ const Searchbar = (): ReactElement => {
     </>
   );
 };
+
 export default Searchbar;
