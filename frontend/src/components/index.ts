@@ -1,13 +1,18 @@
 // components barrel file
+export { default as AboutButton } from './AboutButton';
+export { default as AboutDialog } from './AboutDialog';
 export { default as AccountButton } from './AccountButton';
 export { default as ApplicationBar } from './ApplicationBar';
 export { default as AuthButton } from './AuthButton';
 export { default as ClipboardCopy } from './ClipboardCopy';
+export { default as ContactButton } from './ContactButton';
+export { default as ContactCard } from './ContactCard';
+export { default as ContactDialog } from './ContactDialog';
 export { default as CustomTextField } from './CustomTextField';
 export { default as HappyTully } from './HappyTully';
 export { default as IdeaCard } from './IdeaCard';
 export { default as IdeaFeed } from './IdeaFeed';
-export { default as Layout } from './Layout';
+export { default as IdeasFeed } from './IdeasFeed';
 export { default as Link } from './Link';
 export { default as LoginDialog } from './LoginDialog';
 export { default as NewIdeaButton } from './NewIdeaButton';
