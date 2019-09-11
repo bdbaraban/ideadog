@@ -1,9 +1,19 @@
 import React, { ReactElement, useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
-import { IdeaFeed, Layout } from 'components';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { ApplicationBar, IdeasFeed, NewIdeaDialog } from 'components';
 import { AppStore } from 'store';
 import { fetchIdeas } from 'store/ideas/actions';
 import { fetchTags } from 'store/tags/actions';
+
+// Home page root styles
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      display: 'flex'
+    }
+  })
+);
 
 // Home page props
 interface HomeProps {
@@ -14,6 +24,8 @@ interface HomeProps {
  * Main home page
  */
 const Home: NextPage<HomeProps> = ({ error }: HomeProps): ReactElement => {
+  const classes = useStyles();
+
   useEffect((): void => {
     if (error) {
       alert(`Login Error: ${error}`);
@@ -21,9 +33,15 @@ const Home: NextPage<HomeProps> = ({ error }: HomeProps): ReactElement => {
   }, [error]);
 
   return (
-    <Layout>
-      <IdeaFeed />
-    </Layout>
+    <div className={classes.root}>
+      <header>
+        <ApplicationBar search={true} filters={true} />
+      </header>
+      <main>
+        <IdeasFeed />
+        <NewIdeaDialog />
+      </main>
+    </div>
   );
 };
 
