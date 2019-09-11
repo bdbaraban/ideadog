@@ -231,7 +231,11 @@ const IdeaCard = ({ idea, setSnackbarOpen }: IdeaCardProps): ReactElement => {
           </Avatar>
         }
         title={
-          <Link href={`/user/${idea.owner.id}`} className={classes.userLink}>
+          <Link
+            href="/user/[key]"
+            as={`/user/${idea.owner.id}`}
+            className={classes.userLink}
+          >
             {`@${idea.owner.username}`}
           </Link>
         }
