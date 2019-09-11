@@ -1,6 +1,10 @@
 import {
+  FETCH_IDEA_FAILURE,
   FETCH_IDEAS_FAILURE,
+  FETCH_IDEA_SUCCESS,
   FETCH_IDEAS_SUCCESS,
+  FETCH_USER_IDEAS_FAILURE,
+  FETCH_USER_IDEAS_SUCCESS,
   IdeasActionTypes,
   IdeasState
 } from 'store/ideas/types';
@@ -28,6 +32,30 @@ const ideasReducer = (
       };
 
     case FETCH_IDEAS_FAILURE:
+      return {
+        all: [],
+        status: action.payload
+      };
+
+    case FETCH_IDEA_SUCCESS:
+      return {
+        all: action.payload,
+        status: ''
+      };
+
+    case FETCH_IDEA_FAILURE:
+      return {
+        all: [],
+        status: action.payload
+      };
+
+    case FETCH_USER_IDEAS_SUCCESS:
+      return {
+        all: action.payload,
+        status: ''
+      };
+
+    case FETCH_USER_IDEAS_FAILURE:
       return {
         all: [],
         status: action.payload
