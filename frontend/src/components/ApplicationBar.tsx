@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { useRouter } from 'next/router';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
@@ -9,8 +10,10 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import {
+  AboutButton,
   AccountButton,
   AuthButton,
+  ContactButton,
   HappyTully,
   Link,
   NewIdeaButton,
@@ -24,6 +27,7 @@ import { useSelector } from 'react-redux';
 import { AppState } from 'store';
 import { UserState } from 'store/user/types';
 
+// ApplicationBar component styles
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
@@ -112,17 +116,54 @@ const useStyles = makeStyles((theme: Theme) =>
     tagsCard: {
       marginBottom: theme.spacing(2),
       marginTop: theme.spacing(1)
+    },
+    toolbar: theme.mixins.toolbar,
+    aboutContact: {
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'space-evenly',
+      marginTop: theme.spacing(2),
+      paddingBottom: theme.spacing(2),
+      width: '100%',
+      [theme.breakpoints.down('xs')]: {
+        flexDirection: 'column'
+      }
+    },
+    aboutButton: {
+      [theme.breakpoints.down('xs')]: {
+        paddingBottom: theme.spacing(2)
+      }
     }
   })
 );
 
-const ApplicationBar = (): ReactElement => {
+// ApplicationBar component prop types
+interface ApplicationBarProps {
+  search: boolean; // Display searchbar true/false
+  filters: boolean; // Display sort and tag filters true/false
+}
+
+/**
+ * App toolbar.
+ *   -> On desktop: top bar and permanent right drawer
+ *   -> On mobile: permanent right drawer only
+ */
+const ApplicationBar = ({
+  search = true,
+  filters = true
+}: ApplicationBarProps): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
+
+  // Select Next router
+  const router = useRouter();
+
+  // Select user from Redux store
   const user = useSelector((state: AppState): UserState => state.user);
 
   return (
     <>
-      <Hidden xsDown>
+      <Hidden xsDown implementation="js">
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <Link href="/home">
@@ -147,7 +188,7 @@ const ApplicationBar = (): ReactElement => {
           paper: classes.drawerPaper
         }}
       >
-        <Hidden smUp>
+        <Hidden smUp implementation="js">
           <Box className={classes.logo}>
             <Link href="/home">
               <SvgIcon component={(): ReactElement => HappyTully(46)}>
@@ -157,25 +198,31 @@ const ApplicationBar = (): ReactElement => {
           </Box>
           <Divider variant="middle" classes={{ middle: classes.divider }} />
         </Hidden>
-        <Box className={classes.searchbar}>
-          <Searchbar />
-        </Box>
+        {search ? (
+          <Box className={classes.searchbar}>
+            <Searchbar />
+          </Box>
+        ) : (
+          <div className={classes.toolbar} />
+        )}
         <Divider variant="middle" classes={{ middle: classes.divider }} />
         {user.isAuthenticated ? (
           <>
-            <Hidden xsDown>
+            <Hidden xsDown implementation="css">
               <Box className={classes.user}>
                 <UserCard />
               </Box>
             </Hidden>
-            <Hidden smUp>
+            <Hidden smUp implementation="css">
               <Box className={classes.user}>
                 <AccountButton />
               </Box>
             </Hidden>
-            <Box className={classes.newIdeaButton}>
-              <NewIdeaButton />
-            </Box>
+            {router.pathname !== 'idea' && (
+              <Box className={classes.newIdeaButton}>
+                <NewIdeaButton />
+              </Box>
+            )}
           </>
         ) : (
           <Box className={classes.authButton}>
@@ -183,20 +230,30 @@ const ApplicationBar = (): ReactElement => {
           </Box>
         )}
         <Divider variant="middle" classes={{ middle: classes.divider }} />
-        <Box className={classes.sortSelect}>
-          <SortSelect />
-        </Box>
-        <Hidden xsDown implementation="js">
-          <Box className={classes.tagsCard}>
-            <TagsCard />
-          </Box>
-        </Hidden>
-        <Hidden smUp implementation="js">
-          <Box className={classes.tagsCard}>
-            <TagsSelect />
-          </Box>
-        </Hidden>
+        {filters && (
+          <>
+            <Box className={classes.sortSelect}>
+              <SortSelect />
+            </Box>
+            <Hidden xsDown implementation="css">
+              <Box className={classes.tagsCard}>
+                <TagsCard />
+              </Box>
+            </Hidden>
+            <Hidden smUp implementation="css">
+              <Box className={classes.tagsCard}>
+                <TagsSelect />
+              </Box>
+            </Hidden>
+          </>
+        )}
         <Divider variant="middle" classes={{ middle: classes.divider }} />
+        <Box className={classes.aboutContact}>
+          <Box className={classes.aboutButton}>
+            <AboutButton />
+          </Box>
+          <ContactButton />
+        </Box>
       </Drawer>
     </>
   );
