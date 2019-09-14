@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import { useRouter } from 'next/router';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
@@ -12,7 +11,7 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import {
   AboutButton,
   AccountButton,
-  AuthButton,
+  AuthorizationButton,
   ContactButton,
   HappyTully,
   Link,
@@ -38,6 +37,12 @@ const useStyles = makeStyles((theme: Theme) =>
         marginRight: 300,
         width: `calc(100% - 300px)`
       }
+    },
+    appBarTitle: {
+      alignItems: 'center',
+      color: theme.palette.common.white,
+      display: 'flex',
+      textDecoration: 'none'
     },
     title: {
       marginLeft: theme.spacing(1)
@@ -77,12 +82,6 @@ const useStyles = makeStyles((theme: Theme) =>
     logo: {
       marginBottom: theme.spacing(2)
     },
-    logoLink: {
-      alignItems: 'center',
-      color: theme.palette.common.white,
-      display: 'flex',
-      textDecoration: 'none'
-    },
     searchbar: {
       [theme.breakpoints.down('xs')]: {
         marginBottom: theme.spacing(2),
@@ -117,7 +116,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
       marginTop: theme.spacing(1)
     },
-    toolbar: theme.mixins.toolbar,
+    toolbar: {
+      minHeight: 48
+    },
     aboutContact: {
       alignItems: 'center',
       display: 'flex',
@@ -139,8 +140,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 // ApplicationBar component prop types
 interface ApplicationBarProps {
-  search: boolean; // Display searchbar true/false
-  filters: boolean; // Display sort and tag filters true/false
+  search?: boolean; // Whether to display searchbar true/false
+  filters?: boolean; // Whether to display sort and tag filters true/false
 }
 
 /**
@@ -155,20 +156,23 @@ const ApplicationBar = ({
   // Select Material-UI styles
   const classes = useStyles();
 
-  // Select Next router
-  const router = useRouter();
-
-  // Select user from Redux store
-  const user = useSelector((state: AppState): UserState => state.user);
+  // Select user state from Redux store
+  const { isAuthenticated } = useSelector(
+    (state: AppState): UserState => state.user
+  );
 
   return (
     <>
-      <Hidden xsDown implementation="js">
+      <Hidden xsDown implementation="css">
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <Link href="/home">
-              <Box className={classes.logoLink}>
-                <SvgIcon component={(): ReactElement => HappyTully(46)}>
+              <Box className={classes.appBarTitle}>
+                <SvgIcon
+                  component={(): ReactElement =>
+                    HappyTully(46, 'applicationBarDesktop')
+                  }
+                >
                   &nbsp;
                 </SvgIcon>
                 <Typography className={classes.title} variant="h5" noWrap>
@@ -188,25 +192,35 @@ const ApplicationBar = ({
           paper: classes.drawerPaper
         }}
       >
-        <Hidden smUp implementation="js">
+        <Hidden smUp implementation="css">
           <Box className={classes.logo}>
             <Link href="/home">
-              <SvgIcon component={(): ReactElement => HappyTully(46)}>
+              <SvgIcon
+                component={(): ReactElement =>
+                  HappyTully(46, 'applicationBarMobile')
+                }
+              >
                 &nbsp;
               </SvgIcon>
             </Link>
           </Box>
-          <Divider variant="middle" classes={{ middle: classes.divider }} />
         </Hidden>
         {search ? (
-          <Box className={classes.searchbar}>
-            <Searchbar />
-          </Box>
+          <>
+            <Hidden smUp>
+              <Divider variant="middle" classes={{ middle: classes.divider }} />
+            </Hidden>
+            <Box className={classes.searchbar}>
+              <Searchbar />
+            </Box>
+          </>
         ) : (
-          <div className={classes.toolbar} />
+          <Hidden xsDown implementation="css">
+            <div className={classes.toolbar} />
+          </Hidden>
         )}
         <Divider variant="middle" classes={{ middle: classes.divider }} />
-        {user.isAuthenticated ? (
+        {isAuthenticated ? (
           <>
             <Hidden xsDown implementation="css">
               <Box className={classes.user}>
@@ -218,15 +232,13 @@ const ApplicationBar = ({
                 <AccountButton />
               </Box>
             </Hidden>
-            {router.pathname !== 'idea' && (
-              <Box className={classes.newIdeaButton}>
-                <NewIdeaButton />
-              </Box>
-            )}
+            <Box className={classes.newIdeaButton}>
+              <NewIdeaButton />
+            </Box>
           </>
         ) : (
           <Box className={classes.authButton}>
-            <AuthButton />
+            <AuthorizationButton />
           </Box>
         )}
         <Divider variant="middle" classes={{ middle: classes.divider }} />
@@ -245,9 +257,9 @@ const ApplicationBar = ({
                 <TagsSelect />
               </Box>
             </Hidden>
+            <Divider variant="middle" classes={{ middle: classes.divider }} />
           </>
         )}
-        <Divider variant="middle" classes={{ middle: classes.divider }} />
         <Box className={classes.aboutContact}>
           <Box className={classes.aboutButton}>
             <AboutButton />
