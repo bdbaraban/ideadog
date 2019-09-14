@@ -35,7 +35,7 @@ const Home: NextPage<HomeProps> = ({ error }: HomeProps): ReactElement => {
   return (
     <div className={classes.root}>
       <header>
-        <ApplicationBar search={true} filters={true} />
+        <ApplicationBar />
       </header>
       <main>
         <IdeasFeed />
@@ -53,6 +53,7 @@ Home.getInitialProps = async ({
 }): Promise<HomeProps> => {
   // Fetch ideas
   await store.dispatch(fetchIdeas());
+
   // Fetch tags
   await store.dispatch(fetchTags());
 

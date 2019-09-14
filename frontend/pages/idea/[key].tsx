@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { NextPage, NextPageContext } from 'next';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { ApplicationBar, IdeaFeed } from 'components';
+import { ApplicationBar, SingleIdeaFeed } from 'components';
 import { AppStore } from 'store';
 import { fetchIdea } from 'store/ideas/actions';
 import { fetchTags } from 'store/tags/actions';
@@ -27,7 +27,7 @@ const Idea: NextPage<{}> = (): ReactElement => {
         <ApplicationBar search={false} filters={false} />
       </header>
       <main>
-        <IdeaFeed />
+        <SingleIdeaFeed />
       </main>
     </div>
   );
@@ -46,8 +46,9 @@ Idea.getInitialProps = async ({
 }: IdeaPageContext): Promise<{}> => {
   // Fetch requested idea
   await store.dispatch(fetchIdea(query.key));
-  // Fetch tags
-  await store.dispatch(fetchTags());
+
+  // Fetch tags asynchronously
+  store.dispatch(fetchTags());
 
   return {};
 };
