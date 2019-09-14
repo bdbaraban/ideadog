@@ -2,27 +2,29 @@ import React, { ReactElement } from 'react';
 
 /**
  * Happy Tully logo SVG
- * @param size {number} - width/height to render the SVG with
- * @param opacity {number} - opacity to render the SVG with, defaults to 1
+ * @param size - width/height to render the SVG with
+ * @param id - ID specific to instane of SVG.
  */
-const HappyTully = (size: number, opacity = 1): ReactElement => {
+const HappyTully = (size: number, id: string): ReactElement => {
   return (
     <svg
       width={`${size}`}
       height={`${size}`}
-      style={{ opacity }}
       viewBox="0 0 445 348"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clipPath="url(#clip0_happy)" filter="url(#filter0_happy)">
+      <g
+        clipPath={`url(#clip0_happy_${id})`}
+        filter={`url(#filter0_happy_${id})`}
+      >
         <path
           d="M60.21 105.025L158.611 20.7311L224.977 14.1726L291.304 20.2229L390.409 106.244L376.015 239.818L295.292 333.994L156.948 333.51L75.5328 238.683L60.21 105.025Z"
           fill="#FBE8A6"
           stroke="#837A75"
           strokeWidth="10"
         />
-        <g filter="url(#filter1_happy)">
+        <g filter={`url(#filter1_happy_${id})`}>
           <path
             d="M440.212 1.14291L440.212 188.5L243.138 1.14293L440.212 1.14291Z"
             fill="#BCE7FD"
@@ -33,7 +35,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
             strokeWidth="10"
           />
         </g>
-        <g filter="url(#filter2_happy)">
+        <g filter={`url(#filter2_happy_${id})`}>
           <path
             d="M4.25369 1.14289L4.25368 188.5L201.328 1.14291L4.25369 1.14289Z"
             fill="#FBE8A6"
@@ -44,13 +46,13 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
             strokeWidth="10"
           />
         </g>
-        <g filter="url(#filter3_happy)">
+        <g filter={`url(#filter3_happy_${id})`}>
           <path
             d="M257.093 178.053L224.956 223.005L193 178.007L257.093 178.053Z"
             fill="#837A75"
           />
         </g>
-        <g filter="url(#filter4_happy)">
+        <g filter={`url(#filter4_happy_${id})`}>
           <path
             d="M276 147.563L310 120.609L344.011 147.581"
             stroke="#837A75"
@@ -58,21 +60,21 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
           />
         </g>
         <path d="M225.694 212L225.694 262" stroke="#837A75" strokeWidth="10" />
-        <g filter="url(#filter5_happy)">
+        <g filter={`url(#filter5_happy_${id})`}>
           <path
             d="M100 147.563L134 120.609L168.011 147.581"
             stroke="#837A75"
             strokeWidth="10"
           />
         </g>
-        <g filter="url(#filter6_happy)">
+        <g filter={`url(#filter6_happy_${id})`}>
           <path
             d="M134.499 257.437L156.913 270.815L179.328 284.194L224.473 257.019"
             stroke="#837A75"
             strokeWidth="10"
           />
         </g>
-        <g filter="url(#filter7_happy)">
+        <g filter={`url(#filter7_happy_${id})`}>
           <path
             d="M225.499 257.437L270.328 284.194L315.473 257.019"
             stroke="#837A75"
@@ -82,7 +84,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
       </g>
       <defs>
         <filter
-          id="filter0_happy"
+          id={`filter0_happy_${id}`}
           x="-1"
           y="0"
           width="446"
@@ -115,7 +117,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
           />
         </filter>
         <filter
-          id="filter1_happy"
+          id={`filter1_happy_${id}`}
           x="239.077"
           y="1.14282"
           width="205.197"
@@ -148,7 +150,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
           />
         </filter>
         <filter
-          id="filter2_happy"
+          id={`filter2_happy_${id}`}
           x="0.1925"
           y="1.14282"
           width="205.197"
@@ -181,7 +183,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
           />
         </filter>
         <filter
-          id="filter3_happy"
+          id={`filter3_happy_${id}`}
           x="189"
           y="178.007"
           width="72.0927"
@@ -214,7 +216,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
           />
         </filter>
         <filter
-          id="filter4_happy"
+          id={`filter4_happy_${id}`}
           x="268.894"
           y="117.3"
           width="82.2239"
@@ -247,7 +249,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
           />
         </filter>
         <filter
-          id="filter5_happy"
+          id={`filter5_happy_${id}`}
           x="92.8939"
           y="117.3"
           width="82.2239"
@@ -280,7 +282,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
           />
         </filter>
         <filter
-          id="filter6_happy"
+          id={`filter6_happy_${id}`}
           x="127.936"
           y="252.735"
           width="103.116"
@@ -313,7 +315,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
           />
         </filter>
         <filter
-          id="filter7_happy"
+          id={`filter7_happy_${id}`}
           x="217.936"
           y="252.735"
           width="103.116"
@@ -345,7 +347,7 @@ const HappyTully = (size: number, opacity = 1): ReactElement => {
             result="shape"
           />
         </filter>
-        <clipPath id="clip0_happy">
+        <clipPath id={`clip0_happy_${id}`}>
           <rect
             width="438"
             height="340"
