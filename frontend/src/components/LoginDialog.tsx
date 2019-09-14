@@ -11,7 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { CustomTextField } from 'components';
-import { EmailState } from 'components/AuthButton';
+import { EmailState, ErrorState } from 'components/AuthorizationButton';
 import fetch from 'isomorphic-unfetch';
 
 // LoginDialog component style
@@ -58,6 +58,8 @@ interface LoginDialogProps {
   flip: VoidFunction; // Flip between login/sign up
   email: EmailState; // Entered email address
   setEmail: Dispatch<SetStateAction<EmailState>>; // Change email state
+  authError: ErrorState; // Authorization error
+  setAuthError: Dispatch<SetStateAction<ErrorState>>; // Change authorization error state
   handleSubmit: VoidFunction; // Shift to verification dialog on submit
 }
 
@@ -68,6 +70,8 @@ const LoginDialog = ({
   flip,
   email,
   setEmail,
+  authError,
+  setAuthError,
   handleSubmit
 }: LoginDialogProps): ReactElement => {
   const classes = useStyles();
@@ -79,9 +83,19 @@ const LoginDialog = ({
 
   // Register email input
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    if (authError.status) {
+      setAuthError({
+        status: false,
+        message: ''
+      });
+    }
+
     setEmail({
       address: event.target.value,
-      error: false
+      error: {
+        status: false,
+        message: ''
+      }
     });
   };
 
@@ -89,10 +103,13 @@ const LoginDialog = ({
   const submit = async (): Promise<void> => {
     // Run regex error matching on input
     if (emailErrorRegex) {
-      setEmail({
+      setEmail(email => ({
         address: email.address,
-        error: true
-      });
+        error: {
+          status: true,
+          message: 'Invalid email'
+        }
+      }));
       return;
     }
 
@@ -107,7 +124,10 @@ const LoginDialog = ({
     const data = await response.json();
 
     if (!data.success) {
-      console.log(data.message);
+      setAuthError({
+        status: true,
+        message: data.message
+      });
     } else {
       handleSubmit();
     }
@@ -132,12 +152,12 @@ const LoginDialog = ({
           id="filled-email"
           label="Email"
           required
-          error={email.error}
+          error={email.error.status}
           value={email.address}
           onChange={handleEmailChange}
           margin="normal"
           variant="filled"
-          helperText={email.error && 'Invalid email'}
+          helperText={email.error.status && email.error.message}
           onKeyPress={handleKeyPress}
         />
         <Button className={classes.flipButton} onClick={flip}>
@@ -147,7 +167,7 @@ const LoginDialog = ({
         </Button>
         <Button
           className={classes.submitButton}
-          disabled={email.error}
+          disabled={email.error.status || authError.status}
           variant="contained"
           color="secondary"
           size="large"
@@ -155,6 +175,11 @@ const LoginDialog = ({
         >
           Submit
         </Button>
+        {authError.status && (
+          <Typography color="error" className={classes.flipText}>
+            {authError.message}
+          </Typography>
+        )}
       </DialogContent>
     </>
   );

@@ -18,7 +18,11 @@ import {
   Theme
 } from '@material-ui/core/styles';
 import { CustomTextField } from 'components';
-import { EmailState, UsernameState } from 'components/AuthButton';
+import {
+  EmailState,
+  ErrorState,
+  UsernameState
+} from 'components/AuthorizationButton';
 import fetch from 'isomorphic-unfetch';
 
 // SignUpDialog component styles
@@ -79,6 +83,8 @@ interface SignUpDialogProps {
   setEmail: Dispatch<SetStateAction<EmailState>>; // Set email state
   username: UsernameState; // Entered username
   setUsername: Dispatch<SetStateAction<UsernameState>>; // Set username state
+  authError: ErrorState; // Authorization error
+  setAuthError: Dispatch<SetStateAction<ErrorState>>; // Change authorization error state
   checked: boolean; // Aggreement checked true/false
   setChecked: Dispatch<SetStateAction<boolean>>; // Set checked status
   handleSubmit: VoidFunction; // Flip to verification dialog on submit
@@ -94,9 +100,12 @@ const SignUpDialog = ({
   username,
   setUsername,
   checked,
+  authError,
+  setAuthError,
   setChecked,
   handleSubmit
 }: SignUpDialogProps): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
 
   // Email error checking
@@ -109,17 +118,37 @@ const SignUpDialog = ({
 
   // Register email input
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    if (authError.status) {
+      setAuthError({
+        status: false,
+        message: ''
+      });
+    }
+
     setEmail({
       address: event.target.value,
-      error: false
+      error: {
+        status: false,
+        message: ''
+      }
     });
   };
 
   // Register username input
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    if (authError.status) {
+      setAuthError({
+        status: false,
+        message: ''
+      });
+    }
+
     setUsername({
       name: event.target.value,
-      error: false
+      error: {
+        status: false,
+        message: ''
+      }
     });
   };
 
@@ -133,16 +162,22 @@ const SignUpDialog = ({
     // Run regex error matching on inputs
     if (emailErrorRegex || usernameErrorRegex) {
       if (emailErrorRegex) {
-        setEmail({
+        setEmail(email => ({
           address: email.address,
-          error: true
-        });
+          error: {
+            status: true,
+            message: 'Invalid email.'
+          }
+        }));
       }
       if (usernameErrorRegex) {
-        setUsername({
+        setUsername(username => ({
           name: username.name,
-          error: true
-        });
+          error: {
+            status: true,
+            message: 'Letters, digits, or underscores only.'
+          }
+        }));
       }
       setChecked(false);
       return;
@@ -159,7 +194,10 @@ const SignUpDialog = ({
     const data = await response.json();
 
     if (!data.success) {
-      console.log(data.message);
+      setAuthError({
+        status: true,
+        message: data.message
+      });
     } else {
       handleSubmit();
     }
@@ -183,25 +221,25 @@ const SignUpDialog = ({
           id="filled-email"
           label="Email"
           required={true}
-          error={email.error}
+          error={email.error.status}
           className={classes.emailField}
           value={email.address}
           onChange={handleEmailChange}
           margin="normal"
           variant="filled"
-          helperText={email.error && 'Invalid email'}
+          helperText={email.error.status && email.error.message}
           onKeyPress={handleKeyPress}
         />
         <CustomTextField
           id="filled-username"
           label="Username"
           required={true}
-          error={username.error}
+          error={username.error.status}
           value={username.name}
           onChange={handleUsernameChange}
           margin="normal"
           variant="filled"
-          helperText={username.error && 'Letters, digits, or underscores only.'}
+          helperText={username.error.status && username.error.message}
           onKeyPress={handleKeyPress}
         />
         <FormControlLabel
@@ -219,7 +257,7 @@ const SignUpDialog = ({
         </Button>
         <Button
           className={classes.submitButton}
-          disabled={email.error || username.error || !checked}
+          disabled={email.error.status || username.error.status || !checked}
           variant="contained"
           color="secondary"
           size="large"
@@ -227,6 +265,11 @@ const SignUpDialog = ({
         >
           Submit
         </Button>
+        {authError.status && (
+          <Typography color="error" className={classes.flipText}>
+            {authError.message}
+          </Typography>
+        )}
       </DialogContent>
     </>
   );
