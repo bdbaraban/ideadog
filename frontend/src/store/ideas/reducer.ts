@@ -12,7 +12,7 @@ import {
 // Initial ideas state
 export const initialIdeasState: IdeasState = {
   all: [],
-  status: ''
+  status: 'No bamboozle, there are no more ideas.'
 };
 
 /**
@@ -28,7 +28,7 @@ const ideasReducer = (
     case FETCH_IDEAS_SUCCESS:
       return {
         all: action.payload,
-        status: ''
+        status: 'No bamboozle, there are no more ideas.'
       };
 
     case FETCH_IDEAS_FAILURE:
@@ -52,7 +52,7 @@ const ideasReducer = (
     case FETCH_USER_IDEAS_SUCCESS:
       return {
         all: action.payload,
-        status: ''
+        status: 'No bamboozle, there are no more ideas.'
       };
 
     case FETCH_USER_IDEAS_FAILURE:
