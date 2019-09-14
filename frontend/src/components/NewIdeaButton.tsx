@@ -11,6 +11,7 @@ import { setOpen } from 'store/newIdea/actions';
  * Button for posting new ideas
  */
 const NewIdeaFab = (): ReactElement => {
+  // Load Redux dispatcher
   const dispatch = useThunkDispatch();
 
   // Select new idea state from Redux store

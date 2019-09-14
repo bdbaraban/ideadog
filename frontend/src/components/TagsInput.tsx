@@ -104,6 +104,7 @@ interface TagsInputProps {
  * Tag-chips autosuggest input used in NewIdeaDialog
  */
 const TagsInput = ({ tags, setTags }: TagsInputProps): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
 
   // Select all tags and new idea state from Redux store
@@ -154,13 +155,9 @@ const TagsInput = ({ tags, setTags }: TagsInputProps): ReactElement => {
   // Update text input
   const handleTextFieldInputChange = (
     _: React.ChangeEvent<{}>,
-    { newValue, method }: Autosuggest.ChangeEvent
+    { newValue }: Autosuggest.ChangeEvent
   ): void => {
-    if (method === 'enter') {
-      handleAddChip(newValue);
-    } else {
-      setInput(newValue);
-    }
+    setInput(newValue);
   };
 
   return (

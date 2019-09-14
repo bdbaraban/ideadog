@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { MouseEvent, ReactElement, useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * Account icon link component in top right of Navbar
  */
 const AccountButton = (): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
 
   // Menu component anchor status
@@ -29,7 +30,7 @@ const AccountButton = (): ReactElement => {
   };
 
   // Open user profile page
-  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
+  const handleClick = (event: MouseEvent<HTMLElement>): void => {
     setAnchorEl(event.currentTarget);
   };
 

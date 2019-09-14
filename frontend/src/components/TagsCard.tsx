@@ -3,7 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Divider from '@material-ui/core/Divider';
-import Icon from '@material-ui/core/Icon';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import {
   createStyles,
   fade,
@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * Tag-filtering card component displayed as second item in InfoGrid
  */
 const TagsCard = (): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
 
   return (
@@ -40,7 +41,7 @@ const TagsCard = (): ReactElement => {
         classes={{
           avatar: classes.avatar
         }}
-        avatar={<Icon>local_offer</Icon>}
+        avatar={<LocalOfferIcon />}
         title="Tags"
         titleTypographyProps={{
           className: classes.titleTypographyProps,

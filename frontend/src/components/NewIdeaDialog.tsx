@@ -1,4 +1,10 @@
-import React, { ChangeEvent, ReactElement, useState } from 'react';
+import React, {
+  ChangeEvent,
+  MouseEvent,
+  ReactElement,
+  SyntheticEvent,
+  useState
+} from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
@@ -100,7 +106,10 @@ interface SelectedState {
  * Input dialog for posting new ideas
  */
 const NewIdeaDialog = (): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
+
+  // Load Redux dispatcher
   const dispatch = useThunkDispatch();
 
   // Select new idea state from Redux store
@@ -125,8 +134,9 @@ const NewIdeaDialog = (): ReactElement => {
     dispatch(setOpen(!newIdea.open));
   };
 
+  // Close idea posted snackbar
   const handleClose = (
-    _: React.SyntheticEvent | React.MouseEvent,
+    _: SyntheticEvent | MouseEvent,
     reason?: string
   ): void => {
     if (reason === 'clickaway') {
@@ -208,7 +218,9 @@ const NewIdeaDialog = (): ReactElement => {
             <Box className={classes.tully}>
               <SvgIcon
                 component={(): ReactElement =>
-                  postError ? SadTully(36) : HappyTully(36)
+                  postError
+                    ? SadTully(36, 'NewIdeaDialogSad')
+                    : HappyTully(36, 'NewIdeaDialogHappy')
                 }
               >
                 &nbsp;

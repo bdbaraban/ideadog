@@ -68,7 +68,10 @@ const useStyles = makeStyles((theme: Theme) =>
  * Searchbar component positioned second from top right in Navbar
  */
 const Searchbar = (): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
+
+  // Load Redux dispatcher
   const dispatch = useThunkDispatch();
 
   // Search text

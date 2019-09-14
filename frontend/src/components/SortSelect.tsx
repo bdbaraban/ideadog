@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, ReactElement } from 'react';
+import React, { ChangeEvent, MouseEvent, ReactElement, useState } from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import Hidden from '@material-ui/core/Hidden';
 import Icon from '@material-ui/core/Icon';
@@ -62,12 +62,17 @@ const useStyles = makeStyles((theme: Theme) =>
  * Select component for choosing sort filters
  */
 const SortSelect = (): ReactElement => {
+  // Select material-UI styles
   const classes = useStyles();
-  const sort = useSelector((state: AppState): SortState => state.sort);
+
+  // Load Redux dispatcher
   const dispatch = useThunkDispatch();
 
+  // Select sort filter from Redux store
+  const sort = useSelector((state: AppState): SortState => state.sort);
+
   // Menu component anchor status
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   // Open menu component anchored on selected sort filter
   const handleOpen = (event: MouseEvent<HTMLElement>): void => {

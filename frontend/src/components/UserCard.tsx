@@ -9,12 +9,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import {
-  createStyles,
-  fade,
-  makeStyles,
-  Theme
-} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 import { AppState } from 'store';
 import { UserState } from 'store/user/types';
@@ -24,7 +19,7 @@ import { formatShortDate } from 'utils';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
-      backgroundColor: fade(theme.palette.common.white, 0.15),
+      backgroundColor: '#4f5982',
       color: theme.palette.common.white
     },
     titleTypographyProps: {
@@ -71,11 +66,19 @@ const useStyles = makeStyles((theme: Theme) =>
  * User card component displayed at top of InfoGrid
  */
 const UserCard = (): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
+
+  // Select Next router
   const router = useRouter();
 
-  // Select user from Redux store
+  // Select logged in user from Redux store
   const user = useSelector((state: AppState): UserState => state.user);
+
+  // Redirect to user page
+  const redirectToUser = (): void => {
+    router.push(`/user/${user.profile.key}`);
+  };
 
   // Log user out
   const logout = (): void => {
@@ -122,9 +125,15 @@ const UserCard = (): ReactElement => {
       </CardContent>
       <Divider />
       <CardActions className={classes.cardActions}>
-        <Button size="small" className={classes.button}>
-          View Profile
-        </Button>
+        {router.pathname !== 'user' && (
+          <Button
+            size="small"
+            className={classes.button}
+            onClick={redirectToUser}
+          >
+            View Profile
+          </Button>
+        )}
         <Button size="small" className={classes.button} onClick={logout}>
           Log Out
         </Button>

@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * Select component for choosing tag filters
  */
 const TagsSelect = (): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
 
   // Menu component anchor status

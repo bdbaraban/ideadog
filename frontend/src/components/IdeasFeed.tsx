@@ -1,18 +1,21 @@
 import React, {
+  MouseEvent,
   ReactElement,
+  SyntheticEvent,
   useEffect,
   useMemo,
   useState,
   useRef
 } from 'react';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { IdeaCard, NewIdeaCard } from 'components';
 import { useSelector } from 'react-redux';
 import { AppState, useThunkDispatch } from 'store';
 import { fetchIdeas } from 'store/ideas/actions';
-import { UserState } from 'store/user/types';
 import { Idea } from 'types';
 
 // IdeaFeed component styles
@@ -51,6 +54,12 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: '0 !important',
       paddingRight: '0 !important'
     },
+    status: {
+      alignItems: 'center',
+      color: theme.palette.common.white,
+      display: 'flex',
+      justifyContent: 'center'
+    },
     snackbarContent: {
       alignItems: 'center',
       backgroundColor: theme.palette.error.main,
@@ -64,25 +73,22 @@ const useStyles = makeStyles((theme: Theme) =>
 /**
  * Feed of posted ideas
  */
-const IdeaFeed = (): ReactElement => {
-  // Component styles
+const IdeasFeed = (): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
-
-  // Select user from Redux store
-  const user = useSelector((state: AppState): UserState => state.user);
-
-  // Select relevant state from Redux store
-  const { ideas, sort, search, tags } = useSelector(
-    (state: AppState): AppState => state
-  );
 
   // Redux 'mapDispatch'
   const dispatch = useThunkDispatch();
 
+  // Select relevant state from Redux store
+  const { ideas, sort, search, tags, user } = useSelector(
+    (state: AppState): AppState => state
+  );
+
   // Mutable ref tracking whether component is on first render
   const firstRender = useRef<boolean>(true);
 
-  // Snackbar open/closed status
+  // Idea deleted snackbar open/closed status
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   // Memoize conversion of tags into API query format
@@ -103,8 +109,9 @@ const IdeaFeed = (): ReactElement => {
     dispatch(fetchIdeas(sort.current.key, search.query, memoizedTags));
   }, [dispatch, search, sort, memoizedTags]);
 
+  // Close idea deleted snackbar
   const handleClose = (
-    _: React.SyntheticEvent | React.MouseEvent,
+    _: SyntheticEvent | MouseEvent,
     reason?: string
   ): void => {
     if (reason === 'clickaway') {
@@ -152,6 +159,11 @@ const IdeaFeed = (): ReactElement => {
               )
             )}
           </Grid>
+          <Grid item xs={12} sm={10} lg={8} className={classes.gridItem}>
+            <Box className={classes.status}>
+              <Typography variant="body1">{ideas.status}</Typography>
+            </Box>
+          </Grid>
         </Grid>
       </div>
       <Snackbar
@@ -179,4 +191,4 @@ const IdeaFeed = (): ReactElement => {
   );
 };
 
-export default IdeaFeed;
+export default IdeasFeed;

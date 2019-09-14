@@ -16,8 +16,11 @@ import { formatTag } from 'utils';
  * Tag-filtering menu checkbox list
  */
 const TagsList = (): ReactElement => {
-  const tags = useSelector((state: AppState): TagsState => state.tags);
+  // Load Redux dispatcher
   const dispatch = useThunkDispatch();
+
+  // Select tags from Redux store
+  const tags = useSelector((state: AppState): TagsState => state.tags);
 
   // Toggle a selected tag
   const handleToggle = (tag: string): VoidFunction => (): void => {

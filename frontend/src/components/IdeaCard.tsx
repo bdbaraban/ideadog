@@ -14,7 +14,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Chip from '@material-ui/core/Chip';
 import CloseIcon from '@material-ui/icons/Close';
-import CommentIcon from '@material-ui/icons/Comment';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -70,12 +69,18 @@ const useStyles = makeStyles((theme: Theme) =>
     cardActionsLeft: {
       display: 'flex'
     },
-    brightness: {
-      borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+    upvote: {
       paddingRight: theme.spacing(1)
     },
-    lightbulb: {
+    downvote: {
+      paddingRight: theme.spacing(1),
+      transform: 'rotate(180deg)'
+    },
+    lightbulbUpvoted: {
       fill: theme.palette.secondary.main
+    },
+    lightbulbDownvoted: {
+      fill: theme.palette.error.main
     },
     userLink: {
       color: theme.palette.common.white,
@@ -104,22 +109,24 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     shareDialogTitle: {
       color: theme.palette.common.white,
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
       textAlign: 'center'
     },
     shareDialogContent: {
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'space-around'
+      justifyContent: 'space-evenly',
+      marginBottom: theme.spacing(1),
+      paddingTop: 0,
+      width: '100%'
     },
     link: {
       color: theme.palette.secondary.main,
       '&:hover': {
         color: theme.palette.secondary.dark
       }
-    },
-    happy: {
-      transform: 'scale(1.1)'
     },
     popper: {
       alignItems: 'center',
@@ -170,26 +177,25 @@ const IdeaCard = ({ idea, setSnackbarOpen }: IdeaCardProps): ReactElement => {
       : false
   );
 
-  const toggleVote = async (): Promise<void> => {
+  // Sumit user vote
+  const toggleVote = (): void => {
     if (!voted) {
-      await fetch(`${process.env.IDEADOG_API}/idea/${idea.key}/upvote`, {
+      fetch(`${process.env.IDEADOG_API}/idea/${idea.key}/upvote`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${user.bearer}`
         }
       });
+      setVoted(true);
     } else {
-      await fetch(`${process.env.IDEADOG_API}/idea/${idea.key}/downvote`, {
+      fetch(`${process.env.IDEADOG_API}/idea/${idea.key}/downvote`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${user.bearer}`
         }
       });
+      setVoted(false);
     }
-
-    await dispatch(fetchIdeas());
-
-    setVoted(!voted);
   };
 
   // Delete idea
@@ -297,21 +303,14 @@ const IdeaCard = ({ idea, setSnackbarOpen }: IdeaCardProps): ReactElement => {
       <Divider />
       <CardActions className={classes.cardActions}>
         <Box className={classes.cardActionsLeft}>
-          <Box className={classes.brightness}>
+          <Box className={classes.upvote}>
             <IconButton color="inherit" onClick={toggleVote}>
               {voted ? (
-                <Lightbulb className={classes.lightbulb} />
+                <Lightbulb className={classes.lightbulbUpvoted} />
               ) : (
                 <LightbulbOutline />
               )}
             </IconButton>
-            {`${idea.upvotes}`}
-          </Box>
-          <Box>
-            <IconButton color="inherit">
-              <CommentIcon />
-            </IconButton>
-            32
           </Box>
         </Box>
         <IconButton onClick={toggleOpen} color="inherit">
@@ -326,7 +325,7 @@ const IdeaCard = ({ idea, setSnackbarOpen }: IdeaCardProps): ReactElement => {
             id="share-idea-dialog-title"
             className={classes.shareDialogTitle}
           >
-            Share this great idea.
+            SHARE THIS GREAT IDEA
             <DialogContent className={classes.shareDialogContent}>
               <Link href={`/idea/${idea.key}`} className={classes.link}>
                 {`${process.env.IDEADOG_DOMAIN}/idea/${idea.key}`}

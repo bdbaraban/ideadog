@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * Confirmation dialog displayed after submitting login/signup request
  */
 const VerificationDialog = (): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
 
   return (

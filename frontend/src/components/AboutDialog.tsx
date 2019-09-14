@@ -65,14 +65,15 @@ const ExpansionPanel = withStyles({
 
 // AboutDialog component prop types
 interface AboutDialogProps {
-  open: boolean;
-  handleClose: (value: string) => void;
+  open: boolean; // Component open/closed status
+  handleClose: (value: string) => void; // Function to close the component
 }
 
 /**
  * About IdeaDog FAQ dialog
  */
 const AboutDialog = ({ open, handleClose }: AboutDialogProps): ReactElement => {
+  // Select Material-UI styles
   const classes = useStyles();
 
   return (
