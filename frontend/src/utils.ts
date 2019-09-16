@@ -27,7 +27,7 @@ export const formatLongDate = (date: Date): string => {
  * @param date {Date} - The date type to format.
  */
 export const formatShortDate = (date: Date): string => {
-  return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 };
 
 /**
