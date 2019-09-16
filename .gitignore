@@ -5,8 +5,13 @@ node_modules
 
 # production
 *.log
-.cache
-dist
 *.lock
+.env
+
+# cache
+.jest
+.next
 
 \.idea/
+
+server
