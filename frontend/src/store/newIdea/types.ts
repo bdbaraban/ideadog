@@ -4,11 +4,15 @@ export interface NewIdeaState {
 }
 
 // Action types
-export const SET_OPEN = 'SET_OPEN';
+export const SET_OPEN = 'store/newIdea/SET_OPEN';
+export const SET_CLOSED = 'store/newIdea/SET_CLOSED';
 
 interface SetOpen {
   type: typeof SET_OPEN;
-  payload: boolean;
 }
 
-export type NewIdeaActionTypes = SetOpen;
+interface SetClosed {
+  type: typeof SET_CLOSED;
+}
+
+export type NewIdeaActionTypes = SetOpen | SetClosed;

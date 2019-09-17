@@ -1,11 +1,19 @@
-import { NewIdeaActionTypes, SET_OPEN } from 'store/newIdea/types';
+import { NewIdeaActionTypes, SET_CLOSED, SET_OPEN } from './types';
 
 /**
- * Set the open/closed status of the NewIdeaDialog
+ * Open the NewIdeaDialog.
  */
-export const setOpen = (open: boolean): NewIdeaActionTypes => {
+export const setOpen = (): NewIdeaActionTypes => {
   return {
-    type: SET_OPEN,
-    payload: open
+    type: SET_OPEN
+  };
+};
+
+/**
+ * Close the NewIdeaDialog.
+ */
+export const setClosed = (): NewIdeaActionTypes => {
+  return {
+    type: SET_CLOSED
   };
 };

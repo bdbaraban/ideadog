@@ -1,8 +1,9 @@
 import {
   NewIdeaActionTypes,
   NewIdeaState,
+  SET_CLOSED,
   SET_OPEN
-} from 'store/newIdea/types';
+} from './types';
 
 // Initial new idea state
 export const initialNewIdeaState: NewIdeaState = {
@@ -21,7 +22,12 @@ const newIdeaReducer = (
   switch (action.type) {
     case SET_OPEN:
       return {
-        open: action.payload
+        open: true
+      };
+
+    case SET_CLOSED:
+      return {
+        open: false
       };
 
     default:
