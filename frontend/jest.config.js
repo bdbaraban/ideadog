@@ -6,5 +6,6 @@ module.exports = {
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   moduleDirectories: ['node_modules', 'src', __dirname],
+  setupFiles: ['<rootDir>/jest.setup.js'],
   cacheDirectory: '.jest/cache'
 };
