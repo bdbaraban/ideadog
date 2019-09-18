@@ -24,14 +24,26 @@ import newIdeaReducer, {
   NewIdeaActionTypes,
   NewIdeaState
 } from 'store/newIdea';
-import searchReducer, { initialSearchState } from 'store/search/reducer';
-import sortReducer, { initialSortState } from 'store/sort/reducer';
-import tagsReducer, { initialTagsState } from 'store/tags/reducer';
-import userReducer, { initialUserState } from 'store/user/reducer';
-import { SearchActionTypes, SearchState } from 'store/search/types';
-import { SortActionTypes, SortState } from 'store/sort/types';
-import { TagsActionTypes, TagsState } from 'store/tags/types';
-import { UserActionTypes, UserState } from 'store/user/types';
+import searchReducer, {
+  initialSearchState,
+  SearchActionTypes,
+  SearchState
+} from 'store/search';
+import sortReducer, {
+  initialSortState,
+  SortActionTypes,
+  SortState
+} from 'store/sort';
+import tagsReducer, {
+  initialTagsState,
+  TagsActionTypes,
+  TagsState
+} from 'store/tags';
+import userReducer, {
+  initialUserState,
+  UserActionTypes,
+  UserState
+} from 'store/user';
 
 // Configure default Redux state
 const defaultState: DeepPartial<{
