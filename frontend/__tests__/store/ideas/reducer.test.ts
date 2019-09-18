@@ -22,74 +22,74 @@ const mockPayload = [
   }
 ];
 
-describe('ideas reducer', () => {
+describe('ideas reducer', (): void => {
   test('handles FETCH_IDEAS_SUCCESS', (): void => {
-    expect(
-      ideasReducer(initialIdeasState, {
-        type: FETCH_IDEAS_SUCCESS,
-        payload: mockPayload
-      })
-    ).toEqual({
+    const reducedState = ideasReducer(initialIdeasState, {
+      type: FETCH_IDEAS_SUCCESS,
+      payload: mockPayload
+    });
+
+    expect(reducedState).toEqual({
       all: mockPayload,
       status: 'No bamboozle, there are no more ideas.'
     });
   });
 
   test('handles FETCH_IDEAS_FAILURE', (): void => {
-    expect(
-      ideasReducer(initialIdeasState, {
-        type: FETCH_IDEAS_FAILURE,
-        payload: 'fetch ideas error'
-      })
-    ).toEqual({
+    const reducedState = ideasReducer(initialIdeasState, {
+      type: FETCH_IDEAS_FAILURE,
+      payload: 'fetch ideas error'
+    });
+
+    expect(reducedState).toEqual({
       all: [],
       status: 'fetch ideas error'
     });
   });
 
   test('handles FETCH_IDEA_SUCCESS', (): void => {
-    expect(
-      ideasReducer(initialIdeasState, {
-        type: FETCH_IDEA_SUCCESS,
-        payload: mockPayload
-      })
-    ).toEqual({
+    const reducedState = ideasReducer(initialIdeasState, {
+      type: FETCH_IDEA_SUCCESS,
+      payload: mockPayload
+    });
+
+    expect(reducedState).toEqual({
       all: mockPayload,
       status: 'No bamboozle, there are no more ideas.'
     });
   });
 
   test('handles FETCH_IDEA_FAILURE', (): void => {
-    expect(
-      ideasReducer(initialIdeasState, {
-        type: FETCH_IDEA_FAILURE,
-        payload: 'fetch idea error'
-      })
-    ).toEqual({
+    const reducedState = ideasReducer(initialIdeasState, {
+      type: FETCH_IDEA_FAILURE,
+      payload: 'fetch idea error'
+    });
+
+    expect(reducedState).toEqual({
       all: [],
       status: 'fetch idea error'
     });
   });
 
   test('handles FETCH_USER_IDEAS_SUCCESS', (): void => {
-    expect(
-      ideasReducer(initialIdeasState, {
-        type: FETCH_USER_IDEAS_SUCCESS,
-        payload: mockPayload
-      })
-    ).toEqual({
+    const reducedState = ideasReducer(initialIdeasState, {
+      type: FETCH_USER_IDEAS_SUCCESS,
+      payload: mockPayload
+    });
+
+    expect(reducedState).toEqual({
       all: mockPayload,
       status: 'No bamboozle, there are no more ideas.'
     });
   });
 
   test('handles FETCH_USER_IDEAS_FAILURE', (): void => {
-    expect(
-      ideasReducer(initialIdeasState, {
-        type: FETCH_USER_IDEAS_FAILURE,
-        payload: 'fetch user ideas error'
-      })
-    ).toEqual({
+    const reducedState = ideasReducer(initialIdeasState, {
+      type: FETCH_USER_IDEAS_FAILURE,
+      payload: 'fetch user ideas error'
+    });
+
+    expect(reducedState).toEqual({
       all: [],
       status: 'fetch user ideas error'
     });

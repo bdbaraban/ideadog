@@ -11,7 +11,8 @@ import {
   FETCH_USER_IDEAS_SUCCESS,
   fetchIdea,
   fetchIdeas,
-  fetchUserIdeas
+  fetchUserIdeas,
+  initialIdeasState
 } from 'store/ideas';
 
 const middlewares = [thunk];
@@ -55,7 +56,7 @@ describe('fetchIdeas', (): void => {
   test('creates FETCH_IDEAS_SUCCESS after fetching ideas', async (): Promise<
     void
   > => {
-    const store = mockStore({ all: [], status: '' });
+    const store = mockStore(initialIdeasState);
 
     const queryRegex = new RegExp(/ideas/);
     fetchMock.getOnce(queryRegex, mockResult);
@@ -73,7 +74,7 @@ describe('fetchIdeas', (): void => {
   test('creates FETCH_IDEAS_FAILURE upon failure to fetch ideas', async (): Promise<
     void
   > => {
-    const store = mockStore({ all: [], status: '' });
+    const store = mockStore(initialIdeasState);
 
     const queryRegex = new RegExp(/ideas/);
     fetchMock.getOnce(queryRegex, mockError);
@@ -89,7 +90,7 @@ describe('fetchIdeas', (): void => {
   });
 
   test('handles query parameters', async (): Promise<void> => {
-    const store = mockStore({ all: [], status: '' });
+    const store = mockStore(initialIdeasState);
 
     // `all` sort
     let queryRegex = new RegExp(/ideas/);
@@ -145,7 +146,7 @@ describe('fetchIdea', (): void => {
   test('creates FETCH_IDEA_SUCCESS after fetching single idea', async (): Promise<
     void
   > => {
-    const store = mockStore({ all: [], status: '' });
+    const store = mockStore(initialIdeasState);
 
     const queryRegex = new RegExp(`idea/${mockResult.body[0].key}`);
     fetchMock.getOnce(queryRegex, mockResult);
@@ -163,7 +164,7 @@ describe('fetchIdea', (): void => {
   test('creates FETCH_IDEA_FAILURE upon failing to fetch single idea', async (): Promise<
     void
   > => {
-    const store = mockStore({ all: [], status: '' });
+    const store = mockStore(initialIdeasState);
 
     const queryRegex = new RegExp(`idea/${mockResult.body[0].key}`);
     fetchMock.getOnce(queryRegex, mockError);
@@ -181,7 +182,7 @@ describe('fetchIdea', (): void => {
   test('creates FETCH_IDEA_FAILURE upon fetching nothing for a single idea', async (): Promise<
     void
   > => {
-    const store = mockStore({ all: [], status: '' });
+    const store = mockStore(initialIdeasState);
 
     const queryRegex = new RegExp(`idea/${mockResult.body[0].key}`);
     fetchMock.getOnce(queryRegex, mockEmpty);
@@ -201,7 +202,7 @@ describe('fetchUserIdeas', (): void => {
   test('creates FETCH_USER_IDEAS_SUCCESS after fetching user ideas', async (): Promise<
     void
   > => {
-    const store = mockStore({ all: [], status: '' });
+    const store = mockStore(initialIdeasState);
 
     const queryRegex = new RegExp(`user/${mockResult.body[0].owner.id}/ideas`);
     fetchMock.getOnce(queryRegex, mockResult);
@@ -219,7 +220,7 @@ describe('fetchUserIdeas', (): void => {
   test('creates FETCH_USER_IDEAS_FAILURE upon failing to fetch user ideas', async (): Promise<
     void
   > => {
-    const store = mockStore({ all: [], status: '' });
+    const store = mockStore(initialIdeasState);
 
     const queryRegex = new RegExp(`user/${mockResult.body[0].owner.id}/ideas`);
     fetchMock.getOnce(queryRegex, mockError);
@@ -237,7 +238,7 @@ describe('fetchUserIdeas', (): void => {
   test('creates FETCH_USER_IDEAS_FAILURE upon fetching nothing for user ideas', async (): Promise<
     void
   > => {
-    const store = mockStore({ all: [], status: '' });
+    const store = mockStore(initialIdeasState);
 
     const queryRegex = new RegExp(`user/${mockResult.body[0].owner.id}/ideas`);
     fetchMock.getOnce(queryRegex, mockEmpty);

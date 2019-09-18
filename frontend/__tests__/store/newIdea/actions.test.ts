@@ -1,12 +1,18 @@
 import configureMockStore from 'redux-mock-store';
 
-import { SET_CLOSED, SET_OPEN, setClosed, setOpen } from 'store/newIdea';
+import {
+  initialNewIdeaState,
+  SET_CLOSED,
+  SET_OPEN,
+  setClosed,
+  setOpen
+} from 'store/newIdea';
 
 const mockStore = configureMockStore();
 
 describe('setOpen', (): void => {
   test('creates SET_OPEN', (): void => {
-    const store = mockStore({ open: false });
+    const store = mockStore(initialNewIdeaState);
 
     store.dispatch(setOpen());
 
