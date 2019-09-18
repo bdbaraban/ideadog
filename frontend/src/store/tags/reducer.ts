@@ -5,7 +5,7 @@ import {
   REMOVE_SELECTED_TAG,
   TagsActionTypes,
   TagsState
-} from 'store/tags/types';
+} from './types';
 
 // Initial tags state
 export const initialTagsState: TagsState = {

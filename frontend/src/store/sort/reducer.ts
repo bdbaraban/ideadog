@@ -1,9 +1,4 @@
-import {
-  SET_SORT,
-  SortActionTypes,
-  SortFilter,
-  SortState
-} from 'store/sort/types';
+import { SET_SORT, SortActionTypes, SortFilter, SortState } from './types';
 
 // Initial sort state
 const all: SortFilter[] = [

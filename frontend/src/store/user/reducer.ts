@@ -3,10 +3,10 @@ import {
   FETCH_USER_SUCCESS,
   UserActionTypes,
   UserState
-} from 'store/user/types';
+} from './types';
 
 // Empty user profile
-const empty = {
+const emptyProfile = {
   id: '',
   key: '',
   username: '',
@@ -22,7 +22,7 @@ const empty = {
 
 // Initial user state
 export const initialUserState: UserState = {
-  profile: empty,
+  profile: emptyProfile,
   bearer: '',
   isAuthenticated: false
 };
@@ -46,7 +46,7 @@ const userReducer = (
 
     case FETCH_USER_FAILURE:
       return {
-        profile: empty,
+        profile: emptyProfile,
         bearer: '',
         isAuthenticated: false
       };

@@ -1,39 +1,38 @@
 import { Action } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-import { FETCH_USER_FAILURE, FETCH_USER_SUCCESS } from 'store/user/types';
-import { AppState } from 'store';
+import 'isomorphic-unfetch';
+
+import { ActionType } from 'store';
+import { FETCH_USER_FAILURE, FETCH_USER_SUCCESS } from './types';
 
 /**
- * Fetch logged in user from the API.
+ * Fetch logged in user from the IdeaDog API.
+ * @param bearer - API bearer token for logged in user.
  */
-export const fetchUser = (
-  bearer: string
-): ThunkAction<void, AppState, null, Action<string>> => async (
+export const fetchUser = (bearer: string): ActionType => async (
   dispatch
 ): Promise<Action<string>> => {
   const query = `${process.env.IDEADOG_API}/user`;
-  console.log('Fetching user at', query);
 
-  const response = await fetch(query, {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      Authorization: `Bearer ${bearer}`
-    }
-  });
+  try {
+    const response = await fetch(query, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${bearer}`
+      }
+    });
+    const data = await response.json();
 
-  const data = await response.json();
-
-  if (!data) {
+    return dispatch({
+      type: FETCH_USER_SUCCESS,
+      payload: {
+        profile: data,
+        bearer
+      }
+    });
+  } catch {
     return dispatch({
       type: FETCH_USER_FAILURE
     });
   }
-  return dispatch({
-    type: FETCH_USER_SUCCESS,
-    payload: {
-      profile: data,
-      bearer
-    }
-  });
 };

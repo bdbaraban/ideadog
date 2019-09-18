@@ -1,7 +1,8 @@
-import { SortFilter, SET_SORT, SortActionTypes } from 'store/sort/types';
+import { SortFilter, SET_SORT, SortActionTypes } from './types';
 
 /**
- * Set the current sorting filter
+ * Set the current sorting filter.
+ * @param filter - New sorting filter.
  */
 export const setSort = (filter: SortFilter): SortActionTypes => {
   return {

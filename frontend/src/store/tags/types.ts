@@ -8,10 +8,10 @@ export interface TagsState {
 }
 
 // Action types
-export const FETCH_TAGS_FAILURE = 'FETCH_TAGS_FAILURE';
-export const FETCH_TAGS_SUCCESS = 'FETCH_TAGS_SUCCESS';
-export const ADD_SELECTED_TAG = 'ADD_SELECTED_TAG';
-export const REMOVE_SELECTED_TAG = 'REMOVE_SELECTED_TAG';
+export const FETCH_TAGS_FAILURE = 'store/tags/FETCH_TAGS_FAILURE';
+export const FETCH_TAGS_SUCCESS = 'store/tags/FETCH_TAGS_SUCCESS';
+export const ADD_SELECTED_TAG = 'store/tags/ADD_SELECTED_TAG';
+export const REMOVE_SELECTED_TAG = 'store/tags/REMOVE_SELECTED_TAG';
 
 interface FetchTagsFailure {
   type: typeof FETCH_TAGS_FAILURE;

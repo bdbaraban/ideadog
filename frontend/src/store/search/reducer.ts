@@ -1,4 +1,4 @@
-import { SearchActionTypes, SearchState, SET_SEARCH } from 'store/search/types';
+import { SearchActionTypes, SearchState, SET_SEARCH } from './types';
 
 // Initial search state
 export const initialSearchState: SearchState = {

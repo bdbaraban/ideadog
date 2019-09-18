@@ -1,44 +1,42 @@
 import { Action } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-import fetch from 'isomorphic-unfetch';
-import { AppState } from 'store';
+import 'isomorphic-unfetch';
+
+import { ActionType } from 'store';
 import {
   ADD_SELECTED_TAG,
   FETCH_TAGS_FAILURE,
   FETCH_TAGS_SUCCESS,
   REMOVE_SELECTED_TAG,
   TagsActionTypes
-} from 'store/tags/types';
+} from './types';
 
 /**
- * Fetch tags from the API.
+ * Fetch tags from the IdeaDog API.
  */
-export const fetchTags = (): ThunkAction<
-  void,
-  AppState,
-  null,
-  Action<string>
-> => async (dispatch): Promise<Action<string>> => {
+export const fetchTags = (): ActionType => async (
+  dispatch
+): Promise<Action<string>> => {
   const query = `${process.env.IDEADOG_API}/tags`;
-  console.log('Fetching tags at', query);
-  const response = await fetch(query);
 
-  const data = await response.json();
+  try {
+    const response = await fetch(query);
+    const data = await response.json();
 
-  if (!data) {
+    return dispatch({
+      type: FETCH_TAGS_SUCCESS,
+      payload: data
+    });
+  } catch {
     return dispatch({
       type: FETCH_TAGS_FAILURE,
       payload: 'Could not fetch tags - please try again later.'
     });
   }
-  return dispatch({
-    type: FETCH_TAGS_SUCCESS,
-    payload: data
-  });
 };
 
 /**
  * Add a selected tag.
+ * @param tag - Name of the seleected tag.
  */
 export const addSelectedTag = (tag: string): TagsActionTypes => {
   return {
@@ -49,6 +47,7 @@ export const addSelectedTag = (tag: string): TagsActionTypes => {
 
 /**
  * Remove a selected tag.
+ * @param tag - Name of the removed tag.
  */
 export const removeSelectedTag = (tag: string): TagsActionTypes => {
   return {

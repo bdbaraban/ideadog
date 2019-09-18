@@ -11,7 +11,7 @@ export interface SortState {
 }
 
 // Action types
-export const SET_SORT = 'SET_SORT';
+export const SET_SORT = 'store/sort/SET_SORT';
 
 interface SetSort {
   type: typeof SET_SORT;
