@@ -197,23 +197,29 @@ describe('formatShortDate', (): void => {
 });
 
 describe('formatTag', (): void => {
-  test('one word lowercase', (): void => {
-    expect(formatTag('animals')).toEqual('Animals');
-  });
-
-  test('one word uppercase', (): void => {
+  test('one word', (): void => {
     expect(formatTag('Animals')).toEqual('Animals');
   });
 
   test('two words separated by underscore', (): void => {
-    expect(formatTag('video_game')).toEqual('Video Game');
+    expect(formatTag('Video_Game')).toEqual('Video Game');
   });
 
   test('two words separated by space', (): void => {
-    expect(formatTag('board game')).toEqual('Board Game');
+    expect(formatTag('Board Game')).toEqual('Board Game');
   });
 
-  test('three words separated by underscore and space', (): void => {
-    expect(formatTag('dogs_and cats')).toEqual('Dogs And Cats');
+  test('compound word', (): void => {
+    expect(formatTag('high-quality')).toEqual('high-quality');
+  });
+
+  test('word with apostrophe', (): void => {
+    expect(formatTag("Brennan's")).toEqual("Brennan's");
+  });
+
+  test('whole shebang', (): void => {
+    expect(formatTag("Brennan's_high-quality tag")).toEqual(
+      "Brennan's high-quality tag"
+    );
   });
 });

@@ -35,12 +35,5 @@ export const formatShortDate = (date: Date): string => {
  * @param tag {string} - The tag name to format.
  */
 export const formatTag = (tag: string): string => {
-  return tag
-    .split(new RegExp('[_ ]', 'g'))
-    .reduce(
-      (formatted: string, word: string): string =>
-        formatted + `${word[0].toUpperCase()}${word.substring(1)} `,
-      ''
-    )
-    .trimEnd();
+  return tag.replace(/_/g, ' ');
 };
