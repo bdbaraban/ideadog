@@ -80,4 +80,13 @@ authRoutes.get('/logout', (req, res): void => {
   });
 });
 
+// Log in to @DummyDog account
+authRoutes.get('/loginDummyDog', (req, res): void => {
+  // Store bearer token on session
+  req.session!.bearer = process.env.DUMMY_DOG;
+
+  // Redirect back home
+  res.redirect('/home');
+});
+
 export default authRoutes;
