@@ -5,9 +5,11 @@ import React, {
   KeyboardEvent,
   SetStateAction
 } from 'react';
+import { useRouter } from 'next/router';
 
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import {
   CustomDialogContent,
@@ -15,18 +17,18 @@ import {
   CustomTextField
 } from 'components/common';
 import { EmailState, ErrorState } from './AuthComponentContainer';
-import FlipButton from './FlipButton';
+import TextButton from './TextButton';
 import SubmitButton from './SubmitButton';
 import fetch from 'isomorphic-unfetch';
 
 // LoginDialog component style
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     textField: {
       margin: 0
     },
-    error: {
-      marginTop: theme.spacing(2)
+    textButtons: {
+      textAlign: 'center'
     }
   })
 );
@@ -58,6 +60,9 @@ const LoginDialog: FC<LoginDialogProps> = ({
 }: LoginDialogProps) => {
   // Select Material-UI styles
   const classes = useStyles();
+
+  // Select Next router
+  const router = useRouter();
 
   // Send email with magic link
   const submit = async (): Promise<void> => {
@@ -102,33 +107,50 @@ const LoginDialog: FC<LoginDialogProps> = ({
     }
   };
 
+  // Log in to @DummyDog account
+  const loginDummyDog = (): void => {
+    router.push('/loginDummyDog');
+  };
+
   return (
     <>
       <CustomDialogTitle id="login-dialog-title">LOG IN</CustomDialogTitle>
       <CustomDialogContent>
-        <CustomTextField
-          className={classes.textField}
-          id="filled-email"
-          label="Email"
-          required
-          error={email.error.status}
-          value={email.address}
-          onChange={handleEmailChange}
-          margin="normal"
-          variant="filled"
-          helperText={email.error.status && email.error.message}
-          onKeyPress={handleKeyPress}
-        />
-        <FlipButton text="No account? Sign up here." onClick={flip} />
-        <SubmitButton
-          disabled={email.error.status || authError.status}
-          onClick={submit}
-        />
-        {authError.status && (
-          <Typography color="error" className={classes.error}>
-            {authError.message}
-          </Typography>
-        )}
+        <Grid container justify="center" spacing={1}>
+          <Grid item>
+            <CustomTextField
+              className={classes.textField}
+              id="filled-email"
+              label="Email"
+              required
+              error={email.error.status}
+              value={email.address}
+              onChange={handleEmailChange}
+              margin="normal"
+              variant="filled"
+              helperText={email.error.status && email.error.message}
+              onKeyPress={handleKeyPress}
+            />
+          </Grid>
+          <Grid item className={classes.textButtons}>
+            <TextButton text="No account? Sign up here." onClick={flip} />
+            <TextButton
+              text="Or, log in to a dummy account."
+              onClick={loginDummyDog}
+            />
+          </Grid>
+          <Grid item>
+            <SubmitButton
+              disabled={email.error.status || authError.status}
+              onClick={submit}
+            />
+          </Grid>
+          {authError.status && (
+            <Grid item>
+              <Typography color="error">{authError.message}</Typography>
+            </Grid>
+          )}
+        </Grid>
       </CustomDialogContent>
     </>
   );

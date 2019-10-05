@@ -8,10 +8,11 @@ import React, {
 
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-import FlipButton from './FlipButton';
+import TextButton from './TextButton';
 import SubmitButton from './SubmitButton';
 import {
   CustomDialogContent,
@@ -26,26 +27,22 @@ import {
 import 'isomorphic-unfetch';
 
 // SignUpDialog component styles
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     emailField: {
-      marginTop: 0
+      margin: 0
+    },
+    usernameField: {
+      margin: 0,
+      marginTop: 8
+    },
+    textButton: {
+      textAlign: 'center'
     },
     agree: {
       color: 'white',
+      margin: 0,
       textAlign: 'center'
-    },
-    agreeLabel: {
-      [theme.breakpoints.down('xs')]: {
-        fontSize: '.92rem'
-      }
-    },
-    flip: {
-      marginTop: 0,
-      marginBottom: 8
-    },
-    error: {
-      marginTop: theme.spacing(2)
     }
   })
 );
@@ -153,53 +150,59 @@ const SignUpDialog: FC<SignUpDialogProps> = ({
     <>
       <CustomDialogTitle id="login-dialog-title">SIGN UP</CustomDialogTitle>
       <CustomDialogContent>
-        <CustomTextField
-          id="filled-email"
-          label="Email"
-          required={true}
-          error={email.error.status}
-          className={classes.emailField}
-          value={email.address}
-          onChange={handleEmailChange}
-          margin="normal"
-          variant="filled"
-          helperText={email.error.status && email.error.message}
-          onKeyPress={handleKeyPress}
-        />
-        <CustomTextField
-          id="filled-username"
-          label="Username"
-          required={true}
-          error={username.error.status}
-          value={username.name}
-          onChange={handleUsernameChange}
-          margin="normal"
-          variant="filled"
-          helperText={username.error.status && username.error.message}
-          onKeyPress={handleKeyPress}
-        />
-        <FormControlLabel
-          className={classes.agree}
-          classes={{
-            label: classes.agreeLabel
-          }}
-          control={<Checkbox checked={checked} onChange={toggleCheck} />}
-          label="I agree to share my email with IdeaDog."
-        />
-        <FlipButton
-          className={classes.flip}
-          text="Back to login."
-          onClick={flip}
-        />
-        <SubmitButton
-          disabled={email.error.status || username.error.status || !checked}
-          onClick={submit}
-        />
-        {authError.status && (
-          <Typography color="error" className={classes.error}>
-            {authError.message}
-          </Typography>
-        )}
+        <Grid container justify="center" spacing={1}>
+          <Grid item>
+            <CustomTextField
+              id="filled-email"
+              label="Email"
+              required={true}
+              error={email.error.status}
+              className={classes.emailField}
+              value={email.address}
+              onChange={handleEmailChange}
+              margin="normal"
+              variant="filled"
+              helperText={email.error.status && email.error.message}
+              onKeyPress={handleKeyPress}
+            />
+          </Grid>
+          <Grid item>
+            <CustomTextField
+              id="filled-username"
+              label="Username"
+              required={true}
+              className={classes.usernameField}
+              error={username.error.status}
+              value={username.name}
+              onChange={handleUsernameChange}
+              margin="normal"
+              variant="filled"
+              helperText={username.error.status && username.error.message}
+              onKeyPress={handleKeyPress}
+            />
+          </Grid>
+          <Grid item>
+            <FormControlLabel
+              className={classes.agree}
+              control={<Checkbox checked={checked} onChange={toggleCheck} />}
+              label="I agree to share my email with IdeaDog."
+            />
+          </Grid>
+          <Grid item xs={12} className={classes.textButton}>
+            <TextButton text="Back to login." onClick={flip} />
+          </Grid>
+          <Grid item>
+            <SubmitButton
+              disabled={email.error.status || username.error.status || !checked}
+              onClick={submit}
+            />
+          </Grid>
+          {authError.status && (
+            <Grid item>
+              <Typography color="error">{authError.message}</Typography>
+            </Grid>
+          )}
+        </Grid>
       </CustomDialogContent>
     </>
   );
