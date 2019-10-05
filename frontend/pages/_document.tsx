@@ -6,8 +6,8 @@ import Document, {
   Main,
   NextScript
 } from 'next/document';
+
 import { ServerStyleSheets } from '@material-ui/styles';
-import theme from 'theme';
 
 /**
  * Load Material-UI styles for rendered HTML
@@ -46,7 +46,8 @@ export default class CustomDocument extends Document {
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
           />
-          <meta name="theme-color" content={theme.palette.primary.main} />
+          <link rel="shortcut icon" href="/static/images/logo48.png" />
+          <link rel="manifest" href="/static/manifest.json" />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Lato&display=swap"

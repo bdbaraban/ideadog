@@ -1,13 +1,14 @@
 import React, { ReactElement } from 'react';
 import App, { AppProps, AppContext } from 'next/app';
-import Head from 'next/head';
+
 import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from 'theme';
+
 import { DeepPartial, Store } from 'redux';
 import { Provider } from 'react-redux';
 import { AppState, AppStore, initializeStore } from 'store';
-import { fetchUser } from 'store/user/actions';
+import { fetchUser } from 'store/user';
 
 /**
  * Fetch existing stored Redux state or initialize a new one.
@@ -28,6 +29,7 @@ const getOrCreateStore = (initialState?: DeepPartial<AppState>): AppStore => {
   return (window as any)['__NEXT_REDUX_STORE__'];
 };
 
+// CustomApp component prop types
 interface CustomAppProps {
   pageProps: {};
   initialState: AppState;
@@ -47,19 +49,12 @@ export default class CustomApp extends App {
     // Provide the store to getInitialProps of pages
     (ctx as any).store = store;
 
-    if (process.env.NODE_ENV === 'production') {
-      // Fetch user, if bearer token exists
-      if (
-        ctx.req &&
-        (ctx.req as any).session &&
-        (ctx.req as any).session.bearer
-      ) {
-        await store.dispatch(fetchUser((ctx.req as any).session.bearer));
-      }
-    } else {
-      await store.dispatch(
-        fetchUser('9WURFiA0hozMhQWEV614De8c25bNqUhMZZCJ8CaQ4hM=')
-      );
+    if (
+      ctx.req &&
+      (ctx.req as any).session &&
+      (ctx.req as any).session.bearer
+    ) {
+      await store.dispatch(fetchUser((ctx.req as any).session.bearer));
     }
 
     // Fetch any NextPage props
@@ -93,9 +88,6 @@ export default class CustomApp extends App {
 
     return (
       <>
-        <Head>
-          <title>IdeaDog</title>
-        </Head>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Provider store={this.store}>

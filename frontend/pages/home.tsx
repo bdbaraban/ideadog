@@ -1,10 +1,16 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { NextPage, NextPageContext } from 'next';
+
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { ApplicationBar, IdeasFeed, NewIdeaDialog } from 'components';
+
+import { SEO } from 'components/common';
+import ApplicationBar from 'components/ApplicationBar';
+import IdeasFeed from 'components/IdeasFeed';
+import NewIdeaDialog from 'components/NewIdeaDialog';
+
 import { AppStore } from 'store';
-import { fetchIdeas } from 'store/ideas/actions';
-import { fetchTags } from 'store/tags/actions';
+import { fetchIdeas } from 'store/ideas';
+import { fetchTags } from 'store/tags';
 
 // Home page root styles
 const useStyles = makeStyles(() =>
@@ -16,14 +22,15 @@ const useStyles = makeStyles(() =>
 );
 
 // Home page props
-interface HomeProps {
+interface HomePageProps {
   error?: string; // Authorization error message
 }
 
 /**
  * Main home page
  */
-const Home: NextPage<HomeProps> = ({ error }: HomeProps): ReactElement => {
+const HomePage: NextPage<HomePageProps> = ({ error }: HomePageProps) => {
+  // Select Material-UI styles
   const classes = useStyles();
 
   useEffect((): void => {
@@ -33,24 +40,31 @@ const Home: NextPage<HomeProps> = ({ error }: HomeProps): ReactElement => {
   }, [error]);
 
   return (
-    <div className={classes.root}>
-      <header>
-        <ApplicationBar />
-      </header>
-      <main>
-        <IdeasFeed />
-        <NewIdeaDialog />
-      </main>
-    </div>
+    <>
+      <SEO
+        title="Home"
+        description="Home page of IdeaDog, a social media web application for sharing and discovering awesome, probably dog-related ideas."
+        url="/home"
+      />
+      <div className={classes.root}>
+        <header>
+          <ApplicationBar />
+        </header>
+        <main>
+          <IdeasFeed />
+          <NewIdeaDialog />
+        </main>
+      </div>
+    </>
   );
 };
 
-Home.getInitialProps = async ({
+HomePage.getInitialProps = async ({
   query,
   store
 }: NextPageContext & {
   store: AppStore;
-}): Promise<HomeProps> => {
+}): Promise<HomePageProps> => {
   // Fetch ideas
   await store.dispatch(fetchIdeas());
 
@@ -60,4 +74,4 @@ Home.getInitialProps = async ({
   return { error: query.error as string };
 };
 
-export default Home;
+export default HomePage;
