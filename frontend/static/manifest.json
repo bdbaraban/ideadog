@@ -1,0 +1,45 @@
+{
+  "name": "IdeaDog",
+  "short_name": "IdeaDog",
+  "start_url": "/home",
+  "display": "standalone",
+  "description": "Dog-friendly social media web application for sharing ideas.",
+  "background_color": "#303c6c",
+  "icons": [
+    {
+      "src": "images/logo1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    },
+    {
+      "src": "images/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "images/logo384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "images/logo384.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "images/logo256.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/logo128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "images/logo96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ]
+}
