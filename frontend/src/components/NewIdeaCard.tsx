@@ -1,6 +1,6 @@
-import React, { ReactElement } from 'react';
+import React, { FC } from 'react';
+
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Icon from '@material-ui/core/Icon';
 import {
@@ -9,24 +9,15 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core/styles';
-import { useSelector } from 'react-redux';
-import { AppState, useThunkDispatch } from 'store';
-import { NewIdeaState } from 'store/newIdea/types';
-import { setOpen } from 'store/newIdea/actions';
+
+import { GridCard } from 'components/common';
+
+import { useThunkDispatch } from 'store';
+import { setOpen } from 'store/newIdea';
 
 // NewIdeaCard component style
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    card: {
-      backgroundColor: theme.palette.primary.main,
-      border: `1px solid ${theme.palette.secondary.main}`,
-      color: theme.palette.common.white,
-      [theme.breakpoints.down('xs')]: {
-        border: 'none',
-        borderRadius: 0,
-        boxShadow: 'none'
-      }
-    },
     cardContent: {
       '&:last-child': {
         paddingBottom: 16
@@ -39,7 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       backgroundColor: fade(theme.palette.common.white, 0.15),
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25)
+        backgroundColor: fade(theme.palette.common.white, 0.25),
+        boxShadow: 'none'
       }
     }
   })
@@ -49,20 +41,20 @@ const useStyles = makeStyles((theme: Theme) =>
  * Card that opens dialog for posting new ideas
  * Displayed at top of IdeaFeed
  */
-const NewIdeaCard = (): ReactElement => {
+const NewIdeaCard: FC<{}> = () => {
+  // Select Material-UI styles
   const classes = useStyles();
-  const dispatch = useThunkDispatch();
 
-  // Select new idea state from Redux store
-  const newIdea = useSelector((state: AppState): NewIdeaState => state.newIdea);
+  // Select Redux dispatcher
+  const dispatch = useThunkDispatch();
 
   // Toggle new idea dialog open/closed
   const toggleOpen = (): void => {
-    dispatch(setOpen(!newIdea.open));
+    dispatch(setOpen());
   };
 
   return (
-    <Card raised={true} className={classes.card}>
+    <GridCard>
       <CardContent className={classes.cardContent}>
         <Button
           variant="contained"
@@ -74,7 +66,7 @@ const NewIdeaCard = (): ReactElement => {
           <Icon fontSize="small">edit</Icon>
         </Button>
       </CardContent>
-    </Card>
+    </GridCard>
   );
 };
 
