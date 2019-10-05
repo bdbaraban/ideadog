@@ -81,23 +81,13 @@ const IdeaCardContainer: FC<IdeaCardContainerProps> = ({
 
   // Sumit user vote
   const toggleVote = (): void => {
-    if (!voted) {
-      fetch(`${process.env.IDEADOG_API}/idea/${idea.key}/upvote`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${user.bearer}`
-        }
-      });
-      setVoted(true);
-    } else {
-      fetch(`${process.env.IDEADOG_API}/idea/${idea.key}/downvote`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${user.bearer}`
-        }
-      });
-      setVoted(false);
-    }
+    fetch(`${process.env.IDEADOG_API}/idea/${idea.key}/upvote`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${user.bearer}`
+      }
+    });
+    setVoted(!voted);
   };
 
   // Delete idea
