@@ -16,13 +16,19 @@ const useStyles = makeStyles(() =>
       paddingRight: 0
     },
     left: {
-      paddingLeft: 0,
-      paddingRight: 0
-    },
-    right: {
+      marginLeft: 0,
+      marginRight: 0,
       paddingLeft: 0,
       paddingRight: 0,
-      textAlign: 'right'
+      width: 'max-content'
+    },
+    right: {
+      marginLeft: 0,
+      marginRight: 0,
+      paddingLeft: 0,
+      paddingRight: 0,
+      textAlign: 'right',
+      width: 'min-content'
     }
   })
 );
