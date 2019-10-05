@@ -6,7 +6,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
-    'plugin:prettier/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:jsx-a11y/recommended',
@@ -31,6 +30,9 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error', { singleQuote: true }],
     '@typescript-eslint/camelcase': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/ban-ts-ignore': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn'
   },
@@ -48,50 +50,34 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['server/authFunctions.ts'],
-      rules: {
-        '@typescript-eslint/ban-ts-ignore': 'off'
-      }
-    },
-    {
       files: ['server/authRoutes.ts'],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off'
       }
     },
     {
-      files: ['pages/_app.tsx', 'src/components/TagsInput.tsx'],
-      rules: {
-        '@typescript-eslint/no-explicit-any': 'off'
-      }
-    },
-    {
-      files: ['src/components/TagsInput.tsx'],
+      files: ['src/components/TagsInput/TagsInput.tsx'],
       rules: {
         '@typescript-eslint/no-unused-vars': 'off'
       }
     },
     {
-      files: ['pages/_document.tsx'],
+      files: ['pages/_document.tsx', 'next.config.js'],
       rules: {
         '@typescript-eslint/explicit-function-return-type': 'off'
       }
     },
     {
-      files: ['next.config.js'],
-      rules: {
-        '@typescript-eslint/no-var-requires': 'off',
-        '@typescript-eslint/explicit-function-return-type': 'off'
-      }
-    },
-    {
-      files: ['src/components/TagsSelect.tsx', 'src/components/Link.tsx'],
+      files: [
+        'src/components/TagsSelect/TagsSelect.tsx',
+        'src/components/common/Link.tsx'
+      ],
       rules: {
         'react/display-name': 'off'
       }
     },
     {
-      files: ['src/components/Link.tsx'],
+      files: ['src/components/common/Link.tsx'],
       rules: {
         'jsx-a11y/anchor-has-content': 'off'
       }
@@ -103,7 +89,7 @@ module.exports = {
       }
     },
     {
-      files: ['src/components/TagsInput.tsx'],
+      files: ['src/components/TagsInput/TagsInput.tsx'],
       rules: {
         'import/named': 'off',
         'import/namespace': 'off'
