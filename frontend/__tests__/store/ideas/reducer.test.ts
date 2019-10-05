@@ -1,11 +1,15 @@
 import ideasReducer, {
+  DELETE_IDEA_FAILURE,
+  DELETE_IDEA_SUCCESS,
   initialIdeasState,
   FETCH_IDEA_FAILURE,
   FETCH_IDEA_SUCCESS,
   FETCH_IDEAS_FAILURE,
   FETCH_IDEAS_SUCCESS,
   FETCH_USER_IDEAS_FAILURE,
-  FETCH_USER_IDEAS_SUCCESS
+  FETCH_USER_IDEAS_SUCCESS,
+  POST_IDEA_FAILURE,
+  POST_IDEA_SUCCESS
 } from 'store/ideas';
 
 // Mock ideas action payload
@@ -31,7 +35,8 @@ describe('ideas reducer', (): void => {
 
     expect(reducedState).toEqual({
       all: mockPayload,
-      status: 'No bamboozle, there are no more ideas.'
+      status: 'No bamboozle, there are no more ideas.',
+      message: ''
     });
   });
 
@@ -43,7 +48,8 @@ describe('ideas reducer', (): void => {
 
     expect(reducedState).toEqual({
       all: [],
-      status: 'fetch ideas error'
+      status: 'fetch ideas error',
+      message: ''
     });
   });
 
@@ -55,7 +61,8 @@ describe('ideas reducer', (): void => {
 
     expect(reducedState).toEqual({
       all: mockPayload,
-      status: 'No bamboozle, there are no more ideas.'
+      status: 'No bamboozle, there are no more ideas.',
+      message: ''
     });
   });
 
@@ -67,7 +74,8 @@ describe('ideas reducer', (): void => {
 
     expect(reducedState).toEqual({
       all: [],
-      status: 'fetch idea error'
+      status: 'fetch idea error',
+      message: ''
     });
   });
 
@@ -79,7 +87,8 @@ describe('ideas reducer', (): void => {
 
     expect(reducedState).toEqual({
       all: mockPayload,
-      status: 'No bamboozle, there are no more ideas.'
+      status: 'No bamboozle, there are no more ideas.',
+      message: ''
     });
   });
 
@@ -91,7 +100,66 @@ describe('ideas reducer', (): void => {
 
     expect(reducedState).toEqual({
       all: [],
-      status: 'fetch user ideas error'
+      status: 'fetch user ideas error',
+      message: ''
+    });
+  });
+
+  test('handles POST_IDEA_SUCCESS', (): void => {
+    const reducedState = ideasReducer(initialIdeasState, {
+      type: POST_IDEA_SUCCESS,
+      payload: 'Idea posted! 🙌'
+    });
+
+    expect(reducedState).toEqual({
+      all: [],
+      status: 'No bamboozle, there are no more ideas.',
+      message: 'Idea posted! 🙌'
+    });
+  });
+
+  test('handles POST_IDEA_FAILURE', (): void => {
+    const reducedState = ideasReducer(initialIdeasState, {
+      type: POST_IDEA_FAILURE,
+      payload: 'Failed to post idea.'
+    });
+
+    expect(reducedState).toEqual({
+      all: [],
+      status: 'No bamboozle, there are no more ideas.',
+      message: 'Failed to post idea.'
+    });
+  });
+
+  test('handles DELETE_IDEA_SUCCESS', (): void => {
+    const reducedState = ideasReducer(
+      {
+        ...initialIdeasState,
+        all: mockPayload
+      },
+      {
+        type: DELETE_IDEA_SUCCESS,
+        payload: mockPayload[0].key
+      }
+    );
+
+    expect(reducedState).toEqual({
+      all: [],
+      status: 'No bamboozle, there are no more ideas.',
+      message: 'Idea deleted 🗑️.'
+    });
+  });
+
+  test('handles DELETE_IDEA_FAILURE', (): void => {
+    const reducedState = ideasReducer(initialIdeasState, {
+      type: DELETE_IDEA_FAILURE,
+      payload: 'delete idea error'
+    });
+
+    expect(reducedState).toEqual({
+      all: [],
+      status: 'No bamboozle, there are no more ideas.',
+      message: 'delete idea error'
     });
   });
 });

@@ -3,6 +3,9 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 
 import {
+  DELETE_IDEA_FAILURE,
+  DELETE_IDEA_SUCCESS,
+  deleteIdea,
   FETCH_IDEA_FAILURE,
   FETCH_IDEA_SUCCESS,
   FETCH_IDEAS_FAILURE,
@@ -12,7 +15,10 @@ import {
   fetchIdea,
   fetchIdeas,
   fetchUserIdeas,
-  initialIdeasState
+  initialIdeasState,
+  POST_IDEA_FAILURE,
+  POST_IDEA_SUCCESS,
+  postIdea
 } from 'store/ideas';
 
 const middlewares = [thunk];
@@ -249,6 +255,98 @@ describe('fetchUserIdeas', (): void => {
       {
         type: FETCH_USER_IDEAS_FAILURE,
         payload: `User with ID ${mockResult.body[0].owner.id} does not exist.`
+      }
+    ]);
+  });
+});
+
+describe('postIdea', (): void => {
+  const idea = {
+    text: 'Test idea',
+    owner_id: '1234',
+    tags: ['animals', 'architecture']
+  };
+
+  test('creates POST_IDEA_SUCCESS after posting an idea', async (): Promise<
+    void
+  > => {
+    const store = mockStore(initialIdeasState);
+
+    const queryRegex = new RegExp('idea');
+    fetchMock.postOnce(queryRegex, { status: 200 });
+
+    await store.dispatch(postIdea(
+      idea.text,
+      idea.owner_id,
+      idea.tags,
+      'bearer'
+    ) as any);
+
+    expect(store.getActions()).toEqual([
+      {
+        type: POST_IDEA_SUCCESS,
+        payload: 'Idea posted! 🙌'
+      }
+    ]);
+  });
+
+  test('creates POST_IDEA_FAILURE upon failing to post idea', async (): Promise<
+    void
+  > => {
+    const store = mockStore(initialIdeasState);
+
+    const queryRegex = new RegExp('idea');
+    fetchMock.postOnce(queryRegex, { status: 400 });
+
+    await store.dispatch(postIdea(
+      idea.text,
+      idea.owner_id,
+      idea.tags,
+      'bearer'
+    ) as any);
+
+    expect(store.getActions()).toEqual([
+      {
+        type: POST_IDEA_FAILURE,
+        payload: 'Failed to post idea.'
+      }
+    ]);
+  });
+});
+
+describe('deleteIdea', (): void => {
+  test('creates DELETE_IDEA_SUCCESS after deleting an idea', async (): Promise<
+    void
+  > => {
+    const store = mockStore(initialIdeasState);
+
+    const queryRegex = new RegExp(`idea/${mockResult.body[0].key}`);
+    fetchMock.deleteOnce(queryRegex, { status: 200 });
+
+    await store.dispatch(deleteIdea(mockResult.body[0].key, 'bearer') as any);
+
+    expect(store.getActions()).toEqual([
+      {
+        type: DELETE_IDEA_SUCCESS,
+        payload: mockResult.body[0].key
+      }
+    ]);
+  });
+
+  test('creates DELETE_IDEA_FAILURE upon failing to delete idea', async (): Promise<
+    void
+  > => {
+    const store = mockStore(initialIdeasState);
+
+    const queryRegex = new RegExp(`idea/${mockResult.body[0].key}`);
+    fetchMock.deleteOnce(queryRegex, { status: 400 });
+
+    await store.dispatch(deleteIdea(mockResult.body[0].key, 'bearer') as any);
+
+    expect(store.getActions()).toEqual([
+      {
+        type: DELETE_IDEA_FAILURE,
+        payload: `Failed to delete ID with key ${mockResult.body[0].key}.`
       }
     ]);
   });
