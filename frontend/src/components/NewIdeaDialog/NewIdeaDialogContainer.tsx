@@ -3,14 +3,13 @@ import { useRouter } from 'next/router';
 
 import NewIdeaDialogContent from './NewIdeaDialogContent';
 import NewIdeaDialogTitle from './NewIdeaDialogTitle';
-import { CustomDialog, CustomSnackbar, Emoji } from 'components/common';
+import { CustomDialog } from 'components/common';
 
-import { useAppState, useSnackbar } from 'hooks';
+import { useAppState } from 'hooks';
 import { useThunkDispatch } from 'store';
-import { fetchIdeas } from 'store/ideas';
+import { fetchIdeas, postIdea } from 'store/ideas';
 import { fetchTags } from 'store/tags';
 import { setClosed } from 'store/newIdea';
-import 'isomorphic-unfetch';
 
 /**
  * Wraps input dialog for posting new ideas
@@ -31,9 +30,6 @@ const NewIdeaDialogContainer: FC<{}> = () => {
   // Idea tags
   const [tags, setTags] = useState<string[]>([]);
 
-  // Snackbar state
-  const { snackbarOpen, setSnackbarOpen, handleSnackbarClose } = useSnackbar();
-
   // Toggle dialog open/closed
   const handleClose = (): void => {
     dispatch(setClosed());
@@ -46,23 +42,11 @@ const NewIdeaDialogContainer: FC<{}> = () => {
 
   // Post idea and refresh ideas
   const handlePost = async (): Promise<void> => {
-    // Post idea
-    await fetch(`${process.env.IDEADOG_API}/idea`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: user.bearer
-      },
-      body: JSON.stringify({
-        text,
-        owner_id: user.profile.id,
-        tags
-      })
-    });
+    await dispatch(postIdea(text, user.profile.id, tags, user.bearer));
 
     // Update ideas, if not on single idea page
     if (!router.pathname.startsWith('/idea')) {
-      await dispatch(fetchIdeas());
+      dispatch(fetchIdeas());
     }
 
     // Update tags asynchronously
@@ -74,12 +58,6 @@ const NewIdeaDialogContainer: FC<{}> = () => {
     // Clear idea input
     setText('');
     setTags([]);
-
-    // Flash idea posted snackbar
-    setSnackbarOpen(true);
-    setTimeout((): void => {
-      setSnackbarOpen(false);
-    }, 5000);
   };
 
   const textError = text.length === 0;
@@ -108,17 +86,6 @@ const NewIdeaDialogContainer: FC<{}> = () => {
           setTags={setTags}
         />
       </CustomDialog>
-      <CustomSnackbar
-        open={snackbarOpen}
-        onClose={handleSnackbarClose}
-        label="idea-posted-message"
-        message={
-          <span id="idea-posted-message">
-            Idea posted!
-            <Emoji label="raising-hands" symbol="🙌" />
-          </span>
-        }
-      />
     </>
   );
 };

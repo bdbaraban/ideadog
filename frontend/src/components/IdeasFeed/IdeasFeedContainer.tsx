@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import Box from '@material-ui/core/Box';
@@ -56,13 +56,6 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.common.white,
       display: 'flex',
       justifyContent: 'center'
-    },
-    snackbarContent: {
-      alignItems: 'center',
-      backgroundColor: theme.palette.error.main,
-      display: 'flex',
-      fontWeight: 'bold',
-      justifyContent: 'center'
     }
   })
 );
@@ -85,10 +78,25 @@ const IdeasFeedContainer: FC<IdeasFeedContainerProps> = ({
   const router = useRouter();
 
   // Select ideas Redux store
-  const ideas = useIdeasState();
+  const { all, message, status } = useIdeasState();
 
   // Idea deleted snackbar state
   const { snackbarOpen, setSnackbarOpen, handleSnackbarClose } = useSnackbar();
+
+  // Flash snackbar for 5 seconds
+  const flashSnackbar = useRef((): void => {
+    setSnackbarOpen(true);
+    setTimeout((): void => {
+      setSnackbarOpen(false);
+    }, 5000);
+  });
+
+  useEffect((): void => {
+    if (message !== '') {
+      console.log('trigger');
+      flashSnackbar.current();
+    }
+  }, [message]);
 
   return (
     <>
@@ -123,19 +131,16 @@ const IdeasFeedContainer: FC<IdeasFeedContainerProps> = ({
             className={classes.gridItem}
           >
             {router.pathname.startsWith('/home') ? (
-              <LiveIdeasFeed ideas={ideas} setSnackbarOpen={setSnackbarOpen} />
+              <LiveIdeasFeed ideas={all} />
             ) : (
-              <StaticIdeasFeed
-                ideas={ideas}
-                setSnackbarOpen={setSnackbarOpen}
-              />
+              <StaticIdeasFeed ideas={all} />
             )}
           </Grid>
 
           {!router.pathname.startsWith('/idea') && (
             <Grid item xs={12} sm={10} lg={8} className={classes.gridItem}>
               <Box className={classes.status}>
-                <Typography variant="body1">{ideas.status}</Typography>
+                <Typography variant="body1">{status}</Typography>
               </Box>
             </Grid>
           )}
@@ -143,17 +148,11 @@ const IdeasFeedContainer: FC<IdeasFeedContainerProps> = ({
       </div>
 
       <CustomSnackbar
-        label="idea-deleted-message"
+        label="idea-action-message"
+        color={message.startsWith('Fail') ? 'error' : 'secondary'}
         open={snackbarOpen}
         onClose={handleSnackbarClose}
-        message={
-          <span id="idea-deleted-message">
-            Idea deleted.
-            <span role="img" aria-label="wastebasket">
-              🗑️
-            </span>
-          </span>
-        }
+        message={message}
       />
     </>
   );

@@ -1,12 +1,4 @@
-import React, {
-  Dispatch,
-  FC,
-  MouseEvent,
-  ReactElement,
-  SetStateAction,
-  useState
-} from 'react';
-import { useRouter } from 'next/router';
+import React, { FC, MouseEvent, ReactElement, useState } from 'react';
 
 import Box from '@material-ui/core/Box';
 import CardActions from '@material-ui/core/CardActions';
@@ -30,32 +22,18 @@ import VoteIconButton from './VoteIconButton';
 import { CustomCardHeader, GridCard } from 'components/common';
 
 import { useThunkDispatch } from 'store';
-import { fetchIdeas, fetchUserIdeas } from 'store/ideas';
+import { deleteIdea } from 'store/ideas';
 import { useUserState } from 'hooks';
 
 import { Idea } from 'types';
 import { formatLongDate, formatTag } from 'utils';
+import 'isomorphic-unfetch';
 
 // IdeaCard component style
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    subheaderTypographyProps: {
-      color: fade(theme.palette.common.white, 0.5)
-    },
-    content: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-around',
-      paddingBottom: 16,
-      borderBottom: `1px solid ${fade(theme.palette.common.white, 0.5)}`
-    },
     cardActions: {
       justifyContent: 'space-between'
-    },
-    userLink: {
-      color: theme.palette.common.white,
-      textDecoration: 'none',
-      textTransform: 'none'
     },
     tag: {
       backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -64,18 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     tags: {
       marginTop: theme.spacing(1)
-    },
-    share: {
-      display: 'flex',
-      alignItems: 'center',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      margin: 0,
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2),
-      width: '15%'
     }
   })
 );
@@ -83,21 +49,16 @@ const useStyles = makeStyles((theme: Theme) =>
 // IdeaCard component prop types
 interface IdeaCardContainerProps {
   idea: Idea;
-  setSnackbarOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 /**
  * Wraps card displaying/controlling an idea
  */
 const IdeaCardContainer: FC<IdeaCardContainerProps> = ({
-  idea,
-  setSnackbarOpen
+  idea
 }: IdeaCardContainerProps) => {
   // Select Material-UI styles
   const classes = useStyles();
-
-  // Select Next router
-  const router = useRouter();
 
   // Load Redux dispatcher
   const dispatch = useThunkDispatch();
@@ -140,27 +101,8 @@ const IdeaCardContainer: FC<IdeaCardContainerProps> = ({
   };
 
   // Delete idea
-  const handleDelete = async (): Promise<void> => {
-    await fetch(`${process.env.IDEADOG_API}/idea/${idea.key}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.bearer}`
-      }
-    });
-
-    // Update ideas corresponding to given page
-    if (router.pathname.startsWith('/home')) {
-      await dispatch(fetchIdeas());
-    } else if (router.pathname.startsWith('/user')) {
-      await dispatch(fetchUserIdeas(router.query.key as string));
-    }
-
-    // Flash idea posted snackbar
-    setSnackbarOpen(true);
-    setTimeout((): void => {
-      setSnackbarOpen(false);
-    }, 5000);
+  const handleDelete = (): void => {
+    dispatch(deleteIdea(idea.key, user.bearer));
   };
 
   // Toggle delete popper

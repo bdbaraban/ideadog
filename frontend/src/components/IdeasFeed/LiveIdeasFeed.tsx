@@ -1,12 +1,4 @@
-import React, {
-  Dispatch,
-  FC,
-  ReactElement,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useRef
-} from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useRef } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -30,16 +22,14 @@ const useStyles = makeStyles(() =>
 
 // LiveIdeasFeed component prop types
 interface LiveIdeasFeedProps {
-  ideas: AppState['ideas'];
-  setSnackbarOpen: Dispatch<SetStateAction<boolean>>;
+  ideas: AppState['ideas']['all'];
 }
 
 /**
  * Feed of posted ideas that hot updates on filter actions
  */
 const LiveIdeasFeed: FC<LiveIdeasFeedProps> = ({
-  ideas,
-  setSnackbarOpen
+  ideas
 }: LiveIdeasFeedProps) => {
   // Select Material-UI styles
   const classes = useStyles();
@@ -73,10 +63,10 @@ const LiveIdeasFeed: FC<LiveIdeasFeedProps> = ({
 
   return (
     <>
-      {ideas.all.map(
+      {ideas.map(
         (idea: Idea, index: number): ReactElement => (
           <Grid key={index} item xs={12} classes={{ item: classes.gridItem }}>
-            <IdeaCard idea={idea} setSnackbarOpen={setSnackbarOpen} />
+            <IdeaCard idea={idea} />
           </Grid>
         )
       )}
