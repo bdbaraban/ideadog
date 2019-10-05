@@ -93,7 +93,6 @@ const IdeasFeedContainer: FC<IdeasFeedContainerProps> = ({
 
   useEffect((): void => {
     if (message !== '') {
-      console.log('trigger');
       flashSnackbar.current();
     }
   }, [message]);
