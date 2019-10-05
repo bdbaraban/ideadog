@@ -3,12 +3,16 @@ import 'isomorphic-unfetch';
 
 import { ActionType } from 'store';
 import {
+  DELETE_IDEA_FAILURE,
+  DELETE_IDEA_SUCCESS,
   FETCH_IDEA_FAILURE,
   FETCH_IDEA_SUCCESS,
   FETCH_IDEAS_FAILURE,
   FETCH_IDEAS_SUCCESS,
   FETCH_USER_IDEAS_FAILURE,
-  FETCH_USER_IDEAS_SUCCESS
+  FETCH_USER_IDEAS_SUCCESS,
+  POST_IDEA_FAILURE,
+  POST_IDEA_SUCCESS
 } from './types';
 
 /**
@@ -102,6 +106,86 @@ export const fetchUserIdeas = (key = ''): ActionType => async (
     return dispatch({
       type: FETCH_USER_IDEAS_FAILURE,
       payload: `User with ID ${key} does not exist.`
+    });
+  }
+};
+
+/**
+ * Post an idea on the IdeaDog API.
+ * @param text - The new idea text content.
+ * @param owner_id - The key of the new idea's owner.
+ * @param tags - Tags associated with the new idea.
+ * @param bearer - API bearer token for logged in user & owner of idea.
+ */
+export const postIdea = (
+  text: string,
+  owner_id: string,
+  tags: string[],
+  bearer: string
+): ActionType => async (dispatch): Promise<Action<string>> => {
+  const query = `${process.env.IDEADOG_API}/idea`;
+
+  try {
+    const response = await fetch(query, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: bearer
+      },
+      body: JSON.stringify({
+        text,
+        owner_id,
+        tags
+      })
+    });
+
+    if (response.status !== 200) {
+      throw Error();
+    }
+
+    return dispatch({
+      type: POST_IDEA_SUCCESS,
+      payload: 'Idea posted! 🙌'
+    });
+  } catch {
+    return dispatch({
+      type: POST_IDEA_FAILURE,
+      payload: 'Failed to post idea.'
+    });
+  }
+};
+
+/**
+ * Delete an idea on the IdeaDog API.
+ * @param key - Key of the idea to delete.
+ * @param bearer - API bearer token for logged in user & owner of idea.
+ */
+export const deleteIdea = (key = '', bearer: string): ActionType => async (
+  dispatch
+): Promise<Action<string>> => {
+  const query = `${process.env.IDEADOG_API}/idea/${key}`;
+
+  try {
+    const response = await fetch(query, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${bearer}`
+      }
+    });
+
+    if (response.status !== 200) {
+      throw Error();
+    }
+
+    return dispatch({
+      type: DELETE_IDEA_SUCCESS,
+      payload: key
+    });
+  } catch {
+    return dispatch({
+      type: DELETE_IDEA_FAILURE,
+      payload: `Failed to delete ID with key ${key}.`
     });
   }
 };
