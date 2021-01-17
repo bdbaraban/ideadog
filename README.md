@@ -1,3 +1,7 @@
+## Retrospective 1/17/2021
+
+This was my first significant independent web project, developed with a partner for our final project at Holberton School. This master branch features what my partner and I deployed for presentation at Holberton. What it doesn't feature is a revamp I worked on independently afterwards, in an effort to learn Next.js, Express and Redux. You can check out this revamped work on [this branch](https://github.com/bdbaraban/ideadog/tree/nextjs/frontend). Please note that this app is no longer deployed.
+
 <h1 align="center">IdeaDog</h1>
 <p align="center">
   A [statically-typed] social ideas platform.
@@ -8,20 +12,6 @@
        alt="IdeaDog logo"
   />
 </p>
-
-## NOTE ON IDEADOG DEVELOPMENT :dog:
-
-Note that the current state of this repo and project will soon be outdated - I am currently hard, hard at work at completely revamping the front-end of IdeaDog. And I mean completely revamping. I am in the process of:
-
-- Converting the app onto server-side rendering with Next.js.
-- Converting authorization process into magic link sign in.
-- Moving authorization logic onto server with Express.
-- Reorganizing global state management with Redux & Redux Thunk.
-- Design overhaul.
-
-If you would like a sneak peek at the code behind this revamp, you can check out [this branch](https://github.com/bdbaraban/ideadog/tree/nextjs/frontend).
-
-Stay tuned, there are some big-time updates in the works for IdeaDog. - Brennan
 
 ## Description :bulb:
 
