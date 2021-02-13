@@ -1,6 +1,12 @@
-## Retrospective 1/17/2021
+### NOTE 2-13-2021
 
-This was my first significant independent web project, developed with a partner for our final project at Holberton School. This master branch features what my partner and I deployed for presentation at Holberton. What it doesn't feature is a revamp I worked on independently afterwards, in an effort to learn Next.js, Express and Redux. You can check out this revamped work on [this branch](https://github.com/bdbaraban/ideadog/tree/nextjs/frontend). Please note that this app is no longer deployed.
+I developed IdeaDog with a partner for our final project at Holberton School. This master branch features what my partner and I deployed for presentation at Holberton. What it doesn't feature is a revamp I worked on independently afterwards, in an effort to practice Next.js, Express and Redux. You can view this revamped work at [this branch](https://github.com/bdbaraban/ideadog/tree/nextjs/frontend).
+
+Please note that this app is no longer deployed.
+
+-- Brennan
+
+---
 
 <h1 align="center">IdeaDog</h1>
 <p align="center">
@@ -24,14 +30,6 @@ We have all had those moments, those sudden bursts of inspiration where we think
 Our kind of question.
 
 The front-end of IdeaDog is built in React, with TypeScript, while the back-end runs on Rust. In our book, TypeScript + Rust = The Ultimate Statically-Typed Web App!
-
-### I have a great idea! Where can I post it?
-
-IdeaDog is currently deployed at [ideadog.site](https://ideadog.site) - please do check it out!
-
-#### NOTE
-
-Note that authorization is currently buggy. If you attempt to log in/sign up, you will need to refresh the page twice upon verification for your account to register. Read the development note above for news on coming fixes ^^^.
 
 ## Medium Blog Posts :newspaper:
 
