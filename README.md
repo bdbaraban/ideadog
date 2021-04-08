@@ -122,7 +122,7 @@ Passwords are no fun. IdeaDog features a passwordless user authentication proces
 ## Authors :black_nib:
 
 - **Brennan D Baraban** <[bdbaraban](https://github.com/bdbaraban)>
-- **Martin Smith** <[Ostoyae](https://github.com/Ostoyae)>
+- **Martin Smith** <[Hraesvel](https://github.com/hraesvel)>
 
 ## License :lock:
 
